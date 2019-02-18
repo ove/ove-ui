@@ -2,7 +2,7 @@
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
 import StepZilla from "react-stepzilla";
-import Step1 from './Step1';
+import SelectApp from './SelectApp';
 import Step2 from './Step2';
 import Step3 from './Step3';
 import Step4 from './Step4';
@@ -18,7 +18,7 @@ class App extends Component {
 
     this.sampleStore = {
       email: '',
-      gender: '',
+      app: '',
       savedToCloud: false
     };
   }
@@ -41,12 +41,12 @@ class App extends Component {
   render() {
     const steps =
     [
-      {name: 'Step1', component: <Step1 getStore={() => (this.getStore())} updateStore={(u) => {this.updateStore(u)}} />},
-      {name: 'Step2', component: <Step2 getStore={() => (this.getStore())} updateStore={(u) => {this.updateStore(u)}} />},
-      {name: 'Step3', component: <Step3 getStore={() => (this.getStore())} updateStore={(u) => {this.updateStore(u)}} />},
-      {name: 'step4', component: <Step4 getStore={() => (this.getStore())} updateStore={(u) => {this.updateStore(u)}} />},
-      {name: 'Step5', component: <Step5 getStore={() => (this.getStore())} updateStore={(u) => {this.updateStore(u)}} />},
-      {name: 'Step6', component: <Step6 getStore={() => (this.getStore())} updateStore={(u) => {this.updateStore(u)}} />}
+      {name: 'Select App', component: <SelectApp getStore={() => (this.getStore())} updateStore={(u) => {this.updateStore(u)}} />},
+      {name: 'Select Space', component: <Step2 getStore={() => (this.getStore())} updateStore={(u) => {this.updateStore(u)}} />},
+      {name: 'Specify Geometry', component: <Step3 getStore={() => (this.getStore())} updateStore={(u) => {this.updateStore(u)}} />},
+      {name: 'Specify Geometry', component: <Step4 getStore={() => (this.getStore())} updateStore={(u) => {this.updateStore(u)}} />},
+      {name: 'Configure State', component: <Step5 getStore={() => (this.getStore())} updateStore={(u) => {this.updateStore(u)}} />},
+      {name: 'Completed', component: <Step6 getStore={() => (this.getStore())} updateStore={(u) => {this.updateStore(u)}} />},
     ]
 
     return (
@@ -55,7 +55,7 @@ class App extends Component {
           <StepZilla
             steps={steps}
             preventEnterSubmission={true}
-            nextTextOnFinalActionStep={"Save"}
+            nextTextOnFinalActionStep={"Load"}
             hocValidationAppliedTo={[3]}
             startAtStep={window.sessionStorage.getItem('step') ? parseFloat(window.sessionStorage.getItem('step')) : 0}
             onStepChange={(step) => window.sessionStorage.setItem('step', step)}

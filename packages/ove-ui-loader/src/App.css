@@ -1,33 +1,192 @@
-.App {
+html, html body {
+  background-color: #f2f9ff;
+  font-family: 'Roboto', sans-serif;
+}
+
+html h1 {
+  font-size: 26px;
+  margin-left: 10px;
+}
+
+html h2 {
+  font-size: 22px;
+  margin-left: 10px;
+}
+
+html h3 {
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+html h4 {
+  font-size: 16px;
+}
+
+.example {
+  margin-top: 40px;
+}
+
+.progtrckr {
   text-align: center;
+  padding-bottom: 16px;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+.progtrckr li {
+  margin-bottom: 10px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.val-err-tooltip {
+  background-color: red;
+  padding: 3px 5px 3px 10px;
+  font-size: 14px;
+  color: #fff;
+}
+
+.step {
+  background-color: #ccc;
+  min-height: 450px;
+  padding: 10px;
+}
+
+html .row, html .form-horizontal .form-group {
+  margin: 0;
+}
+
+.footer-buttons {
+  margin-top: 10px;
+}
+
+html .step3 label, html .step4 label {
+  font-size: 20px;
+  text-align: left;
+}
+
+html .form-horizontal .control-label {
+  text-align: left;
+}
+
+.review .txt {
+  font-size: 20px;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+}
+
+html body .saving {
+  background-color: #5cb85c;
+  width: 90%;
+  padding: 5px;
+  font-size: 16px;
+}
+
+code {
+  position: relative;
+  left: 12px;
+  line-height: 25px;
+}
+
+.eg-jump-lnk {
+  margin-top: 50px;
+  font-style: italic;
+}
+
+.lib-version {
+  font-size: 12px;
+  background-color: rgba(255, 255, 0, 1);
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  padding: 5px;
+}
+
+html .content {
+  margin-left: 10px;
+}
+
+span.red {
+  color: #d9534f;
+}
+
+span.green {
+  color: #3c763d;
+}
+
+span.bold {
+  font-weight: bold;
+}
+
+html .hoc-alert {
+  margin-top: 20px;
+}
+
+html .form-block-holder {
+  margin-top: 20px !important;
+}
+
+/* overwrite the stepzilla styles */
+html ol.progtrckr li.progtrckr-todo:before {
+  content: "\2022";
   color: white;
+  background-color: #CCCCCC;
+  width: 1.2em;
+  line-height: 1.2em;
+  border-radius: 1.2em;
 }
 
-.App-link {
-  color: #61dafb;
+html ol.progtrckr li.progtrckr-todo {
+  color: black;
+  border-bottom: 4px solid #CCCCCC;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+html ol.progtrckr li.progtrckr-doing:before {
+  background-color: #f0b32f;
+}
+
+html ol.progtrckr li.progtrckr-doing {
+  border-bottom: 4px solid #f0b32f;
+}
+
+html ol.progtrckr li.progtrckr-doing[value="5"]:before {
+  content: "\2713";
+  background-color: #5cb85c;
+}
+
+html ol.progtrckr li.progtrckr-doing[value="5"] {
+  color: black;
+  border-bottom: 4px solid #5cb85c;
+}
+
+html ol.progtrckr li.progtrckr-todo:hover:before, html ol.progtrckr li.progtrckr-doing:hover:before {
+  color: black;
+}
+
+#exList {
+  background-color: #333;
+  padding: 8px;
+  text-align: center;
+  color: #fff;
+}
+
+#exList .title {
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-top: 5px;
+}
+
+#exList .eg {
+  display: inline-block;
+  padding: 5px;
+  border: solid 1px;
+  border-radius: 3px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+#exList .eg.sel {
+  background-color: #000;
+}
+
+.container {
+  display: none;
 }
