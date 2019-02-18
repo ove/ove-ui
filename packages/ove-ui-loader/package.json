@@ -1,0 +1,35 @@
+{
+  "name": "@ove/ove-ui-loader",
+  "version": "0.1.0",
+  "description": "Loads content into OVE",
+  "main": "server.js",
+  "private": true,
+  "dependencies": {
+    "express": "4.16.4",
+    "joi": "14.3.1",
+    "joi-validation-strategy": "0.3.3",
+    "react": "16.8.2",
+    "react-dom": "16.8.2",
+    "react-scripts": "2.1.5",
+    "react-stepzilla": "5.0.0",
+    "react-validation-mixin": "5.4.0"
+  },
+  "keywords": [],
+  "author": "Senaka Fernando <senaka.fernando15@imperial.ac.uk>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node server.js",
+    "start:dev": "PORT=3001 react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "apps": [
+    {
+      "name": "@ove/ove-ui-loader",
+      "cwd": "./packages/ove-ui-loader",
+      "kill_timeout": 3000,
+      "restart_delay": 3000,
+      "script": "server.js",
+      "env": {
+          "PORT": "8281"
+      }
+    }
+  ]
+}
