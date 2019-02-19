@@ -10,9 +10,12 @@
     "joi-validation-strategy": "0.3.3",
     "react": "16.8.2",
     "react-dom": "16.8.2",
+    "react-redux": "6.0.0",
     "react-scripts": "2.1.5",
     "react-stepzilla": "5.0.0",
-    "react-validation-mixin": "5.4.0"
+    "react-validation-mixin": "5.4.0",
+    "redux": "4.0.1",
+    "redux-persist": "5.10.0"
   },
   "keywords": [],
   "author": "Senaka Fernando <senaka.fernando15@imperial.ac.uk>",

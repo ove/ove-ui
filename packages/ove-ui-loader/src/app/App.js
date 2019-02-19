@@ -2,25 +2,19 @@
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
 import StepZilla from "react-stepzilla";
-import SelectApp from './SelectApp';
-import Step2 from './Step2';
-import Step3 from './Step3';
-import Step4 from './Step4';
-import Step5 from './Step5';
-import Step6 from './Step6';
+import SelectApp from '../steps/SelectApp';
+import Step2 from '../steps/Step2';
+import Step3 from '../steps/Step3';
+import Step4 from '../steps/Step4';
+import Step5 from '../steps/Step5';
+import Step6 from '../steps/Step6';
 import './App.css';
-import './main.css';
+import '../deps/main.css';
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-
-    this.sampleStore = {
-      email: '',
-      app: '',
-      savedToCloud: false
-    };
+    this.store = props;
   }
 
   componentDidMount() {}
@@ -28,14 +22,18 @@ class App extends Component {
   componentWillUnmount() {}
 
   getStore() {
-    return this.sampleStore;
+    return this.store;
   }
 
   updateStore(update) {
-    this.sampleStore = {
-      ...this.sampleStore,
+    this.store = {
+      ...this.store,
       ...update,
     }
+    this.store.dispatch({
+      type: "UPDATE",
+      ...update,
+    })
   }
 
   render() {

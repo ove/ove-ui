@@ -10,8 +10,6 @@ export default class SelectApp extends Component {
       app: props.getStore().app
     };
 
-    this._validateOnDemand = true; // this flag enables onBlur validation as user fills forms
-
     this.validationCheck = this.validationCheck.bind(this);
     this.isValidated = this.isValidated.bind(this);
   }
@@ -23,48 +21,41 @@ export default class SelectApp extends Component {
   isValidated() {
     const userInput = this._grabUserInput(); // grab user entered vals
     const validateNewInput = this._validateData(userInput); // run the new input against the validator
-    let isDataValid = false;
 
     // if full validation passes then save to store and pass as valid
     if (Object.keys(validateNewInput).every((k) => { return validateNewInput[k] === true })) {
-        if (this.props.getStore().email !== userInput.email || this.props.getStore().gender !== userInput.gender) { // only update store of something changed
+        if (this.props.getStore().app !== userInput.app) { // only update store of something changed
           this.props.updateStore({
             ...userInput,
             savedToCloud: false // use this to notify step4 that some changes took place and prompt the user to save again
           });  // Update store here (this is just an example, in reality you will do it via redux or flux)
         }
-
-        isDataValid = true;
+        return true;
     }
     else {
         // if anything fails then update the UI validation state but NOT the UI Data State
         this.setState(Object.assign(userInput, validateNewInput, this._validationErrors(validateNewInput)));
+        return false;
     }
-
-    return isDataValid;
   }
 
   validationCheck() {
-    if (!this._validateOnDemand)
-      return;
-
     const userInput = this._grabUserInput(); // grab user entered vals
     const validateNewInput = this._validateData(userInput); // run the new input against the validator
 
     this.setState(Object.assign(userInput, validateNewInput, this._validationErrors(validateNewInput)));
   }
 
-   _validateData(data) {
+  _validateData(data) {
     return  {
-      appVal: (data.app !== ''), // required: anything besides N/A
+      appVal: (data.app !== '')
     }
   }
 
   _validationErrors(val) {
-    const errMsgs = {
-      appValMsg: val.appVal ? '' : 'An application must be selected',
-    }
-    return errMsgs;
+    return {
+      appValMsg: val.appVal ? '' : 'An application must be selected'
+    };
   }
 
   _grabUserInput() {
