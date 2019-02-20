@@ -5,7 +5,7 @@
       "cwd": "./packages/ove-ui-loader",
       "kill_timeout": 3000,
       "restart_delay": 3000,
-      "script": "server.js",
+      "script": "-r dotenv/config server.js dotenv_config_path=.env",
       "env": {
           "PORT": "8281"
       }
