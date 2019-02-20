@@ -1,6 +1,7 @@
 /* jshint ignore:start */
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
+import axios from 'axios';
 
 export default class SelectApp extends Component {
     constructor(props) {
@@ -25,20 +26,59 @@ export default class SelectApp extends Component {
         const validateNewInput = this._validateData(userInput); // run the new input against the validator
 
         // if full validation passes then save to store and pass as valid
-        if (Object.keys(validateNewInput).every((k) => { return validateNewInput[k] === true })) {
+        if (Object.keys(validateNewInput).every((k) => { return validateNewInput[k] === true; })) {
             if (this.props.getStore().app !== userInput.app) { // only update store of something changed
                 this.props.updateStore({
-                    ...userInput,
-                    savedToCloud: false // use this to notify step4 that some changes took place and prompt the user to save again
-                });  // Update store here (this is just an example, in reality you will do it via redux or flux)
+                    ...userInput
+                });
             }
             const valid = true;
             this.log.debug('Input is valid:', valid, 'step:', SelectApp.name);
-            return valid;
+            const __self = this;
+            return new Promise((resolve, _reject) => {
+                const hostname = process.env.REACT_APP_OVE_HOST;
+                let result = {};
+                let count = 0;
+                axios.get('//' + hostname + '/spaces').then(res => res.data).then(spaces => {
+                    count = Object.keys(spaces).length;
+                    Object.keys(spaces).forEach(space => {
+                        axios.get('//' + hostname + '/spaces/' + space + '/geometry').then(res => {
+                            result[space] = res.data;
+                        }).catch(this.log.error);
+                    });
+                }).catch(this.log.error);
+                setTimeout(_ => {
+                    const x = setInterval(_ => {
+                        if (count > 0 && Object.keys(result).length === count) {
+                            clearInterval(x);
+                            __self.props.updateStore({
+                                ...userInput,
+                                spaces: result
+                            });
+                            axios.get('//' + process.env['REACT_APP_OVE_APP_' +
+                                userInput.app.toUpperCase()] + '/name').then(_ => {
+                                resolve(true);
+                            }).catch(error => {
+                                if (error.request) {
+                                    this.setState({
+                                        ...this.state,
+                                        appVal: false,
+                                        appValMsg: 'Selected application is not available'
+                                    });
+                                    this.log.debug('Ran validation check at step:', SelectApp.name);
+                                    resolve(false);
+                                } else {
+                                    this.log.error(error);
+                                }
+                            });
+                        }
+                    }, 1000);
+                }, 2000);
+            });
         }
         else {
             // if anything fails then update the UI validation state but NOT the UI Data State
-            this.setState(Object.assign(userInput, validateNewInput, this._validationErrors(validateNewInput)));
+            this.setState(Object.assign(userInput, validateNewInput, this._validationMessages(validateNewInput)));
             const valid = false;
             this.log.debug('Input is valid:', valid, 'step:', SelectApp.name);
             return valid;
@@ -49,17 +89,17 @@ export default class SelectApp extends Component {
         const userInput = this._grabUserInput(); // grab user entered vals
         const validateNewInput = this._validateData(userInput); // run the new input against the validator
 
-        this.setState(Object.assign(userInput, validateNewInput, this._validationErrors(validateNewInput)));
-        this.log.debug('Ran validation check at step:', SelectApp.name)
+        this.setState(Object.assign(userInput, validateNewInput, this._validationMessages(validateNewInput)));
+        this.log.debug('Ran validation check at step:', SelectApp.name);
     }
 
     _validateData(data) {
         return {
             appVal: (data.app !== '')
-        }
+        };
     }
 
-    _validationErrors(val) {
+    _validationMessages(val) {
         return {
             appValMsg: val.appVal ? '' : 'An application must be selected'
         };
@@ -123,6 +163,6 @@ export default class SelectApp extends Component {
                     </form>
                 </div>
             </div>
-        )
+        );
     }
 }
