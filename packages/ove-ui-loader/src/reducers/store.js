@@ -12,7 +12,8 @@ export default () => {
                     ...state,
                     email: action.email,
                     app: action.app,
-                    savedToCloud: action.savedToCloud
+                    savedToCloud: action.savedToCloud,
+                    space: action.space
                 };
             default:
                 return state;
@@ -21,12 +22,12 @@ export default () => {
     const persistedReducer = persistReducer({
         key: 'root',
         storage,
-        blacklist: ['log']
+        blacklist: ['log', 'spaces']
     }, combineReducers({
         form: persistReducer({
             key: 'form',
             storage,
-            blacklist: ['log']
+            blacklist: ['log', 'spaces']
         }, formReducer)
     }));
     const store = createStore(persistedReducer);
@@ -35,6 +36,8 @@ export default () => {
         email: state.form.email,
         app: state.form.app,
         savedToCloud: state.form.savedToCloud,
+        space: state.form.space,
+        spaces: state.form.spaces,
         log: ownProps.log
     });
     return { store, persistor, mapStateToProps };
