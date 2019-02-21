@@ -4,6 +4,9 @@
   "description": "Loads content into OVE",
   "main": "server.js",
   "private": true,
+  "keywords": [],
+  "author": "Senaka Fernando <senaka.fernando15@imperial.ac.uk>",
+  "license": "MIT",
   "dependencies": {
     "axios": "0.18.0",
     "dotenv": "6.2.0",
@@ -21,11 +24,9 @@
     "react-stepzilla": "5.0.0",
     "react-validation-mixin": "5.4.0",
     "redux": "4.0.1",
-    "redux-persist": "5.10.0"
+    "redux-persist": "5.10.0",
+    "bootstrap": "3.3.6"
   },
-  "keywords": [],
-  "author": "Senaka Fernando <senaka.fernando15@imperial.ac.uk>",
-  "license": "MIT",
   "scripts": {
     "start": "node -r dotenv/config server.js dotenv_config_path=.env",
     "start:dev": "PORT=3001 node -r dotenv/config ../../node_modules/.bin/react-scripts start dotenv_config_path=.env",

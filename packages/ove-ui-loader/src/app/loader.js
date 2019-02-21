@@ -9,6 +9,8 @@ import StateConfiguration from '../steps/StateConfiguration';
 import Review from '../steps/Review';
 import Confirm from '../steps/Confirm';
 import Complete from '../steps/Complete';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap-theme.min.css';
 import './loader.css';
 
 class Loader extends Component {
