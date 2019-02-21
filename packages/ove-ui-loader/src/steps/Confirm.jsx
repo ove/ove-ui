@@ -65,8 +65,11 @@ export default class Confirm extends Component {
             const loadApp = _ => {
                 axios.post('http://' + Constants.REACT_APP_OVE_HOST + '/section', this.state.payload).then(res => {
                     if ((res.data.id || res.data.id === 0)) {
-                        const controllerURL = 'http://' + Constants.REACT_APP_OVE_APP(this.state.app) +
+                        let controllerURL = 'http://' + Constants.REACT_APP_OVE_APP(this.state.app) +
                             '/control.html?oveSectionId=' + res.data.id;
+                        if (this.state.app === Constants.App.ALIGNMENT) {
+                            controllerURL += '&oveSpace=' + this.state.space;
+                        }
                         if (this.state.showController) {
                             $('<a>', {
                                 class: Constants.SECTION_CONTROLLER.substring(1),

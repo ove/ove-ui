@@ -27,11 +27,6 @@ export default class Review extends Component {
             this.state.state = props.getStore().state
         }
 
-        if ([Constants.App.ALIGNMENT, Constants.App.WHITEBOARD].includes(this.state.app)) {
-            this.props.jumpToStep(2);
-            return;
-        }
-
         this.updateCode = this.updateCode.bind(this);
         this.validationCheck = this.validationCheck.bind(this);
         this.isValidated = this.isValidated.bind(this);
@@ -89,7 +84,8 @@ export default class Review extends Component {
 
     _validateData(data) {
         return {
-            configVal: this.state.state || (data.config !== '' && this._isValidJSON(data.config))
+            configVal: [Constants.App.ALIGNMENT, Constants.App.WHITEBOARD].includes(this.state.app) || 
+                this.state.state || (data.config !== '' && this._isValidJSON(data.config))
         };
     }
 
@@ -108,26 +104,28 @@ export default class Review extends Component {
     }
 
     _getInstructions() {
-        if (this.state.state) {
-            return (
-                <h3>Pressing <code>Next</code> will finalise the configuration for creating an instance of an application of
-                type <code>{this.state.app}</code> in space <code>{this.state.space}</code> with
-                geometry <code>{JSON.stringify(this.state.geometry)}</code>. The <code>{this.state.state}</code> state
-                configuration will be pre-loaded with this application instance.</h3>
-            );
-        } else {
-            return (
-                <h3>Pressing <code>Next</code> finalise the configuration for creating an instance of an application of
-                type <code>{this.state.app}</code> in space <code>{this.state.space}</code> with
-                geometry <code>{JSON.stringify(this.state.geometry)}</code>. The following state configuration
-                will be pre-loaded with this application instance. <a href={'https://ove.readthedocs.io/en/stable/ove-apps/packages/ove-app-' + this.state.app + '/README.html#application-state'} target="_blank" rel="noopener noreferrer">Advanced configuration options</a> can
-                be passed by modifying the state configuration displayed below.</h3>
-            );
+        if (![Constants.App.ALIGNMENT, Constants.App.WHITEBOARD].includes(this.state.app)) {
+            if (this.state.state) {
+                return (
+                    <h3>Pressing <code>Next</code> will finalise the configuration for creating an instance of an application of
+                    type <code>{this.state.app}</code> in space <code>{this.state.space}</code> with
+                    geometry <code>{JSON.stringify(this.state.geometry)}</code>. The <code>{this.state.state}</code> state
+                    configuration will be pre-loaded with this application instance.</h3>
+                );
+            } else {
+                return (
+                    <h3>Pressing <code>Next</code> finalise the configuration for creating an instance of an application of
+                    type <code>{this.state.app}</code> in space <code>{this.state.space}</code> with
+                    geometry <code>{JSON.stringify(this.state.geometry)}</code>. The following state configuration
+                    will be pre-loaded with this application instance. <a href={'https://ove.readthedocs.io/en/stable/ove-apps/packages/ove-app-' + this.state.app + '/README.html#application-state'} target="_blank" rel="noopener noreferrer">Advanced configuration options</a> can
+                    be passed by modifying the state configuration displayed below.</h3>
+                );
+            }
         }
     }
 
     _showConfiguration() {
-        if (!this.state.state) {
+        if (![Constants.App.ALIGNMENT, Constants.App.WHITEBOARD].includes(this.state.app) && !this.state.state) {
             let cmOptions = {
                 lineNumbers: true,
                 lineWrapping: true,

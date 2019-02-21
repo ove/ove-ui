@@ -32,10 +32,6 @@ export default class StateConfiguration extends Component {
     componentWillUnmount() { }
 
     isValidated() {
-        if (!this.refs.mode) {
-            this.props.jumpToStep(4);
-            return false;
-        }
         const userInput = this._grabUserInput(); // grab user entered vals
         const validateNewInput = this._validateData(userInput); // run the new input against the validator
 
