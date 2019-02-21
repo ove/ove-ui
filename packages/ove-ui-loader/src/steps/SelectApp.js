@@ -141,13 +141,13 @@ export default class SelectApp extends Component {
                                             <option value="alignment">Alignment</option>
                                             <option value="audio">Audio</option>
                                             <option value="charts">Charts</option>
-                                            {/* <option value="controller">Controller</option> */}
+                                            <option value="controller">Controller</option>
                                             <option value="html">HTML</option>
                                             <option value="images">Images</option>
                                             <option value="maps">Maps</option>
                                             <option value="networks">Networks</option>
                                             <option value="pdf">PDF</option>
-                                            {/* <option value="replicator">Replicator</option> */}
+                                            <option value="replicator">Replicator</option>
                                             <option value="svg">SVG</option>
                                             <option value="videos">Videos</option>
                                             <option value="webrtc">WebRTC</option>

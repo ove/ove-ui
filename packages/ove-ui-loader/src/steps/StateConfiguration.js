@@ -15,6 +15,11 @@ export default class StateConfiguration extends Component {
             states: props.getStore().states
         };
 
+        if (['controller', 'replicator'].includes(this.state.app)) {
+            this.props.jumpToStep(1);
+            return;
+        }
+
         this.validationCheck = this.validationCheck.bind(this);
         this.isValidated = this.isValidated.bind(this);
         this.log.debug('Displaying step:', StateConfiguration.name);

@@ -9,6 +9,7 @@ export default class SpaceAndGeometry extends Component {
 
         this.log = props.getLogger();
         this.state = {
+            app: props.getStore().app,
             geometry: props.getStore().geometry || {},
             space: props.getStore().space,
             spaces: props.getStore().spaces
@@ -44,6 +45,17 @@ export default class SpaceAndGeometry extends Component {
             const valid = true;
             this.log.debug('Input is valid:', valid, 'step:', SpaceAndGeometry.name);
             const __self = this;
+            if (['controller', 'replicator'].includes(this.state.app)) {
+                let config = this.state.app === 'controller' ? JSON.stringify({ mode: 'space' }) : JSON.stringify({ mode: 'space', border: 'solid gold' });
+                this.props.updateStore({
+                    ...userInput,
+                    mode: 'new',
+                    url: undefined,
+                    config: config
+                });
+                this.props.jumpToStep(3);
+                return false;
+            }
             return axios.get('//' + process.env['REACT_APP_OVE_APP_' +
                 this.props.getStore().app.toUpperCase()] + '/states').then(res => res.data).then(states => {
                 __self.props.updateStore({

@@ -19,11 +19,15 @@ export default class Review extends Component {
 
         }
         if (props.getStore().mode === 'new') {
-            this.state.config = JSON.stringify({
-                url: props.getStore().url
-            });
+            this.state.config = props.getStore().url ?
+                JSON.stringify({ url: props.getStore().url }) : props.getStore().config;
         } else {
             this.state.state = props.getStore().state
+        }
+
+        if (['alignment', 'whiteboard'].includes(this.state.app)) {
+            this.props.jumpToStep(2);
+            return;
         }
 
         this.updateCode = this.updateCode.bind(this);
@@ -43,8 +47,7 @@ export default class Review extends Component {
         // if full validation passes then save to store and pass as valid
         if (Object.keys(validateNewInput).every((k) => { return validateNewInput[k] !== false; })) {
             this.props.updateStore({
-                ...userInput,
-                config: userInput.config ? JSON.parse(userInput.config) : undefined
+                ...userInput
             });
             const valid = true;
             this.log.debug('Input is valid:', valid, 'step:', Review.name);
@@ -156,10 +159,6 @@ export default class Review extends Component {
     }
 
     render() {
-        if (['alignment', 'whiteboard'].includes(this.state.app)) {
-            this.props.jumpToStep(2);
-            return (<div className="step review"></div>);
-        }
         return (
             <div className="step review">
                 <div className="row">
