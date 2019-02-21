@@ -32,7 +32,7 @@
     "start:dev": "PORT=3001 node -r dotenv/config ../../node_modules/.bin/react-scripts start dotenv_config_path=.env",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "lint": "eslint src/. --ext .js"
+    "lint": "eslint src/. --ext .jsx"
   },
   "eslintConfig": {
     "extends": "react-app"
