@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "@ove/ove-ui-loader",
+  "name": "OVE Application Loader",
   "icons": [
     {
       "src": "favicon.ico",

@@ -7,8 +7,8 @@ import SelectApp from '../steps/SelectApp';
 import SpaceAndGeometry from '../steps/SpaceAndGeometry';
 import StateConfiguration from '../steps/StateConfiguration';
 import Review from '../steps/Review';
-import Step5 from '../steps/Step5';
-import Step6 from '../steps/Step6';
+import Confirm from '../steps/Confirm';
+import Complete from '../steps/Complete';
 import './loader.css';
 
 class Loader extends Component {
@@ -49,8 +49,8 @@ class Loader extends Component {
                 { name: 'Define Geometry', component: <SpaceAndGeometry getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
                 { name: 'Configure State', component: <StateConfiguration getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
                 { name: 'Review Configuration', component: <Review getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
-                { name: 'Configure State', component: <Step5 getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
-                { name: 'Completed', component: <Step6 getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
+                { name: 'Confirm Operation', component: <Confirm getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
+                { name: 'Complete', component: <Complete getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
             ];
         steps.forEach(e => {
             this.log.debug('Loading step:', e.name);

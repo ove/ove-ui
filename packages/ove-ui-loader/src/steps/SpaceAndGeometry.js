@@ -189,7 +189,7 @@ export default class SpaceAndGeometry extends Component {
                         <div className="form-group">
                             <label className="col-md-12 control-label">
                                 <h1>Step 2: Select space and provide geometry details</h1>
-                                <h3>More information on <code>Space</code>, <code>Geometry</code> and other basic concepts are available in the <a href="https://ove.readthedocs.io/en/stable/docs/BASIC_CONCEPTS.html" target="_blank" rel="noopener noreferrer">Documentation</a>.</h3>
+                                <h3>You are creating an application of type <code>{this.state.app}</code>. More information on <code>Space</code>, <code>Geometry</code> and other basic concepts are available in the <a href="https://ove.readthedocs.io/en/stable/docs/BASIC_CONCEPTS.html" target="_blank" rel="noopener noreferrer">Documentation</a>.</h3>
                             </label>
                             <div className="col-md-12">
                                 <div className="form-group col-md-8 content form-block-holder">

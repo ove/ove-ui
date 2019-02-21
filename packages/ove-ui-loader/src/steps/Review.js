@@ -15,8 +15,9 @@ export default class Review extends Component {
         this.state = {
             app: props.getStore().app,
             space: props.getStore().space,
-            geometry: props.getStore().geometry
-
+            geometry: props.getStore().geometry,
+            deleteSections: props.getStore().deleteSections,
+            showController: props.getStore().showController
         }
         if (props.getStore().mode === 'new') {
             this.state.config = props.getStore().url ?
@@ -100,23 +101,22 @@ export default class Review extends Component {
     _grabUserInput() {
         return {
             config: this.state.config,
-            deleteSections: this.refs.deleteSections.value,
-            showPreview: this.refs.showPreview.value,
-            showController: this.refs.showController.value
+            deleteSections: JSON.parse(this.refs.deleteSections.value),
+            showController: JSON.parse(this.refs.showController.value)
         };
     }
 
     _getInstructions() {
         if (this.state.state) {
             return (
-                <h3>Pressing <code>Next</code> will create an instance of an application of
+                <h3>Pressing <code>Next</code> will finalise the configuration for creating an instance of an application of
                 type <code>{this.state.app}</code> in space <code>{this.state.space}</code> with
                 geometry <code>{JSON.stringify(this.state.geometry)}</code>. The <code>{this.state.state}</code> state
                 configuration will be pre-loaded with this application instance.</h3>
             );
         } else {
             return (
-                <h3>Pressing <code>Next</code> will create an instance of an application of
+                <h3>Pressing <code>Next</code> finalise the configuration for creating an instance of an application of
                 type <code>{this.state.app}</code> in space <code>{this.state.space}</code> with
                 geometry <code>{JSON.stringify(this.state.geometry)}</code>. The following state configuration
                 will be pre-loaded with this application instance. <a href={'https://ove.readthedocs.io/en/stable/ove-apps/packages/ove-app-' + this.state.app + '/README.html#application-state'} target="_blank" rel="noopener noreferrer">Advanced configuration options</a> can
@@ -129,6 +129,7 @@ export default class Review extends Component {
         if (!this.state.state) {
             let cmOptions = {
                 lineNumbers: true,
+                lineWrapping: true,
                 mode: {name: "javascript", json: true},
                 smartIndent: true,
                 theme: "dracula"
@@ -179,17 +180,6 @@ export default class Review extends Component {
                                             <option value="true">Yes</option>
                                         </select>
                                     </div>
-                                    <label className="control-label col-md-3">
-                                        Show preview
-                                    </label>
-                                    <div className="no-error col-sm-2">
-                                        <select ref="showPreview" autoComplete="off" className="form-control" required defaultValue={this.state.showPreview} onBlur={this.validationCheck}>
-                                            <option value="false">No</option>
-                                            {/* <option value="true">Yes</option> */}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="form-group col-md-8 content form-block-holder">
                                     <label className="control-label col-md-3">
                                         Show controller
                                     </label>

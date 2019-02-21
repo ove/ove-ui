@@ -19,8 +19,8 @@ export default () => {
                     state: action.state,
                     config: action.config,
                     deleteSections: action.deleteSections,
-                    showPreview: action.showPreview,
-                    showController: action.showController
+                    showController: action.showController,
+                    controllerURL: action.controllerURL
                 };
             default:
                 return state;
@@ -50,8 +50,8 @@ export default () => {
         state: state.form.state,
         states: state.form.states,
         deleteSections: state.form.deleteSections,
-        showPreview: state.form.showPreview,
         showController: state.form.showController,
+        controllerURL: state.form.controllerURL,
         log: ownProps.log
     });
     return { store, persistor, mapStateToProps };

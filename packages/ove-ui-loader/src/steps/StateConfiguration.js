@@ -10,6 +10,7 @@ export default class StateConfiguration extends Component {
         this.state = {
             app: props.getStore().app,
             state: props.getStore().state,
+            space: props.getStore().space,
             url: props.getStore().url,
             mode: props.getStore().mode,
             states: props.getStore().states
@@ -141,14 +142,18 @@ export default class StateConfiguration extends Component {
     _getInstructions() {
         switch (this.state.app) {
             case 'alignment':
-                return (<h3>The <code>Alignment App</code> does not require a state configuration. Please press <code>Next</code> to proceed.</h3>);
+                return (<h3>The <code>Alignment App</code> does not require a state configuration.
+                    Please press <code>Next</code> to proceed.</h3>);
             case 'whiteboard':
-                return (<h3>The <code>Whiteboard App</code> does not require a state configuration. Please press <code>Next</code> to proceed.</h3>);
+                return (<h3>The <code>Whiteboard App</code> does not require a state configuration.
+                    Please press <code>Next</code> to proceed.</h3>);
             case 'maps':
             case 'webrtc':
-                return (<h3>Please select one of the following pre-loaded states.</h3>);
+                return (<h3>You are creating an application of type <code>{this.state.app}</code> in space <code>{this.state.space}</code>.
+                    Please select one of the following pre-loaded states.</h3>);
             default:
-                return (<h3>Please select an existing state or provide an asset URL to create a new state configuration.</h3>);
+                return (<h3>You are creating an application of type <code>{this.state.app}</code> in space <code>{this.state.space}</code>.
+                    Please select an existing state or provide an asset URL to create a new state configuration.</h3>);
         }
     }
 
