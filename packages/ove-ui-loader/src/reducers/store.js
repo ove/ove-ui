@@ -12,8 +12,15 @@ export default () => {
                     ...state,
                     email: action.email,
                     app: action.app,
-                    savedToCloud: action.savedToCloud,
-                    space: action.space
+                    mode: action.mode,
+                    space: action.space,
+                    geometry: action.geometry,
+                    url: action.url,
+                    state: action.state,
+                    config: action.config,
+                    deleteSections: action.deleteSections,
+                    showPreview: action.showPreview,
+                    showController: action.showController
                 };
             default:
                 return state;
@@ -22,12 +29,12 @@ export default () => {
     const persistedReducer = persistReducer({
         key: 'root',
         storage,
-        blacklist: ['log', 'spaces']
+        blacklist: ['log', 'spaces', 'states']
     }, combineReducers({
         form: persistReducer({
             key: 'form',
             storage,
-            blacklist: ['log', 'spaces']
+            blacklist: ['log', 'spaces', 'states']
         }, formReducer)
     }));
     const store = createStore(persistedReducer);
@@ -35,9 +42,16 @@ export default () => {
     const mapStateToProps = (state, ownProps) => ({
         email: state.form.email,
         app: state.form.app,
-        savedToCloud: state.form.savedToCloud,
+        mode: state.form.mode,
         space: state.form.space,
         spaces: state.form.spaces,
+        geometry: state.form.geometry,
+        url: state.form.url,
+        state: state.form.state,
+        states: state.form.states,
+        deleteSections: state.form.deleteSections,
+        showPreview: state.form.showPreview,
+        showController: state.form.showController,
         log: ownProps.log
     });
     return { store, persistor, mapStateToProps };

@@ -36,8 +36,7 @@ export default class Step3 extends Component {
         }
 
         isDataValid = true;
-    }
-    else {
+    } else {
         // if anything fails then update the UI validation state but NOT the UI Data State
         this.setState(Object.assign(userInput, validateNewInput, this._validationErrors(validateNewInput)));
     }
@@ -83,16 +82,14 @@ export default class Step3 extends Component {
 
     if (typeof this.state.genderVal == 'undefined' || this.state.genderVal) {
       notValidClasses.genderCls = 'no-error col-md-8';
-    }
-    else {
+    } else {
        notValidClasses.genderCls = 'has-error col-md-8';
        notValidClasses.genderValGrpCls = 'val-err-tooltip';
     }
 
     if (typeof this.state.emailVal == 'undefined' || this.state.emailVal) {
         notValidClasses.emailCls = 'no-error col-md-8';
-    }
-    else {
+    } else {
        notValidClasses.emailCls = 'has-error col-md-8';
        notValidClasses.emailValGrpCls = 'val-err-tooltip';
     }

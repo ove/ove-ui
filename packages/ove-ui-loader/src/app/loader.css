@@ -19,6 +19,7 @@ html h2 {
 html h3 {
     font-size: 14px;
     margin-left: 10px;
+    line-height: 1.7;
 }
 
 html h4 {
@@ -118,6 +119,12 @@ html .hoc-alert {
 
 html .form-block-holder {
     margin-top: 20px !important;
+}
+
+/* change codemirror height */
+.CodeMirror {
+    border: 1px solid #eee;
+    height: auto;
 }
 
 /* overwrite the stepzilla styles */

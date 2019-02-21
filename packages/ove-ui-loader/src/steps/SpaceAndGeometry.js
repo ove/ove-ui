@@ -1,6 +1,7 @@
 /* jshint ignore:start */
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
+import axios from 'axios';
 
 export default class SpaceAndGeometry extends Component {
     constructor(props) {
@@ -42,9 +43,15 @@ export default class SpaceAndGeometry extends Component {
             }
             const valid = true;
             this.log.debug('Input is valid:', valid, 'step:', SpaceAndGeometry.name);
-            return valid;
-        }
-        else {
+            const __self = this;
+            return axios.get('//' + process.env['REACT_APP_OVE_APP_' +
+                this.props.getStore().app.toUpperCase()] + '/states').then(res => res.data).then(states => {
+                __self.props.updateStore({
+                    ...userInput,
+                    states: states
+                });
+            }).catch(this.log.error);
+        } else {
             // if anything fails then update the UI validation state but NOT the UI Data State
             this.setState(Object.assign(userInput, validateNewInput, this._validationMessages(validateNewInput)));
             const valid = false;
@@ -117,7 +124,7 @@ export default class SpaceAndGeometry extends Component {
         };
     }
 
-    _createSelectItems() {
+    _getSelectionItems() {
         let items = [];
         if (this.state.spaces) {
             Object.keys(this.state.spaces).forEach(e => {
@@ -133,37 +140,32 @@ export default class SpaceAndGeometry extends Component {
 
         if (typeof this.state.spaceVal == 'undefined' || this.state.spaceVal) {
             notValidClasses.spaceCls = 'no-error col-md-5';
-        }
-        else {
+        } else {
             notValidClasses.spaceCls = 'has-error col-md-5';
             notValidClasses.spaceValGrpCls = 'val-err-tooltip';
         }
 
         if (typeof this.state.geometryVal_x == 'undefined' || this.state.geometryVal_x) {
             notValidClasses.geometryCls_x = 'no-error col-sm-3';
-        }
-        else {
+        } else {
             notValidClasses.geometryCls_x = 'has-error col-sm-3';
             notValidClasses.geometryValGrpCls_x = 'val-err-tooltip';
         }
         if (typeof this.state.geometryVal_y == 'undefined' || this.state.geometryVal_y) {
             notValidClasses.geometryCls_y = 'no-error col-sm-3';
-        }
-        else {
+        } else {
             notValidClasses.geometryCls_y = 'has-error col-sm-3';
             notValidClasses.geometryValGrpCls_y = 'val-err-tooltip';
         }
         if (typeof this.state.geometryVal_w == 'undefined' || this.state.geometryVal_w) {
             notValidClasses.geometryCls_w = 'no-error col-sm-3';
-        }
-        else {
+        } else {
             notValidClasses.geometryCls_w = 'has-error col-sm-3';
             notValidClasses.geometryValGrpCls_w = 'val-err-tooltip';
         }
         if (typeof this.state.geometryVal_h == 'undefined' || this.state.geometryVal_h) {
             notValidClasses.geometryCls_h = 'no-error col-sm-3';
-        }
-        else {
+        } else {
             notValidClasses.geometryCls_h = 'has-error col-sm-3';
             notValidClasses.geometryValGrpCls_h = 'val-err-tooltip';
         }
@@ -185,7 +187,7 @@ export default class SpaceAndGeometry extends Component {
                                     <div className={notValidClasses.spaceCls}>
                                         <select ref="space" autoComplete="off" className="form-control" required defaultValue={this.state.space} onBlur={this.validationCheck}>
                                             <option value="">Please select</option>
-                                            {this._createSelectItems()}
+                                            {this._getSelectionItems()}
                                         </select>
                                         <div className={notValidClasses.spaceValGrpCls}>{this.state.spaceValMsg}</div>
                                     </div>
@@ -206,7 +208,7 @@ export default class SpaceAndGeometry extends Component {
                                             type="number"
                                             placeholder="0"
                                             min="0"
-                                            max={this.state.bounds ? this.state.bounds.w : 1440}
+                                            max={this.state.bounds ? this.state.bounds.w : 4320}
                                             className="form-control"
                                             required
                                             defaultValue={this.state.geometry.x}
@@ -223,7 +225,7 @@ export default class SpaceAndGeometry extends Component {
                                             type="number"
                                             placeholder="0"
                                             min="0"
-                                            max={this.state.bounds ? this.state.bounds.h : 808}
+                                            max={this.state.bounds ? this.state.bounds.h : 2424}
                                             className="form-control"
                                             required
                                             defaultValue={this.state.geometry.y}
@@ -243,9 +245,9 @@ export default class SpaceAndGeometry extends Component {
                                             ref="geometry_w"
                                             autoComplete="off"
                                             type="number"
-                                            placeholder={this.state.bounds ? this.state.bounds.w : 1440}
+                                            placeholder={this.state.bounds ? this.state.bounds.w : 4320}
                                             min="1"
-                                            max={this.state.bounds ? this.state.bounds.w : 1440}
+                                            max={this.state.bounds ? this.state.bounds.w : 4320}
                                             className="form-control"
                                             required
                                             defaultValue={this.state.geometry.w}
@@ -260,9 +262,9 @@ export default class SpaceAndGeometry extends Component {
                                             ref="geometry_h"
                                             autoComplete="off"
                                             type="number"
-                                            placeholder={this.state.bounds ? this.state.bounds.h : 808}
+                                            placeholder={this.state.bounds ? this.state.bounds.h : 2424}
                                             min="1"
-                                            max={this.state.bounds ? this.state.bounds.h : 808}
+                                            max={this.state.bounds ? this.state.bounds.h : 2424}
                                             className="form-control"
                                             required
                                             defaultValue={this.state.geometry.h}
