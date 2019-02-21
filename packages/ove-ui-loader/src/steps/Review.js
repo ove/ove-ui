@@ -44,7 +44,7 @@ export default class Review extends Component {
         if (Object.keys(validateNewInput).every((k) => { return validateNewInput[k] !== false; })) {
             this.props.updateStore({
                 ...userInput,
-                config: JSON.parse(userInput.config)
+                config: userInput.config ? JSON.parse(userInput.config) : undefined
             });
             const valid = true;
             this.log.debug('Input is valid:', valid, 'step:', Review.name);
@@ -84,7 +84,7 @@ export default class Review extends Component {
 
     _validateData(data) {
         return {
-            configVal: (data.config !== '' && this._isValidJSON(data.config))
+            configVal: this.state.state || (data.config !== '' && this._isValidJSON(data.config))
         };
     }
 
@@ -122,29 +122,51 @@ export default class Review extends Component {
         }
     }
 
-    render() {
-        let cmOptions = {
-            lineNumbers: true,
-            mode: {name: "javascript", json: true},
-            smartIndent: true,
-            theme: "dracula"
-        };
-        // explicit class assigning based on validation
-        let notValidClasses = {};
+    _showConfiguration() {
+        if (!this.state.state) {
+            let cmOptions = {
+                lineNumbers: true,
+                mode: {name: "javascript", json: true},
+                smartIndent: true,
+                theme: "dracula"
+            };
+            // explicit class assigning based on validation
+            let notValidClasses = {};
+    
+            if (typeof this.state.configVal == 'undefined' || this.state.configVal) {
+                notValidClasses.configCls = 'no-error col-md-8';
+            } else {
+                notValidClasses.configCls = 'has-error col-md-8';
+                notValidClasses.configValGrpCls = 'val-err-tooltip';
+            }
+            return (    
+                <div className="col-md-12">
+                    <div className="form-group col-md-8 content form-block-holder">
+                        <label className="control-label col-md-3">
+                            Configuration
+                        </label>
+                        <div className="col-md-9">
+                            <CodeMirror value={js_beautify(this.state.config, { indent_size: 2   })} onChange={this.updateCode} options={cmOptions} />
+                            <div className={notValidClasses.configValGrpCls}>{this.state.configValMsg}</div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+    }
 
-        if (typeof this.state.configVal == 'undefined' || this.state.configVal) {
-            notValidClasses.configCls = 'no-error col-md-8';
-        } else {
-            notValidClasses.configCls = 'has-error col-md-8';
-            notValidClasses.configValGrpCls = 'val-err-tooltip';
+    render() {
+        if (['alignment', 'whiteboard'].includes(this.state.app)) {
+            this.props.jumpToStep(2);
+            return (<div className="step review"></div>);
         }
         return (
-            <div className="step selectStateConfiguration">
+            <div className="step review">
                 <div className="row">
                     <form id="Form" className="form-horizontal">
                         <div className="form-group">
                             <label className="col-md-12 control-label">
-                                <h1>Step 4: Review operation details</h1>
+                                <h1>Step 4: Review state configuration and operation details</h1>
                                 <h3>Please select additional actions that should be performed when loading the application instance.</h3>
                             </label>
                             <div className="col-md-12">
@@ -183,17 +205,7 @@ export default class Review extends Component {
                             <label className="col-md-12 control-label">
                                 {this._getInstructions()}
                             </label>
-                            <div className="col-md-12">
-                                <div className="form-group col-md-8 content form-block-holder">
-                                    <label className="control-label col-md-3">
-                                        Configuration
-                                    </label>
-                                    <div className="col-md-9">
-                                        <CodeMirror value={js_beautify(this.state.config, { indent_size: 2   })} onChange={this.updateCode} options={cmOptions} />
-                                        <div className={notValidClasses.configValGrpCls}>{this.state.configValMsg}</div>
-                                    </div>
-                                </div>
-                            </div>
+                            {this._showConfiguration()}
                         </div>
                     </form>
                 </div>

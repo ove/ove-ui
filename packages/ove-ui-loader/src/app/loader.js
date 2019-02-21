@@ -45,10 +45,10 @@ class Loader extends Component {
     render() {
         const steps =
             [
-                { name: 'Application', component: <SelectApp getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u);}} /> },
-                { name: 'Space and Geometry', component: <SpaceAndGeometry getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
-                { name: 'State Configuration', component: <StateConfiguration getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
-                { name: 'Review Operation', component: <Review getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
+                { name: 'Select Application', component: <SelectApp getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u);}} /> },
+                { name: 'Define Geometry', component: <SpaceAndGeometry getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
+                { name: 'Configure State', component: <StateConfiguration getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
+                { name: 'Review Configuration', component: <Review getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
                 { name: 'Configure State', component: <Step5 getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
                 { name: 'Completed', component: <Step6 getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
             ];

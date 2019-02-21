@@ -25,6 +25,10 @@ export default class StateConfiguration extends Component {
     componentWillUnmount() { }
 
     isValidated() {
+        if (!this.refs.mode) {
+            this.props.jumpToStep(4);
+            return false;
+        }
         const userInput = this._grabUserInput(); // grab user entered vals
         const validateNewInput = this._validateData(userInput); // run the new input against the validator
 
@@ -113,9 +117,9 @@ export default class StateConfiguration extends Component {
 
     _grabUserInput() {
         return {
-            mode: this.refs.mode.value,
-            state: this.refs.state.value,
-            url: this.refs.url.value
+            mode: this.refs.mode ? this.refs.mode.value : undefined,
+            state: this.refs.state ? this.refs.state.value : undefined,
+            url: this.refs.url ? this.refs.url.value : undefined
         };
     }
 
@@ -139,7 +143,7 @@ export default class StateConfiguration extends Component {
             case 'webrtc':
                 return (<h3>Please select one of the following pre-loaded states.</h3>);
             default:
-                return (<h3>Please select either an existing state or provide the asset URL to create a new state configuration.</h3>);
+                return (<h3>Please select an existing state or provide an asset URL to create a new state configuration.</h3>);
         }
     }
 
