@@ -1,6 +1,7 @@
 /* jshint ignore:start */
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
+import Constants from '../constants/loader';
 import CodeMirror from 'react-codemirror';
 import { js_beautify } from 'js-beautify'
 import 'codemirror/mode/javascript/javascript';
@@ -19,14 +20,14 @@ export default class Review extends Component {
             deleteSections: props.getStore().deleteSections,
             showController: props.getStore().showController
         }
-        if (props.getStore().mode === 'new') {
+        if (props.getStore().mode === Constants.Mode.NEW) {
             this.state.config = props.getStore().url ?
                 JSON.stringify({ url: props.getStore().url }) : props.getStore().config;
         } else {
             this.state.state = props.getStore().state
         }
 
-        if (['alignment', 'whiteboard'].includes(this.state.app)) {
+        if ([Constants.App.ALIGNMENT, Constants.App.WHITEBOARD].includes(this.state.app)) {
             this.props.jumpToStep(2);
             return;
         }
@@ -130,14 +131,14 @@ export default class Review extends Component {
             let cmOptions = {
                 lineNumbers: true,
                 lineWrapping: true,
-                mode: {name: "javascript", json: true},
+                mode: {name: Constants.CodeMirror.Mode.JS, json: true},
                 smartIndent: true,
-                theme: "dracula"
+                theme: Constants.CodeMirror.THEME
             };
             // explicit class assigning based on validation
             let notValidClasses = {};
     
-            if (typeof this.state.configVal == 'undefined' || this.state.configVal) {
+            if (typeof this.state.configVal == Constants.UNDEFINED || this.state.configVal) {
                 notValidClasses.configCls = 'no-error col-md-8';
             } else {
                 notValidClasses.configCls = 'has-error col-md-8';

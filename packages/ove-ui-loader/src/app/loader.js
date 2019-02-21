@@ -2,7 +2,8 @@
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
 import StepZilla from 'react-stepzilla';
-import 'react-stepzilla/src/css/main.css'
+import 'react-stepzilla/src/css/main.css';
+import Constants from '../constants/loader';
 import SelectApp from '../steps/SelectApp';
 import SpaceAndGeometry from '../steps/SpaceAndGeometry';
 import StateConfiguration from '../steps/StateConfiguration';
@@ -38,7 +39,7 @@ class Loader extends Component {
             ...update,
         };
         this.props.dispatch({
-            type: 'UPDATE',
+            type: Constants.UPDATE,
             ...this.store,
             ...update,
         });
@@ -63,11 +64,11 @@ class Loader extends Component {
                     <StepZilla
                         steps={steps}
                         preventEnterSubmission={true}
-                        nextTextOnFinalActionStep={'Load'}
-                        startAtStep={window.sessionStorage.getItem('step') ? parseFloat(window.sessionStorage.getItem('step')) : 0}
-                        onStepChange={(step) => window.sessionStorage.setItem('step', step)}
-                        nextButtonCls='btn btn-prev btn-primary btn-md pull-right'
-                        backButtonCls='btn btn-next btn-primary btn-md pull-left'
+                        nextTextOnFinalActionStep={Constants.LOAD}
+                        startAtStep={window.sessionStorage.getItem(Constants.STEP) ? parseFloat(window.sessionStorage.getItem(Constants.STEP)) : 0}
+                        onStepChange={(step) => window.sessionStorage.setItem(Constants.STEP, step)}
+                        nextButtonCls={Constants.NEXT_BUTTON_CLASS}
+                        backButtonCls={Constants.BACK_BUTTON_CLASS}
                     />
                 </div>
             </div>

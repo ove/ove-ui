@@ -1,6 +1,7 @@
 /* jshint ignore:start */
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
+import Constants from '../constants/loader';
 import axios from 'axios';
 
 export default class SelectApp extends Component {
@@ -36,7 +37,7 @@ export default class SelectApp extends Component {
             this.log.debug('Input is valid:', valid, 'step:', SelectApp.name);
             const __self = this;
             return new Promise((resolve, _reject) => {
-                const hostname = process.env.REACT_APP_OVE_HOST;
+                const hostname = Constants.REACT_APP_OVE_HOST;
                 let result = {};
                 let count = 0;
                 axios.get('//' + hostname + '/spaces').then(res => res.data).then(spaces => {
@@ -55,8 +56,7 @@ export default class SelectApp extends Component {
                                 ...userInput,
                                 spaces: result
                             });
-                            axios.get('//' + process.env['REACT_APP_OVE_APP_' +
-                                userInput.app.toUpperCase()] + '/name').then(_ => {
+                            axios.get('//' + Constants.REACT_APP_OVE_APP(userInput.app) + '/name').then(_ => {
                                 resolve(true);
                             }).catch(error => {
                                 if (error.request) {
@@ -114,7 +114,7 @@ export default class SelectApp extends Component {
         // explicit class assigning based on validation
         let notValidClasses = {};
 
-        if (typeof this.state.appVal == 'undefined' || this.state.appVal) {
+        if (typeof this.state.appVal == Constants.UNDEFINED || this.state.appVal) {
             notValidClasses.appCls = 'no-error col-md-5';
         } else {
             notValidClasses.appCls = 'has-error col-md-5';

@@ -1,6 +1,7 @@
 /* jshint ignore:start */
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
+import Constants from '../constants/loader';
 import axios from 'axios';
 import CodeMirror from 'react-codemirror';
 import 'codemirror/mode/shell/shell';
@@ -26,18 +27,18 @@ export default class Confirm extends Component {
                 space: props.getStore().space,
                 ...props.getStore().geometry,
                 app: {
-                    url: 'http://' + process.env['REACT_APP_OVE_APP_' + props.getStore().app.toUpperCase()],
+                    url: 'http://' + Constants.REACT_APP_OVE_APP(props.getStore().app),
                     states: {}
                 }
             },
-            os: 'unix'
+            os: Constants.OS.UNIX
         }
 
-        if (['replicator', 'controller'].includes(this.state.app)) {
+        if ([Constants.App.REPLICATOR, Constants.App.CONTROLLER].includes(this.state.app)) {
             this.state.payload.app.states.load = JSON.parse(props.getStore().config);
-        } else if (['alignment', 'whiteboard'].includes(this.state.app)) {
+        } else if ([Constants.App.ALIGNMENT, Constants.App.WHITEBOARD].includes(this.state.app)) {
             delete this.state.payload.app.states;
-        } else if (['maps', 'webrtc'].includes(this.state.app) || props.getStore().mode !== 'new') {
+        } else if ([Constants.App.MAPS, Constants.App.WEBRTC].includes(this.state.app) || props.getStore().mode !== Constants.Mode.NEW) {
             this.state.payload.app.states.load = props.getStore().state;
         } else {
             this.state.payload.app.states.load = props.getStore().config ? JSON.parse(props.getStore().config) : {};
@@ -62,20 +63,20 @@ export default class Confirm extends Component {
     isValidated() {
         return new Promise((resolve, _reject) => {
             const loadApp = _ => {
-                axios.post('http://' + process.env.REACT_APP_OVE_HOST + '/section', this.state.payload).then(res => {
+                axios.post('http://' + Constants.REACT_APP_OVE_HOST + '/section', this.state.payload).then(res => {
                     if ((res.data.id || res.data.id === 0)) {
-                        const controllerURL = 'http://' + process.env['REACT_APP_OVE_APP_' + this.state.app.toUpperCase()] +
+                        const controllerURL = 'http://' + Constants.REACT_APP_OVE_APP(this.state.app) +
                             '/control.html?oveSectionId=' + res.data.id;
                         if (this.state.showController) {
                             $('<a>', {
-                                class: 'section-controller',
+                                class: Constants.SECTION_CONTROLLER.substring(1),
                                 target: '_blank',
                                 rel: 'noopener noreferrer',
                                 href: controllerURL
                             }).css('display', 'none').appendTo($('body'));
                             this.log.debug('Loading controller for section:', res.data.id);
-                            $('a.section-controller')[0].click();
-                            $('a.section-controller').remove();
+                            $('a' + Constants.SECTION_CONTROLLER)[0].click();
+                            $('a' + Constants.SECTION_CONTROLLER).remove();
                         }
                         this.props.updateStore({
                             controllerURL: controllerURL
@@ -89,7 +90,7 @@ export default class Confirm extends Component {
                 }).catch(this.log.error);
             };
             if (this.state.deleteSections) {
-                axios.delete('http://' + process.env.REACT_APP_OVE_HOST + '/sections').then(_ => {
+                axios.delete('http://' + Constants.REACT_APP_OVE_HOST + '/sections').then(_ => {
                     setTimeout(loadApp, 1000);
                 }).catch(this.log.error);
             } else {
@@ -100,15 +101,15 @@ export default class Confirm extends Component {
 
     _getCurlPayload() {
         const DELETE_SECTIONS_COMMAND = 'curl --header "Content-Type: application/json" --request DELETE http://' +
-            process.env.REACT_APP_OVE_HOST + '/sections'
-        if (this.state.os === 'unix') {
+        Constants.REACT_APP_OVE_HOST + '/sections'
+        if (this.state.os === Constants.OS.UNIX) {
             return (this.state.deleteSections ? DELETE_SECTIONS_COMMAND + '\n' : '') +
                 'curl --header "Content-Type: application/json" --request POST --data \'' +
-                JSON.stringify(this.state.payload) + '\' http://' + process.env.REACT_APP_OVE_HOST + '/section';
+                JSON.stringify(this.state.payload) + '\' http://' + Constants.REACT_APP_OVE_HOST + '/section';
         } else {
             return (this.state.deleteSections ? DELETE_SECTIONS_COMMAND + '\n' : '') +
                 'curl --header "Content-Type: application/json" --request POST --data ' +
-                JSON.stringify(JSON.stringify(this.state.payload)) + ' http://' + process.env.REACT_APP_OVE_HOST +
+                JSON.stringify(JSON.stringify(this.state.payload)) + ' http://' + Constants.REACT_APP_OVE_HOST +
                 '/section';
         }
     }
@@ -118,10 +119,10 @@ export default class Confirm extends Component {
             lineNumberFormatter: _ => '',
             lineNumbers: true,
             lineWrapping: true,
-            mode: 'shell',
+            mode: Constants.CodeMirror.Mode.SHELL,
             readOnly: true,
             value: this._getCurlPayload(),
-            theme: 'dracula'
+            theme: Constants.CodeMirror.THEME
         };
         return (
             <div className="step confirm">
@@ -142,8 +143,8 @@ export default class Confirm extends Component {
                                     </label>
                                     <div className="no-error col-md-5">
                                         <select ref="os" autoComplete="off" className="form-control" required defaultValue={this.state.os} onChange={this.changeSelect}>
-                                            <option value="unix">Linux/Mac</option>
-                                            <option value="windows">Windows</option>
+                                            <option value={Constants.OS.UNIX}>Linux/Mac</option>
+                                            <option value={Constants.OS.WINDOWS}>Windows</option>
                                         </select>
                                     </div>
                                 </div>

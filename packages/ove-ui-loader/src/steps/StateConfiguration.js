@@ -1,6 +1,7 @@
 /* jshint ignore:start */
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
+import Constants from '../constants/loader';
 
 export default class StateConfiguration extends Component {
     constructor(props) {
@@ -16,7 +17,7 @@ export default class StateConfiguration extends Component {
             states: props.getStore().states
         };
 
-        if (['controller', 'replicator'].includes(this.state.app)) {
+        if ([Constants.App.CONTROLLER, Constants.App.REPLICATOR].includes(this.state.app)) {
             this.props.jumpToStep(1);
             return;
         }
@@ -68,49 +69,9 @@ export default class StateConfiguration extends Component {
     }
 
     _validateData(data) {
-        // Based on https://gist.github.com/dperini/729294
-        const VALID_URL_REGEX = new RegExp(
-            "^" +
-                // protocol identifier (optional)
-                // short syntax // still required
-                "(?:(?:(?:https?|ftp):)?\\/\\/)" +
-                // user:pass BasicAuth (optional)
-                "(?:\\S+(?::\\S*)?@)?" +
-                "(?:" +
-                    // IP address dotted notation octets
-                    // excludes loopback network 0.0.0.0
-                    // excludes reserved space >= 224.0.0.0
-                    // excludes network & broacast addresses
-                    // (first & last IP address of each class)
-                    "(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])" +
-                    "(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}" +
-                    "(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))" +
-                "|" +
-                    // host & domain names, may end with dot
-                    // can be replaced by a shortest alternative
-                    // (?![-_])(?:[-\\w\\u00a1-\\uffff]{0,63}[^-_]\\.)+
-                    "(?:" +
-                    "(?:" +
-                        "[a-z0-9\\u00a1-\\uffff]" +
-                        "[a-z0-9\\u00a1-\\uffff_-]{0,62}" +
-                    ")?" +
-                    "[a-z0-9\\u00a1-\\uffff]\\." +
-                    ")+" +
-                    // TLD identifier name must not end with a dot
-                    "(?:[a-z\\u00a1-\\uffff]{2,})" +
-                "|" +
-                    // Accept localhost as a valid URL
-                    "(?:localhost)" +
-                ")" +
-                // port number (optional)
-                "(?::\\d{2,5})?" +
-                // resource path (optional)
-                "(?:[/?#]\\S*)?" +
-            "$", "i"
-        );
         return {
-            stateVal: (data.mode === 'new' || data.state !== ''),
-            urlVal: (data.mode !== 'new' || VALID_URL_REGEX.test(data.url))
+            stateVal: (data.mode === Constants.Mode.NEW || data.state !== ''),
+            urlVal: (data.mode !== Constants.Mode.NEW || Constants.VALID_URL_REGEX.test(data.url))
         };
     }
 
@@ -141,14 +102,14 @@ export default class StateConfiguration extends Component {
 
     _getInstructions() {
         switch (this.state.app) {
-            case 'alignment':
+            case Constants.App.ALIGNMENT:
                 return (<h3>The <code>Alignment App</code> does not require a state configuration.
                     Please press <code>Next</code> to proceed.</h3>);
-            case 'whiteboard':
+            case Constants.App.WHITEBOARD:
                 return (<h3>The <code>Whiteboard App</code> does not require a state configuration.
                     Please press <code>Next</code> to proceed.</h3>);
-            case 'maps':
-            case 'webrtc':
+            case Constants.App.MAPS:
+            case Constants.App.WEBRTC:
                 return (<h3>You are creating an application of type <code>{this.state.app}</code> in space <code>{this.state.space}</code>.
                     Please select one of the following pre-loaded states.</h3>);
             default:
@@ -158,11 +119,11 @@ export default class StateConfiguration extends Component {
     }
 
     _getMode() {
-        if (['maps', 'webrtc'].includes(this.state.app)) {
+        if ([Constants.App.MAPS, Constants.App.WEBRTC].includes(this.state.app)) {
             return (
-                <input type="hidden" ref="mode" value="existing" />
+                <input type="hidden" ref="mode" value={Constants.Mode.EXISTING} />
             );
-        } else if (!['alignment', 'whiteboard'].includes(this.state.app)) {
+        } else if (![Constants.App.ALIGNMENT, Constants.App.WHITEBOARD].includes(this.state.app)) {
             return (
                 <div className="col-md-12">
                     <div className="form-group col-md-8 content form-block-holder">
@@ -171,8 +132,8 @@ export default class StateConfiguration extends Component {
                         </label>
                         <div className="no-error col-md-5">
                             <select ref="mode" autoComplete="off" className="form-control" required defaultValue={this.state.mode} onBlur={this.validationCheck}>
-                                <option value="existing">Use existing state</option>
-                                <option value="new">New state configuration</option>
+                                <option value={Constants.Mode.EXISTING}>Use existing state</option>
+                                <option value={Constants.Mode.NEW}>New state configuration</option>
                             </select>
                         </div>
                     </div>
@@ -185,13 +146,13 @@ export default class StateConfiguration extends Component {
         // explicit class assigning based on validation
         let notValidClasses = {};
 
-        if (typeof this.state.stateVal == 'undefined' || this.state.stateVal) {
+        if (typeof this.state.stateVal == Constants.UNDEFINED || this.state.stateVal) {
             notValidClasses.stateCls = 'no-error col-md-5';
         } else {
             notValidClasses.stateCls = 'has-error col-md-5';
             notValidClasses.stateValGrpCls = 'val-err-tooltip';
         }
-        if (!['alignment', 'whiteboard'].includes(this.state.app)) {
+        if (![Constants.App.ALIGNMENT, Constants.App.WHITEBOARD].includes(this.state.app)) {
             return (
                 <div className="col-md-12">
                     <div className="form-group col-md-8 content form-block-holder">
@@ -215,13 +176,13 @@ export default class StateConfiguration extends Component {
         // explicit class assigning based on validation
         let notValidClasses = {};
 
-        if (typeof this.state.urlVal == 'undefined' || this.state.urlVal) {
+        if (typeof this.state.urlVal == Constants.UNDEFINED || this.state.urlVal) {
             notValidClasses.urlCls = 'no-error col-md-8';
         } else {
             notValidClasses.urlCls = 'has-error col-md-8';
             notValidClasses.urlValGrpCls = 'val-err-tooltip';
         }
-        if (!['alignment', 'whiteboard', 'maps', 'webrtc'].includes(this.state.app)) {
+        if (![Constants.App.ALIGNMENT, Constants.App.WHITEBOARD, Constants.App.MAPS, Constants.App.WEBRTC].includes(this.state.app)) {
             return (
                 <div className="col-md-12">
                     <div className="form-group col-md-8 content form-block-holder">

@@ -1,6 +1,7 @@
 /* jshint ignore:start */
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
+import Constants from '../constants/loader';
 import axios from 'axios';
 
 export default class SpaceAndGeometry extends Component {
@@ -29,7 +30,7 @@ export default class SpaceAndGeometry extends Component {
         const validateNewInput = this._validateData(userInput, true); // run the new input against the validator
 
         // if full validation passes then save to store and pass as valid
-        if (Object.keys(validateNewInput).every((k) => { return validateNewInput[k] !== false && validateNewInput[k] !== 'pending'; })) {
+        if (Object.keys(validateNewInput).every((k) => { return validateNewInput[k] !== false && validateNewInput[k] !== Constants.PENDING; })) {
             if (JSON.stringify(this.props.getStore().geometry) !== JSON.stringify(userInput.geometry) ||
                 this.props.getStore().space !== userInput.space) { // only update store of something changed
                 this.props.updateStore({
@@ -45,19 +46,18 @@ export default class SpaceAndGeometry extends Component {
             const valid = true;
             this.log.debug('Input is valid:', valid, 'step:', SpaceAndGeometry.name);
             const __self = this;
-            if (['controller', 'replicator'].includes(this.state.app)) {
-                let config = this.state.app === 'controller' ? JSON.stringify({ mode: 'space' }) : JSON.stringify({ mode: 'space', border: 'solid gold' });
+            if ([Constants.App.CONTROLLER, Constants.App.REPLICATOR].includes(this.state.app)) {
+                let config = this.state.app === Constants.App.CONTROLLER ? JSON.stringify({ mode: 'space' }) : JSON.stringify({ mode: 'space', border: 'solid gold' });
                 this.props.updateStore({
                     ...userInput,
-                    mode: 'new',
+                    mode: Constants.Mode.NEW,
                     url: undefined,
                     config: config
                 });
                 this.props.jumpToStep(3);
                 return false;
             }
-            return axios.get('//' + process.env['REACT_APP_OVE_APP_' +
-                this.props.getStore().app.toUpperCase()] + '/states').then(res => res.data).then(states => {
+            return axios.get('//' + Constants.REACT_APP_OVE_APP(this.props.getStore().app) + '/states').then(res => res.data).then(states => {
                 __self.props.updateStore({
                     ...userInput,
                     states: states
@@ -89,10 +89,10 @@ export default class SpaceAndGeometry extends Component {
             data.geometry.w === '' && data.geometry.h === '') {
             return {
                 ...result,
-                geometryVal_x: 'pending',
-                geometryVal_y: 'pending',
-                geometryVal_w: 'pending',
-                geometryVal_h: 'pending'
+                geometryVal_x: Constants.PENDING,
+                geometryVal_y: Constants.PENDING,
+                geometryVal_w: Constants.PENDING,
+                geometryVal_h: Constants.PENDING
             };
         }
         return {
@@ -150,37 +150,21 @@ export default class SpaceAndGeometry extends Component {
         // explicit class assigning based on validation
         let notValidClasses = {};
 
-        if (typeof this.state.spaceVal == 'undefined' || this.state.spaceVal) {
+        if (typeof this.state.spaceVal == Constants.UNDEFINED || this.state.spaceVal) {
             notValidClasses.spaceCls = 'no-error col-md-5';
         } else {
             notValidClasses.spaceCls = 'has-error col-md-5';
             notValidClasses.spaceValGrpCls = 'val-err-tooltip';
         }
 
-        if (typeof this.state.geometryVal_x == 'undefined' || this.state.geometryVal_x) {
-            notValidClasses.geometryCls_x = 'no-error col-sm-3';
-        } else {
-            notValidClasses.geometryCls_x = 'has-error col-sm-3';
-            notValidClasses.geometryValGrpCls_x = 'val-err-tooltip';
-        }
-        if (typeof this.state.geometryVal_y == 'undefined' || this.state.geometryVal_y) {
-            notValidClasses.geometryCls_y = 'no-error col-sm-3';
-        } else {
-            notValidClasses.geometryCls_y = 'has-error col-sm-3';
-            notValidClasses.geometryValGrpCls_y = 'val-err-tooltip';
-        }
-        if (typeof this.state.geometryVal_w == 'undefined' || this.state.geometryVal_w) {
-            notValidClasses.geometryCls_w = 'no-error col-sm-3';
-        } else {
-            notValidClasses.geometryCls_w = 'has-error col-sm-3';
-            notValidClasses.geometryValGrpCls_w = 'val-err-tooltip';
-        }
-        if (typeof this.state.geometryVal_h == 'undefined' || this.state.geometryVal_h) {
-            notValidClasses.geometryCls_h = 'no-error col-sm-3';
-        } else {
-            notValidClasses.geometryCls_h = 'has-error col-sm-3';
-            notValidClasses.geometryValGrpCls_h = 'val-err-tooltip';
-        }
+        ['x', 'y', 'w', 'h'].forEach(e => {
+            if (typeof this.state['geometryVal_' + e] == Constants.UNDEFINED || this.state['geometryVal_' + e]) {
+                notValidClasses['geometryCls_' + e] = 'no-error col-sm-3';
+            } else {
+                notValidClasses['geometryCls_' + e] = 'has-error col-sm-3';
+                notValidClasses['geometryValGrpCls_' + e] = 'val-err-tooltip';
+            }
+        })
 
         return (
             <div className="step selectSpaceAndGeometry">
@@ -220,7 +204,7 @@ export default class SpaceAndGeometry extends Component {
                                             type="number"
                                             placeholder="0"
                                             min="0"
-                                            max={this.state.bounds ? this.state.bounds.w : 4320}
+                                            max={this.state.bounds ? this.state.bounds.w : Constants.DEFAULT_WIDTH}
                                             className="form-control"
                                             required
                                             defaultValue={this.state.geometry.x}
@@ -237,7 +221,7 @@ export default class SpaceAndGeometry extends Component {
                                             type="number"
                                             placeholder="0"
                                             min="0"
-                                            max={this.state.bounds ? this.state.bounds.h : 2424}
+                                            max={this.state.bounds ? this.state.bounds.h : Constants.DEFAULT_HEIGHT}
                                             className="form-control"
                                             required
                                             defaultValue={this.state.geometry.y}
@@ -257,9 +241,9 @@ export default class SpaceAndGeometry extends Component {
                                             ref="geometry_w"
                                             autoComplete="off"
                                             type="number"
-                                            placeholder={this.state.bounds ? this.state.bounds.w : 4320}
+                                            placeholder={this.state.bounds ? this.state.bounds.w : Constants.DEFAULT_WIDTH}
                                             min="1"
-                                            max={this.state.bounds ? this.state.bounds.w : 4320}
+                                            max={this.state.bounds ? this.state.bounds.w : Constants.DEFAULT_WIDTH}
                                             className="form-control"
                                             required
                                             defaultValue={this.state.geometry.w}
@@ -274,9 +258,9 @@ export default class SpaceAndGeometry extends Component {
                                             ref="geometry_h"
                                             autoComplete="off"
                                             type="number"
-                                            placeholder={this.state.bounds ? this.state.bounds.h : 2424}
+                                            placeholder={this.state.bounds ? this.state.bounds.h : Constants.DEFAULT_HEIGHT}
                                             min="1"
-                                            max={this.state.bounds ? this.state.bounds.h : 2424}
+                                            max={this.state.bounds ? this.state.bounds.h : Constants.DEFAULT_HEIGHT}
                                             className="form-control"
                                             required
                                             defaultValue={this.state.geometry.h}

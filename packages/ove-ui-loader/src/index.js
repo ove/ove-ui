@@ -2,6 +2,7 @@
 // JSHint cannot deal with React.
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Constants from './constants/loader';
 
 import { PersistGate } from 'redux-persist/integration/react';
 import configureStore from './reducers/store.js';
@@ -18,8 +19,8 @@ window.$ = $;
 const { store, persistor, mapStateToProps } = configureStore();
 const Form = connect(mapStateToProps)(Loader);
 
-load('//' + process.env.REACT_APP_OVE_HOST + '/ove.js', _ => {
-    const log = window.OVE.Utils.Logger('loader');
+load('//' + Constants.REACT_APP_OVE_HOST + '/ove.js', _ => {
+    const log = window.OVE.Utils.Logger(Constants.COMPONENT_NAME);
 
     log.debug('Rendering React DOM');
     ReactDOM.render(

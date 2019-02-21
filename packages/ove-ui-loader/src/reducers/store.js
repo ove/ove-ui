@@ -3,11 +3,12 @@
 import { createStore, combineReducers } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import Constants from '../constants/loader';
 
 export default () => {
     const formReducer = (state = {}, action) => {
         switch (action.type) {
-            case 'UPDATE':
+            case Constants.UPDATE:
                 return {
                     ...state,
                     email: action.email,
@@ -29,12 +30,12 @@ export default () => {
     const persistedReducer = persistReducer({
         key: 'root',
         storage,
-        blacklist: ['log', 'spaces', 'states']
+        blacklist: Constants.BLACKLIST
     }, combineReducers({
         form: persistReducer({
             key: 'form',
             storage,
-            blacklist: ['log', 'spaces', 'states']
+            blacklist: Constants.BLACKLIST
         }, formReducer)
     }));
     const store = createStore(persistedReducer);
