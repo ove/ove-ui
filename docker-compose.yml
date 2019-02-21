@@ -1,0 +1,7 @@
+version: '3'
+services:
+  ove-ui:
+    image: ovehub/ove-ui:${SERVICE_VERSION}
+    build: .
+    ports:
+    - "8082:8082"
