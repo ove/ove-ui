@@ -116,7 +116,6 @@ export default class Replicator {
         const __self = this;
         const log = __private.log;
         if (!this.hostname || !this.space) {
-            log.error('Unable to load preview with space:', this.space, 'hostname:', this.hostname);
             __private.displayError();
             return;
         }
