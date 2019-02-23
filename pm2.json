@@ -10,6 +10,17 @@
       "env": {
           "PORT": "8281"
       }
-    }
+    },
+    {
+        "name": "@ove/ove-ui-preview",
+        "cwd": "./packages/ove-ui-preview",
+        "kill_timeout": 3000,
+        "restart_delay": 3000,
+        "script": "npm",
+        "args": "run start",
+        "env": {
+            "PORT": "8282"
+        }
+      }
   ]
 }

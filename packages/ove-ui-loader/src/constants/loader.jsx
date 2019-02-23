@@ -6,6 +6,7 @@ export default {
     LOAD: 'Load',
     BLACKLIST: ['log', 'spaces', 'states'],
     COMPONENT_NAME: 'loader',
+    LOG_LEVEL: +(process.env.LOG_LEVEL || 5), // Level (from 0 - 6): 5 == TRACE
     SECTION_CONTROLLER: '.section-controller',
 
     REACT_APP_OVE_HOST: (function () {

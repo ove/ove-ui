@@ -1,5 +1,5 @@
 {
-  "name": "@ove/ove-ui-loader",
+  "name": "@ove/ove-ui-preview",
   "version": "0.1.0",
   "description": "Loads content into OVE",
   "main": "server.js",
@@ -8,25 +8,21 @@
   "author": "Senaka Fernando <senaka.fernando15@imperial.ac.uk>",
   "license": "MIT",
   "dependencies": {
-    "axios": "0.18.0",
     "dotenv": "6.2.0",
     "express": "4.16.4",
     "little-loader": "0.2.0",
-    "js-beautify": "1.8.9",
     "jquery": "3.3.1",
     "react": "16.8.2",
-    "react-codemirror": "1.0.0",
     "react-dom": "16.8.2",
     "react-redux": "6.0.0",
     "react-scripts": "2.1.5",
-    "react-stepzilla": "5.0.0",
     "redux": "4.0.1",
     "redux-persist": "5.10.0",
     "bootstrap": "3.3.6"
   },
   "scripts": {
     "start": "node -r dotenv/config server.js dotenv_config_path=.env",
-    "start:dev": "PORT=3001 node -r dotenv/config ../../node_modules/.bin/react-scripts start dotenv_config_path=.env",
+    "start:dev": "PORT=3002 node -r dotenv/config ../../node_modules/.bin/react-scripts start dotenv_config_path=.env",
     "build": "react-scripts build",
     "test": "react-scripts test --no-watch",
     "lint": "eslint src/. --ext .jsx"

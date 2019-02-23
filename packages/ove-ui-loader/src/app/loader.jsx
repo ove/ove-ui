@@ -14,7 +14,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/css/bootstrap-theme.min.css';
 import './loader.css';
 
-class Loader extends Component {
+export default class Loader extends Component {
     constructor(props) {
         super(props);
         this.store = JSON.parse(JSON.stringify(props));
@@ -75,5 +75,3 @@ class Loader extends Component {
         );
     }
 }
-
-export default Loader;
