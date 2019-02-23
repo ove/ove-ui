@@ -3,7 +3,6 @@
 import React, { Component } from 'react';
 import Constants from '../constants/preview';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/css/bootstrap-theme.min.css';
 import './preview.css';
 import Replicator from '../replicator/replicator';
 
