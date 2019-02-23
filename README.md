@@ -11,3 +11,4 @@ OVE needs to be installed before using OVE UIs. The [OVE Documentation](https://
 This repository contains the following OVE UIs:
 
 * [Loader](packages/ove-ui-loader/README.md) - used to load OVE applications into the OVE framework.
+* [Preview](packages/ove-ui-preview/README.md) - preview spaces of the OVE framework, one at a time.

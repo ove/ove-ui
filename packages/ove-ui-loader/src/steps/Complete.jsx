@@ -28,14 +28,16 @@ export default class Complete extends Component {
                     type <code>{this.state.app}</code> in space <code>{this.state.space}</code> using <a href="https://ove.readthedocs.io/en/stable/README.html" target="_blank" rel="noopener noreferrer">OVE</a>.
                     More information on using the application is available in the <a href={'https://ove.readthedocs.io/en/stable/ove-apps/packages/ove-app-' + this.state.app + '/README.html'} target="_blank" rel="noopener noreferrer">Documentation</a>.
                     The controller of the application can be launched by <a href={this.state.controllerURL} target="_blank" rel="noopener noreferrer">clicking here</a>. 
-                    You can load another application by <a href='#' onClick={() => this.props.jumpToStep(0)}>clicking here</a>. {/* eslint-disable-line jsx-a11y/anchor-is-valid */}</h3>
+                    You can load another application by <a href='#' onClick={() => this.props.jumpToStep(0)}>clicking here</a>. {/* eslint-disable-line jsx-a11y/anchor-is-valid */}
+                    To see the outcome of your operation, click <a href={'//' + process.env.REACT_APP_OVE_UI_PREVIEW + '?oveSpace=' + this.state.space + '&oveHost=//' + process.env.REACT_APP_OVE_HOST} target="_blank" rel="noopener noreferrer">preview space</a>.</h3>
             )
         } else {
             return (
                 <h3>Congratulations you have created a new instance of an application of
                     type <code>{this.state.app}</code> in space <code>{this.state.space}</code> using <a href="https://ove.readthedocs.io/en/stable/README.html" target="_blank" rel="noopener noreferrer">OVE</a>.
                     More information on using the application is available in the <a href={'https://ove.readthedocs.io/en/stable/ove-apps/packages/ove-app-' + this.state.app + '/README.html'} target="_blank" rel="noopener noreferrer">Documentation</a>.
-                    You can load another application by <a href='#' onClick={() => this.props.jumpToStep(0)}>clicking here</a>. {/* eslint-disable-line jsx-a11y/anchor-is-valid */}</h3>
+                    You can load another application by <a href='#' onClick={() => this.props.jumpToStep(0)}>clicking here</a>. {/* eslint-disable-line jsx-a11y/anchor-is-valid */}
+                    To see the outcome of your operation, click <a href={'//' + process.env.REACT_APP_OVE_UI_PREVIEW + '?oveSpace=' + this.state.space + '&oveHost=//' + process.env.REACT_APP_OVE_HOST} target="_blank" rel="noopener noreferrer">preview space</a>.</h3>
             )
         }
     }

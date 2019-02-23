@@ -1,6 +1,6 @@
 {
   "short_name": "@ove/ove-ui-preview",
-  "name": "OVE Application Preview",
+  "name": "OVE Preview Space",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",

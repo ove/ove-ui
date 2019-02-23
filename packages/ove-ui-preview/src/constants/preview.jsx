@@ -4,9 +4,12 @@ export default {
     CONTENT_DIV: '.preview',
     SPACE_DIV: '.space',
     BACKGROUND: '#222',
+    CONTROL_CANVAS: '.unselectable',
     OVE_FRAME: '.ove-frame',
     HOSTNAME: 'oveHost',
     SPACE: 'oveSpace',
+    MAX_ZOOM_LEVEL: 1,
+    MIN_ZOOM_LEVEL: 1.000001,
     LOG_LEVEL: +(process.env.LOG_LEVEL || 5), // Level (from 0 - 6): 5 == TRACE
     FRAME_LOAD_DELAY: 500, // Unit: milliseconds
 
