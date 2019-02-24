@@ -158,6 +158,23 @@ export default class Review extends Component {
         }
     }
 
+    _showControllerStates() {
+        if (![Constants.App.SVG].includes(this.state.app)) {
+            return (
+                <select ref="showController" autoComplete="off" className="form-control" required defaultValue={this.state.showController} onBlur={this.validationCheck}>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            );
+        } else {
+            return (
+                <select ref="showController" autoComplete="off" className="form-control" required defaultValue={this.state.showController} onBlur={this.validationCheck}>
+                    <option value="true">Yes</option>
+                </select>
+            );
+        }
+    }
+
     render() {
         return (
             <div className="step review">
@@ -183,10 +200,7 @@ export default class Review extends Component {
                                         Show controller
                                     </label>
                                     <div className="no-error col-sm-2">
-                                        <select ref="showController" autoComplete="off" className="form-control" required defaultValue={this.state.showController} onBlur={this.validationCheck}>
-                                            <option value="true">Yes</option>
-                                            <option value="false">No</option>
-                                        </select>
+                                        {this._showControllerStates()}
                                     </div>
                                 </div>
                             </div>
