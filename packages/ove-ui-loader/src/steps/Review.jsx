@@ -159,17 +159,24 @@ export default class Review extends Component {
     }
 
     _showControllerStates() {
-        if (![Constants.App.SVG].includes(this.state.app)) {
+        if ([Constants.App.REPLICATOR].includes(this.state.app)) {
+            return (
+                <select ref="showController" autoComplete="off" className="form-control" required defaultValue={this.state.showController} onBlur={this.validationCheck}>
+                    <option value="false">No</option>
+                </select>
+            );
+        } else if ([Constants.App.ALIGNMENT, Constants.App.CONTROLLER, Constants.App.MAPS, Constants.App.SVG,
+                    Constants.App.WEBRTC, Constants.App.WHITEBOARD].includes(this.state.app)) {
             return (
                 <select ref="showController" autoComplete="off" className="form-control" required defaultValue={this.state.showController} onBlur={this.validationCheck}>
                     <option value="true">Yes</option>
-                    <option value="false">No</option>
                 </select>
             );
         } else {
             return (
                 <select ref="showController" autoComplete="off" className="form-control" required defaultValue={this.state.showController} onBlur={this.validationCheck}>
                     <option value="true">Yes</option>
+                    <option value="false">No</option>
                 </select>
             );
         }
