@@ -9,7 +9,7 @@ export default class Replicator {
     constructor() {
         if (window.OVE && window.OVE.Utils) {
             this.space = window.OVE.Utils.getQueryParam(Constants.SPACE);
-            this.hostname = window.OVE.Utils.getQueryParam(Constants.HOSTNAME);
+            this.hostname = '//' + Constants.REACT_APP_OVE_HOST;
         }
     }
 
@@ -17,8 +17,7 @@ export default class Replicator {
         const __private = {
             displayError: _ => {
                 $('<div>').addClass('alert alert-danger')
-                    .html('<strong>Error:</strong> Please provide <strong>' + Constants.HOSTNAME + '</strong> and <strong>' +
-                        Constants.SPACE + '</strong> query parameters.')
+                    .html('<strong>Error:</strong> Please provide <strong>' + Constants.SPACE + '</strong> query parameter.')
                     .appendTo(Constants.CONTENT_DIV).css({ display: 'block', margin: '0.5vw auto', width: '85vw', maxWidth: '980px' });
             },
             replicate: (sections, space, hostname, bounds, scale, __private) => {

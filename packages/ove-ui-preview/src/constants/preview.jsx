@@ -6,7 +6,6 @@ export default {
     BACKGROUND: '#222',
     CONTROL_CANVAS: '.unselectable',
     OVE_FRAME: '.ove-frame',
-    HOSTNAME: 'oveHost',
     SPACE: 'oveSpace',
     MAX_ZOOM_LEVEL: 1,
     MIN_ZOOM_LEVEL: 1.000001,

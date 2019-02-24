@@ -22,6 +22,19 @@ export default {
         return host;
     })(),
 
+    REACT_APP_OVE_UI_PREVIEW: (function () {
+        let host = process.env.REACT_APP_OVE_UI_PREVIEW;
+        if (host) {
+            if (host.indexOf('//') >= 0) {
+                host = host.substring(host.indexOf('//') + 2);
+            }
+            if (host.indexOf('/') >= 0) {
+                host = host.substring(0, host.indexOf('/'));
+            }
+        }
+        return host;
+    })(),
+
     REACT_APP_OVE_APP: function (appName) {
         let host = process.env['REACT_APP_OVE_APP_' + appName.toUpperCase()];
         if (host) {
