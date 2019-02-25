@@ -54,45 +54,48 @@ export default {
     DEFAULT_HEIGHT: 2424,
     DEFAULT_WIDTH: 4320,
 
+    YOUTUBE_URL_REGEX: new RegExp('^(?:(?:(?:https?|ftp):)?\\/\\/)' +
+        '(?:www.youtube.com\\/embed\\/)(?:[a-z0-9_-]{0,11})$', 'i'),
+
     // Based on https://gist.github.com/dperini/729294
     VALID_URL_REGEX: new RegExp(
-        "^" +
+        '^' +
             // protocol identifier (optional)
             // short syntax // still required
-            "(?:(?:(?:https?|ftp):)?\\/\\/)" +
+            '(?:(?:(?:https?|ftp):)?\\/\\/)' +
             // user:pass BasicAuth (optional)
-            "(?:\\S+(?::\\S*)?@)?" +
-            "(?:" +
+            '(?:\\S+(?::\\S*)?@)?' +
+            '(?:' +
                 // IP address dotted notation octets
                 // excludes loopback network 0.0.0.0
                 // excludes reserved space >= 224.0.0.0
                 // excludes network & broacast addresses
                 // (first & last IP address of each class)
-                "(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])" +
-                "(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}" +
-                "(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))" +
-            "|" +
+                '(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])' +
+                '(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}' +
+                '(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))' +
+            '|' +
                 // host & domain names, may end with dot
                 // can be replaced by a shortest alternative
                 // (?![-_])(?:[-\\w\\u00a1-\\uffff]{0,63}[^-_]\\.)+
-                "(?:" +
-                "(?:" +
-                    "[a-z0-9\\u00a1-\\uffff]" +
-                    "[a-z0-9\\u00a1-\\uffff_-]{0,62}" +
-                ")?" +
-                "[a-z0-9\\u00a1-\\uffff]\\." +
-                ")+" +
+                '(?:' +
+                '(?:' +
+                    '[a-z0-9\\u00a1-\\uffff]' +
+                    '[a-z0-9\\u00a1-\\uffff_-]{0,62}' +
+                ')?' +
+                '[a-z0-9\\u00a1-\\uffff]\\.' +
+                ')+' +
                 // TLD identifier name must not end with a dot
-                "(?:[a-z\\u00a1-\\uffff]{2,})" +
-            "|" +
+                '(?:[a-z\\u00a1-\\uffff]{2,})' +
+            '|' +
                 // Accept localhost as a valid URL
-                "(?:localhost)" +
-            ")" +
+                '(?:localhost)' +
+            ')' +
             // port number (optional)
-            "(?::\\d{2,5})?" +
+            '(?::\\d{2,5})?' +
             // resource path (optional)
-            "(?:[/?#]\\S*)?" +
-        "$", "i"
+            '(?:[/?#]\\S*)?' +
+        '$', 'i'
     ),
 
     /**************************************************************

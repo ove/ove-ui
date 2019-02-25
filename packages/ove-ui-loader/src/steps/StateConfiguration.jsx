@@ -49,7 +49,7 @@ export default class StateConfiguration extends Component {
             return valid;
         } else {
             // if anything fails then update the UI validation state but NOT the UI Data State
-            this.setState(Object.assign(userInput, validateNewInput, this._validationMessages(validateNewInput)));
+            this.setState(Object.assign(userInput, validateNewInput, this._validationMessages(userInput, validateNewInput)));
             const valid = false;
             this.log.debug('Input is valid:', valid, 'step:', StateConfiguration.name);
             return valid;
@@ -60,21 +60,28 @@ export default class StateConfiguration extends Component {
         const userInput = this._grabUserInput(); // grab user entered vals
         const validateNewInput = this._validateData(userInput); // run the new input against the validator
 
-        this.setState(Object.assign(userInput, validateNewInput, this._validationMessages(validateNewInput)));
+        this.setState(Object.assign(userInput, validateNewInput, this._validationMessages(userInput, validateNewInput)));
         this.log.debug('Ran validation check at step:', StateConfiguration.name);
     }
 
     _validateData(data) {
         return {
             stateVal: (data.mode === Constants.Mode.NEW || data.state !== ''),
-            urlVal: (data.mode !== Constants.Mode.NEW || Constants.VALID_URL_REGEX.test(data.url))
+            urlVal: (data.mode !== Constants.Mode.NEW ||
+                (Constants.VALID_URL_REGEX.test(data.url) && this._validateYoutubeURL(data)))
         };
     }
 
-    _validationMessages(val) {
+    _validateYoutubeURL(data) {
+        return this.state.app !== Constants.App.VIDEOS || Constants.YOUTUBE_URL_REGEX.test(data.url);
+    }
+
+    _validationMessages(data, val) {
         return {
             stateValMsg: val.stateVal ? '' : 'A state must be selected',
-            urlValMsg: val.urlVal ? '' : 'The asset URL is not valid'
+            urlValMsg: this._validateYoutubeURL(data) ? (
+                val.urlVal ? ''  : 'The asset URL is not valid') : 'Youtube URLs ' +
+                'must have the format http://www.youtube.com/embed/<VIDEO_ID>'
         };
     }
 
