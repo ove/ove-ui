@@ -99,11 +99,7 @@ export default class Replicator {
                     });
                     // Only displaying the subset of sections in the background.
                     setTimeout(function () {
-                        const filter = [];
-                        sections.forEach(function (section) {
-                            filter.push(section.id);
-                        });
-                        __private.ove.frame.send('child', { load: true, filters: { includeOnly: filter } }, 'core');
+                        __private.ove.frame.send('child', { load: true }, 'core');
                     }, Constants.FRAME_LOAD_DELAY);
                 });
             },

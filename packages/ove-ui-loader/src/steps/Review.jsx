@@ -158,6 +158,23 @@ export default class Review extends Component {
         }
     }
 
+    _showDeleteSections() {
+        if ([Constants.App.ALIGNMENT].includes(this.state.app)) {
+            return (
+                <select ref="deleteSections" autoComplete="off" className="form-control" required defaultValue={this.state.deleteSections} onBlur={this.validationCheck}>
+                    <option value="true">Yes</option>
+                </select>
+            );
+        } else {
+            return (
+                <select ref="deleteSections" autoComplete="off" className="form-control" required defaultValue={this.state.deleteSections} onBlur={this.validationCheck}>
+                    <option value="false">No</option>
+                    <option value="true">Yes</option>
+                </select>
+            );
+        }
+    }
+
     _showControllerStates() {
         if ([Constants.App.REPLICATOR].includes(this.state.app)) {
             return (
@@ -198,10 +215,7 @@ export default class Review extends Component {
                                         Delete sections
                                     </label>
                                     <div className="no-error col-sm-2">
-                                        <select ref="deleteSections" autoComplete="off" className="form-control" required defaultValue={this.state.deleteSections} onBlur={this.validationCheck}>
-                                            <option value="false">No</option>
-                                            <option value="true">Yes</option>
-                                        </select>
+                                        {this._showDeleteSections()}
                                     </div>
                                     <label className="control-label col-md-3">
                                         Show controller

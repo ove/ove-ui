@@ -47,7 +47,12 @@ export default class SpaceAndGeometry extends Component {
             this.log.debug('Input is valid:', valid, 'step:', SpaceAndGeometry.name);
             const __self = this;
             if ([Constants.App.CONTROLLER, Constants.App.REPLICATOR].includes(this.state.app)) {
-                let config = this.state.app === Constants.App.CONTROLLER ? JSON.stringify({ mode: 'space' }) : JSON.stringify({ mode: 'space', border: 'solid gold' });
+                let config;
+                if (this.state.app === Constants.App.CONTROLLER) {
+                    config = JSON.stringify({ mode: 'space' });
+                } else {
+                    config = JSON.stringify({ mode: 'space', spaceName: userInput.space, border: 'solid gold' });
+                }
                 this.props.updateStore({
                     ...userInput,
                     mode: Constants.Mode.NEW,
