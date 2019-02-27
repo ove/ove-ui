@@ -3,7 +3,7 @@ export default {
     STEP: 'step',
     PENDING: 'pending',
     UNDEFINED: typeof undefined,
-    LAUNCH: 'LAUNCH',
+    LAUNCH: 'Launch',
     BLACKLIST: ['log', 'spaces', 'states'],
     COMPONENT_NAME: 'launcher',
     LOG_LEVEL: +(process.env.LOG_LEVEL || 5), // Level (from 0 - 6): 5 == TRACE
