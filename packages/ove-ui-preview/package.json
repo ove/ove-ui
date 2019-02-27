@@ -1,7 +1,7 @@
 {
   "name": "@ove/ove-ui-preview",
   "version": "0.1.0",
-  "description": "Loads content into OVE",
+  "description": "Preview spaces of the OVE framework",
   "main": "server.js",
   "private": true,
   "keywords": [],

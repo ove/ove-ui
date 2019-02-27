@@ -1,8 +1,8 @@
 {
   "apps": [
     {
-      "name": "@ove/ove-ui-loader",
-      "cwd": "./packages/ove-ui-loader",
+      "name": "@ove/ove-ui-launcher",
+      "cwd": "./packages/ove-ui-launcher",
       "kill_timeout": 3000,
       "restart_delay": 3000,
       "script": "npm",

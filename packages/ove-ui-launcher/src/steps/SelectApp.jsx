@@ -1,7 +1,7 @@
 /* jshint ignore:start */
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
-import Constants from '../constants/loader';
+import Constants from '../constants/launcher';
 import axios from 'axios';
 
 export default class SelectApp extends Component {
@@ -127,7 +127,7 @@ export default class SelectApp extends Component {
                     <form id="Form" className="form-horizontal">
                         <div className="form-group">
                             <label className="col-md-12 control-label">
-                                <h1>Step 1: Choose the type of application to load</h1>
+                                <h1>Step 1: Choose the type of application to launch</h1>
                                 <h3>A complete list of applications along with more information, is available in the <a href="https://ove.readthedocs.io/en/stable/ove-apps/README.html" target="_blank" rel="noopener noreferrer">Documentation</a>.</h3>
                             </label>
                             <div className="col-md-12">

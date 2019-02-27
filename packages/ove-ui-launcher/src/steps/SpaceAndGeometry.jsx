@@ -1,7 +1,7 @@
 /* jshint ignore:start */
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
-import Constants from '../constants/loader';
+import Constants from '../constants/launcher';
 import axios from 'axios';
 
 export default class SpaceAndGeometry extends Component {

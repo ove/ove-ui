@@ -3,9 +3,9 @@ export default {
     STEP: 'step',
     PENDING: 'pending',
     UNDEFINED: typeof undefined,
-    LOAD: 'Load',
+    LAUNCH: 'LAUNCH',
     BLACKLIST: ['log', 'spaces', 'states'],
-    COMPONENT_NAME: 'loader',
+    COMPONENT_NAME: 'launcher',
     LOG_LEVEL: +(process.env.LOG_LEVEL || 5), // Level (from 0 - 6): 5 == TRACE
     SECTION_CONTROLLER: '.section-controller',
 

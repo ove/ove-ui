@@ -1,7 +1,7 @@
 {
-  "name": "@ove/ove-ui-loader",
+  "name": "@ove/ove-ui-launcher",
   "version": "0.1.0",
-  "description": "Loads content into OVE",
+  "description": "Launch applications on the OVE framework",
   "main": "server.js",
   "private": true,
   "keywords": [],

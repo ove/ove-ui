@@ -1,7 +1,7 @@
 /* jshint ignore:start */
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
-import Constants from '../constants/loader';
+import Constants from '../constants/launcher';
 import CodeMirror from 'react-codemirror';
 import { js_beautify } from 'js-beautify'
 import 'codemirror/mode/javascript/javascript';
@@ -207,7 +207,7 @@ export default class Review extends Component {
                         <div className="form-group">
                             <label className="col-md-12 control-label">
                                 <h1>Step 4: Review state configuration and operation details</h1>
-                                <h3>Please select additional actions that should be performed when loading the application instance.</h3>
+                                <h3>Please select additional actions that should be performed when launching the application instance.</h3>
                             </label>
                             <div className="col-md-12">
                                 <div className="form-group col-md-8 content form-block-holder">

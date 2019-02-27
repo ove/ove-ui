@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import StepZilla from 'react-stepzilla';
 import 'react-stepzilla/src/css/main.css';
-import Constants from '../constants/loader';
+import Constants from '../constants/launcher';
 import SelectApp from '../steps/SelectApp';
 import SpaceAndGeometry from '../steps/SpaceAndGeometry';
 import StateConfiguration from '../steps/StateConfiguration';
@@ -12,9 +12,9 @@ import Confirm from '../steps/Confirm';
 import Complete from '../steps/Complete';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/css/bootstrap-theme.min.css';
-import './loader.css';
+import './launcher.css';
 
-export default class Loader extends Component {
+export default class Launcher extends Component {
     constructor(props) {
         super(props);
         this.store = JSON.parse(JSON.stringify(props));
@@ -64,7 +64,7 @@ export default class Loader extends Component {
                     <StepZilla
                         steps={steps}
                         preventEnterSubmission={true}
-                        nextTextOnFinalActionStep={Constants.LOAD}
+                        nextTextOnFinalActionStep={Constants.LAUNCH}
                         startAtStep={window.sessionStorage.getItem(Constants.STEP) ? parseFloat(window.sessionStorage.getItem(Constants.STEP)) : 0}
                         onStepChange={(step) => window.sessionStorage.setItem(Constants.STEP, step)}
                         nextButtonCls={Constants.NEXT_BUTTON_CLASS}

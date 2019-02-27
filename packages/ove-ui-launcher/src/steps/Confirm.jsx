@@ -1,7 +1,7 @@
 /* jshint ignore:start */
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
-import Constants from '../constants/loader';
+import Constants from '../constants/launcher';
 import axios from 'axios';
 import CodeMirror from 'react-codemirror';
 import 'codemirror/mode/shell/shell';
@@ -62,7 +62,7 @@ export default class Confirm extends Component {
 
     isValidated() {
         return new Promise((resolve, _reject) => {
-            const loadApp = _ => {
+            const launchApp = _ => {
                 axios.post('http://' + Constants.REACT_APP_OVE_HOST + '/section', this.state.payload).then(res => {
                     if ((res.data.id || res.data.id === 0)) {
                         let controllerURL = 'http://' + Constants.REACT_APP_OVE_APP(this.state.app) +
@@ -94,10 +94,10 @@ export default class Confirm extends Component {
             };
             if (this.state.deleteSections) {
                 axios.delete('http://' + Constants.REACT_APP_OVE_HOST + '/sections').then(_ => {
-                    setTimeout(loadApp, 1000);
+                    setTimeout(launchApp, 1000);
                 }).catch(this.log.error);
             } else {
-                loadApp();
+                launchApp();
             }
         });
     }
@@ -133,8 +133,8 @@ export default class Confirm extends Component {
                     <form id="Form" className="form-horizontal">
                         <div className="form-group">
                             <label className="col-md-12 control-label">
-                                <h1>Step 5: Load a new application instance</h1>
-                                <h3>Pressing <code>Load</code> below will create a new instance of an application of
+                                <h1>Step 5: Launch a new application instance</h1>
+                                <h3>Pressing <code>Launch</code> below will create a new instance of an application of
                                     type <code>{this.state.app}</code> in space <code>{this.state.space}</code>.
                                     The same operation can also be executed on a CLI using <a href="https://curl.haxx.se/docs/manpage.html" target="_blank" rel="noopener noreferrer">curl</a>.
                                     Please note that the application's controller may not automatically launch if you have any pop-up blockers on your web browser.</h3>
