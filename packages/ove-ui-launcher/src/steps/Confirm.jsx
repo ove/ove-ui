@@ -67,9 +67,6 @@ export default class Confirm extends Component {
                     if (this.state.app !== Constants.App.REPLICATOR && (res.data.id || res.data.id === 0)) {
                         let controllerURL = 'http://' + Constants.REACT_APP_OVE_APP(this.state.app) +
                             '/control.html?oveSectionId=' + res.data.id;
-                        if (this.state.app === Constants.App.ALIGNMENT) {
-                            controllerURL += '&oveSpace=' + this.state.space;
-                        }
                         if (this.state.showController) {
                             $('<a>', {
                                 class: Constants.SECTION_CONTROLLER.substring(1),
