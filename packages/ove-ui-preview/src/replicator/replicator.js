@@ -20,7 +20,7 @@ export default class Replicator {
                     .html('<strong>Error:</strong> Please provide <strong>' + Constants.SPACE + '</strong> query parameter.')
                     .appendTo(Constants.CONTENT_DIV).css({ display: 'block', margin: '0.5vw auto', width: '85vw', maxWidth: '980px' });
             },
-            replicate: (sections, space, hostname, bounds, scale, __private) => {
+            replicate: (space, hostname, bounds, scale, __private) => {
                 const log = __private.log;
                 
                 log.debug('Displaying content on a canvas with width:', bounds.w * scale, 'height:', bounds.h * scale);
@@ -116,35 +116,17 @@ export default class Replicator {
         }
 
         log.debug('Replicating contents from host:', __self.hostname);
-        let url = __self.hostname + '/sections?space=' + __self.space;
-        let sections = {};
-        fetch(url).then(function (r) { return r.text(); }).then(function (text) {
-            let response = JSON.parse(text);
-            log.trace('Got response:', response, 'from from URL:', url);
-            response.forEach(function (section) {
-                if (__self.space === section.space) {
-                    if (!sections[section.space]) {
-                        sections[section.space] = [];
-                    }
-                    sections[section.space].push(section);
-                }
-            });
-            
-            const sectionsToReplicate = sections[__self.space] || [];
-            log.info('Replicating', sectionsToReplicate.length, 'sections from space:', __self.space, 'on host:', __self.hostname);
-            
-            let boundsURL = __self.hostname + '/spaces/' + __self.space + '/geometry';
-            fetch(boundsURL).then(function (r) { return r.text(); }).then(function (text) {
-                let bounds = JSON.parse(text);
-                log.trace('Got response:', bounds, 'from from URL:', boundsURL);
-                const scale = 1 / Math.min(bounds.w / Math.min(document.documentElement.clientWidth, window.innerWidth),
-                    bounds.h / Math.min(document.documentElement.clientHeight, window.innerHeight));
-                __private.replicate(sectionsToReplicate, __self.space, __self.hostname, bounds, scale, __private);
-            });
+        let boundsURL = __self.hostname + '/spaces/' + __self.space + '/geometry';
+        fetch(boundsURL).then(function (r) { return r.text(); }).then(function (text) {
+            let bounds = JSON.parse(text);
+            log.trace('Got response:', bounds, 'from from URL:', boundsURL);
+            const scale = 1 / Math.min(bounds.w / Math.min(document.documentElement.clientWidth, window.innerWidth),
+                bounds.h / Math.min(document.documentElement.clientHeight, window.innerHeight));
+            __private.replicate(__self.space, __self.hostname, bounds, scale, __private);
         });
         $(Constants.CONTENT_DIV).css({
             width: '100%',
             height: '100%'
         });
-    }    
+    }
 }
