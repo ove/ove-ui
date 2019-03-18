@@ -1,10 +1,13 @@
 # Open Visualisation Environment - UI
 
-[Open Visualisation Environment (OVE)](https://github.com/ove/ove) provides the users with a modular user interface with components to manage assets, launch and preview applications. These UI components are all browser based and are popular alternatives for end users compared to using OVE APIs and SDKs. The currently available UI components are:
-
-* [Launcher](packages/ove-ui-launcher/README.md) - used to launch applications on the OVE framework.
-* [Preview](packages/ove-ui-preview/README.md) - preview spaces of the OVE framework, one at a time.
-
-OVE needs to be installed before using OVE UIs. The [OVE Documentation](https://ove.readthedocs.io/en/stable/) provides [installation instructions](https://ove.readthedocs.io/en/stable/docs/INSTALLATION.html) and a [user guide](https://ove.readthedocs.io/en/stable/docs/USAGE.html).
-
 This repository contains a collection of UI components designed to be used with [Open Visualisation Environment (OVE)](https://github.com/ove/ove).
+
+These components are all browser based, and provide an alternative to using the OVE APIs directly or through one of the [OVE SDKs](http://github.com/ove/ove-sdks). 
+
+The currently available components are:
+
+* [Launcher](packages/ove-ui-launcher/README.md), which launches OVE applications
+* [Preview](packages/ove-ui-preview/README.md), which provides a previews of an OVE Space 
+
+OVE must be installed before the OVE UIs can be used. The [OVE Documentation](https://ove.readthedocs.io/en/stable/) provides [installation instructions](https://ove.readthedocs.io/en/stable/docs/INSTALLATION.html) and a [user guide](https://ove.readthedocs.io/en/stable/docs/USAGE.html).
+
