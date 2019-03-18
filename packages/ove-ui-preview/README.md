@@ -1,6 +1,6 @@
 # Preview UI
 
-This [React](https://reactjs.org/) web application can be used to preview spaces of the OVE framework, one at a time. It also allows users to download corresponding commands and configurations that can be used to recreate the same space using tools such as [curl](https://curl.haxx.se/docs/manpage.html) or SDKs such as the [Python SDK](https://github.com/ove/ove-sdks/tree/master/python).
+This [React](https://reactjs.org/) web application can be used to preview an [OVE](https://github.com/ove/ove Space. It also allows users to download corresponding commands and configurations that can be used to recreate the same space using tools such as [curl](https://curl.haxx.se/docs/manpage.html) or SDKs such as the [Python SDK](https://github.com/ove/ove-sdks/tree/master/python).
 
 
 ## Installation
