@@ -1,18 +1,42 @@
 # Launcher UI
 
-This react web application can be used to launch applications on the OVE framework using wizard that will guide you step-by-step. It also produces equivalent [curl](https://curl.haxx.se/docs/manpage.html) commands for users who wish to use a CLI.
+This [React](https://reactjs.org/) web application provides a wizard that will guide you through launching an [OVE App](https://ove.readthedocs.io/en/stable/ove-apps/README.html) step-by-step.
 
-The launcher UI can be launched either for development or in a production environment. To launch in a production environment, simply run:
+It will also display the [curl](https://curl.haxx.se/docs/manpage.html) command that can be used to repeat this action at the commandline.
+
+## Installation
+
+The launcher UI can be launched either for development or in a production environment.
+
+Unless [OVE Core](https://github.com/ove/ove) and the OVE Apps are running on localhost on their default ports, you will also need to modify the configuration file `.env` appropriately.
+
+### Production mode
+
+To launch in a production environment, first build the project:
+
+```sh
+npm run build
+```
+
+Then run it:
 
 ```sh
 npm run start
 ```
 
-To launch for development, run:
+You should then be able to access the UI by opening `http://localhost:8080` with a web browser.
+
+
+### Development mode
+
+Alternatively, to launch in development mode, simply run:
 
 ```sh
 npm run start:dev
 ```
+
+You should then be able to access the UI by opening `http://localhost:8282` with a web browser.
+
 
 ## Hosting content
 
