@@ -35,7 +35,7 @@ Alternatively, to launch in development mode, simply run:
 npm run start:dev
 ```
 
-You should then be able to access the UI by opening `http://localhost:8282` with a web browser.
+You should then be able to access the UI by opening `http://localhost:8281` with a web browser.
 
 
 ## Hosting content
