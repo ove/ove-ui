@@ -130,11 +130,15 @@ export default class Confirm extends Component {
                     <form id="Form" className="form-horizontal">
                         <div className="form-group">
                             <label className="col-md-12 control-label">
-                                <h1>Step 5: Launch a new application instance</h1>
+                                <h1>Step 5: Launch application</h1>
                                 <h3>Pressing <code>Launch</code> below will create a new instance of an application of
-                                    type <code>{this.state.app}</code> in space <code>{this.state.space}</code>.
-                                    The same operation can also be executed on a CLI using <a href="https://curl.haxx.se/docs/manpage.html" target="_blank" rel="noopener noreferrer">curl</a>.
-                                    Please note that the application's controller may not automatically launch if you have any pop-up blockers on your web browser.</h3>
+                                    type <code>{this.state.app}</code> in space <code>{this.state.space}</code>.<br />
+                                    Please note that the application's controller may not automatically launch if you
+                                    have any pop-up blockers on your web browser.<br />
+                                    The same operation can also be executed using
+                                    <a href="https://curl.haxx.se/docs/manpage.html" target="_blank" rel="noopener noreferrer"> curl</a>,
+                                    by using the command below at the commandline.
+                                    </h3>
                             </label>
                             <div className="col-md-12">
                                 <div className="form-group col-md-9 content form-block-holder">
