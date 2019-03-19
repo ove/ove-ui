@@ -118,7 +118,7 @@ export default class Review extends Component {
                     type <code>{this.state.app}</code> in space <code>{this.state.space}</code> with
                     geometry <code>{JSON.stringify(this.state.geometry)}</code>.<br />
                     The following state configuration will be pre-loaded with this application instance.<br />
-                    <a href={'https://ove.readthedocs.io/en/stable/ove-apps/packages/ove-app-' + this.state.app + '/README.html#application-state'} target="_blank" rel="noopener noreferrer">Advanced configuration options</a> can
+                    <a href={"https://ove.readthedocs.io/en/stable/ove-apps/packages/ove-app-" + this.state.app + "/README.html#application-state"} target="_blank" rel="noopener noreferrer">Advanced configuration options</a> can
                     be passed by modifying the state configuration displayed below.</h3>
                 );
             }
