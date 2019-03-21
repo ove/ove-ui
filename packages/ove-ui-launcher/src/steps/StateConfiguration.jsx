@@ -73,7 +73,7 @@ export default class StateConfiguration extends Component {
     }
 
     _validateVideoURL(data) {
-        return this.state.app !== Constants.App.VIDEOS || data.mode !== Constants.Mode.NEW || Constants.YOUTUBE_URL_REGEX.test(data.url) || !data.url.includes('youtube.com');
+        return this.state.app !== Constants.App.VIDEOS || data.mode !== Constants.Mode.NEW || Constants.YOUTUBE_URL_REGEX.test(data.url) || !data.url.includes("youtube.com");
     }
 
     _validationMessages(data, val) {
