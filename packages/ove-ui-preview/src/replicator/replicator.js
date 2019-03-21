@@ -1,4 +1,5 @@
 import Constants from '../constants/preview';
+import axios from 'axios';
 import * as d3 from 'd3';
 
 // Setup jQuery to work inside React
@@ -15,10 +16,27 @@ export default class Replicator {
 
     init() {
         const __private = {
-            displayError: _ => {
-                $('<div>').addClass('alert alert-danger')
-                    .html('<strong>Error:</strong> Please provide <strong>' + Constants.SPACE + '</strong> query parameter.')
-                    .appendTo(Constants.CONTENT_DIV).css({ display: 'block', margin: '0.5vw auto', width: '85vw', maxWidth: '980px' });
+            displayError: () => {
+                $('<div id="no-space-selected">').addClass('alert alert-danger')
+                    .html('No <strong>' + Constants.SPACE + '</strong> query parameter provided. Available spaces:')
+                    .appendTo(Constants.CONTENT_DIV).css({
+                    display: 'block',
+                    margin: '0.5vw auto',
+                    width: '85vw',
+                    maxWidth: '980px'
+                });
+
+                axios.get('//' + Constants.REACT_APP_OVE_HOST + '/spaces').then(res => res.data).then(spaces => {
+                    d3.select('#no-space-selected')
+                        .append("ul")
+                        .selectAll('li')
+                        .data(Object.keys(spaces))
+                        .enter()
+                        .append('li')
+                        .append('a')
+                        .attr('href', d => `?oveSpace=${d}`)
+                        .text(d => d);
+                });
             },
             replicate: (space, hostname, bounds, scale, __private) => {
                 const log = __private.log;
