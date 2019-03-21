@@ -68,18 +68,18 @@ export default class StateConfiguration extends Component {
         return {
             stateVal: (data.mode === Constants.Mode.NEW || data.state !== ''),
             urlVal: (data.mode !== Constants.Mode.NEW ||
-                (Constants.VALID_URL_REGEX.test(data.url) && this._validateYoutubeURL(data)))
+                (Constants.VALID_URL_REGEX.test(data.url) && this._validateVideoURL(data)))
         };
     }
 
-    _validateYoutubeURL(data) {
-        return this.state.app !== Constants.App.VIDEOS || data.mode !== Constants.Mode.NEW || Constants.YOUTUBE_URL_REGEX.test(data.url);
+    _validateVideoURL(data) {
+        return this.state.app !== Constants.App.VIDEOS || data.mode !== Constants.Mode.NEW || Constants.YOUTUBE_URL_REGEX.test(data.url) || !data.url.includes('youtube.com');
     }
 
     _validationMessages(data, val) {
         return {
             stateValMsg: val.stateVal ? '' : 'A state must be selected',
-            urlValMsg: this._validateYoutubeURL(data) ? (
+            urlValMsg: this._validateVideoURL(data) ? (
                 val.urlVal ? ''  : 'The asset URL is not valid') : 'Youtube URLs ' +
                 'must have the format http://www.youtube.com/embed/<VIDEO_ID>'
         };
@@ -113,11 +113,11 @@ export default class StateConfiguration extends Component {
                     Please press <code>Next</code> to proceed.</h3>);
             case Constants.App.MAPS:
             case Constants.App.WEBRTC:
-                return (<h3>You are creating an application of type <code>{this.state.app}</code> in space <code>{this.state.space}</code>.
+                return (<h3>You are creating an application of type <code>{this.state.app}</code> in space <code>{this.state.space}</code>.<br />
                     Please select one of the following pre-loaded states.</h3>);
             default:
-                return (<h3>You are creating an application of type <code>{this.state.app}</code> in space <code>{this.state.space}</code>.
-                    Please select an existing state or provide an asset URL to create a new state configuration.</h3>);
+                return (<h3>You are creating an application of type <code>{this.state.app}</code> in space <code>{this.state.space}</code>.<br />
+                    Please select an existing state or create a new state by providing an asset URL.</h3>);
         }
     }
 
@@ -217,7 +217,7 @@ export default class StateConfiguration extends Component {
                     <form id="Form" className="form-horizontal">
                         <div className="form-group">
                             <label className="col-md-12 control-label">
-                                <h1>Step 3: Configure application state for section</h1>
+                                <h1>Step 3: Configure application state</h1>
                                 {this._getInstructions()}
                             </label>
                             {this._getMode()}
