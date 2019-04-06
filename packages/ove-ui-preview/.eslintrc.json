@@ -32,6 +32,7 @@
             "flatTernaryExpressions": false,
             "ignoreComments": false
         }],
+        "quotes": [1, "single"],
         "semi": ["error", "always"]
     }
 }

@@ -24,7 +24,8 @@
             "flatTernaryExpressions": false,
             "ignoreComments": false
         }],
-        "react/no-string-refs": ["false"],
-        "semi": ["error", "always"]
+        "quotes": [1, "single"],
+        "semi": ["error", "always"],
+        "react/no-string-refs": ["false"]
     }
 }
