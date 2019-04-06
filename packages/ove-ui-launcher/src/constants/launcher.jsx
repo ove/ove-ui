@@ -2,7 +2,6 @@ export default {
     UPDATE: 'UPDATE',
     STEP: 'step',
     PENDING: 'pending',
-    UNDEFINED: typeof undefined,
     LAUNCH: 'Launch',
     BLACKLIST: ['log', 'spaces', 'states'],
     COMPONENT_NAME: 'launcher',

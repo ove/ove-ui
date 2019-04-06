@@ -1,15 +1,16 @@
 /* jshint ignore:start */
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Constants from '../constants/launcher';
 import CodeMirror from 'react-codemirror';
-import { js_beautify } from 'js-beautify'
+import { js_beautify as JSBeautify } from 'js-beautify';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/dracula.css';
 
 export default class Review extends Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
 
         this.log = props.getLogger();
@@ -19,12 +20,12 @@ export default class Review extends Component {
             geometry: props.getStore().geometry,
             deleteSections: props.getStore().deleteSections,
             showController: props.getStore().showController
-        }
+        };
+
         if (props.getStore().mode === Constants.Mode.NEW) {
-            this.state.config = props.getStore().url ?
-                JSON.stringify({ url: props.getStore().url }) : props.getStore().config;
+            this.state.config = props.getStore().url ? JSON.stringify({ url: props.getStore().url }) : props.getStore().config;
         } else {
-            this.state.state = props.getStore().state
+            this.state.state = props.getStore().state;
         }
 
         this.updateCode = this.updateCode.bind(this);
@@ -33,11 +34,11 @@ export default class Review extends Component {
         this.log.debug('Displaying step:', Review.name);
     }
 
-    componentDidMount() { }
+    componentDidMount () { }
 
-    componentWillUnmount() { }
+    componentWillUnmount () { }
 
-    isValidated() {
+    isValidated () {
         const userInput = this._grabUserInput(); // grab user entered vals
         const validateNewInput = this._validateData(userInput); // run the new input against the validator
 
@@ -58,7 +59,7 @@ export default class Review extends Component {
         }
     }
 
-    validationCheck() {
+    validationCheck () {
         const userInput = this._grabUserInput(); // grab user entered vals
         const validateNewInput = this._validateData(userInput); // run the new input against the validator
 
@@ -66,14 +67,14 @@ export default class Review extends Component {
         this.log.debug('Ran validation check at step:', Review.name);
     }
 
-    updateCode(config) {
+    updateCode (config) {
         this.setState({
             config: config
         });
         this.validationCheck();
     }
 
-    _isValidJSON(str) {
+    _isValidJSON (str) {
         try {
             JSON.parse(str);
         } catch (_) {
@@ -82,20 +83,20 @@ export default class Review extends Component {
         return true;
     }
 
-    _validateData(data) {
+    _validateData (data) {
         return {
-            configVal: [Constants.App.ALIGNMENT, Constants.App.WHITEBOARD].includes(this.state.app) || 
+            configVal: [Constants.App.ALIGNMENT, Constants.App.WHITEBOARD].includes(this.state.app) ||
                 this.state.state || (data.config !== '' && this._isValidJSON(data.config))
         };
     }
 
-    _validationMessages(val) {
+    _validationMessages (val) {
         return {
             configValMsg: val.configVal ? '' : 'State configuration is invalid'
         };
     }
 
-    _grabUserInput() {
+    _grabUserInput () {
         return {
             config: this.state.config,
             deleteSections: JSON.parse(this.refs.deleteSections.value),
@@ -103,7 +104,7 @@ export default class Review extends Component {
         };
     }
 
-    _getInstructions() {
+    _getInstructions () {
         if (![Constants.App.ALIGNMENT, Constants.App.WHITEBOARD].includes(this.state.app)) {
             if (this.state.state) {
                 return (
@@ -124,32 +125,32 @@ export default class Review extends Component {
         }
     }
 
-    _showConfiguration() {
+    _showConfiguration () {
         if (![Constants.App.ALIGNMENT, Constants.App.WHITEBOARD].includes(this.state.app) && !this.state.state) {
             let cmOptions = {
                 lineNumbers: true,
                 lineWrapping: true,
-                mode: {name: Constants.CodeMirror.Mode.JS, json: true},
+                mode: { name: Constants.CodeMirror.Mode.JS, json: true },
                 smartIndent: true,
                 theme: Constants.CodeMirror.THEME
             };
             // explicit class assigning based on validation
             let notValidClasses = {};
-    
-            if (typeof this.state.configVal == Constants.UNDEFINED || this.state.configVal) {
+
+            if (typeof this.state.configVal === 'undefined' || this.state.configVal) {
                 notValidClasses.configCls = 'no-error col-md-8';
             } else {
                 notValidClasses.configCls = 'has-error col-md-8';
                 notValidClasses.configValGrpCls = 'val-err-tooltip';
             }
-            return (    
+            return (
                 <div className="col-md-12">
                     <div className="form-group col-md-8 content form-block-holder">
                         <label className="control-label col-md-3">
                             Configuration
                         </label>
                         <div className="col-md-9">
-                            <CodeMirror value={js_beautify(this.state.config, { indent_size: 2   })} onChange={this.updateCode} options={cmOptions} />
+                            <CodeMirror value={JSBeautify(this.state.config, { indent_size: 2 })} onChange={this.updateCode} options={cmOptions} />
                             <div className={notValidClasses.configValGrpCls}>{this.state.configValMsg}</div>
                         </div>
                     </div>
@@ -158,7 +159,7 @@ export default class Review extends Component {
         }
     }
 
-    _showDeleteSections() {
+    _showDeleteSections () {
         if ([Constants.App.ALIGNMENT].includes(this.state.app)) {
             return (
                 <select ref="deleteSections" autoComplete="off" className="form-control" required defaultValue={this.state.deleteSections} onBlur={this.validationCheck}>
@@ -175,7 +176,7 @@ export default class Review extends Component {
         }
     }
 
-    _showControllerStates() {
+    _showControllerStates () {
         if ([Constants.App.REPLICATOR].includes(this.state.app)) {
             return (
                 <select ref="showController" autoComplete="off" className="form-control" required defaultValue={this.state.showController} onBlur={this.validationCheck}>
@@ -183,7 +184,7 @@ export default class Review extends Component {
                 </select>
             );
         } else if ([Constants.App.ALIGNMENT, Constants.App.CONTROLLER, Constants.App.MAPS, Constants.App.SVG,
-                    Constants.App.WEBRTC, Constants.App.WHITEBOARD].includes(this.state.app)) {
+            Constants.App.WEBRTC, Constants.App.WHITEBOARD].includes(this.state.app)) {
             return (
                 <select ref="showController" autoComplete="off" className="form-control" required defaultValue={this.state.showController} onBlur={this.validationCheck}>
                     <option value="true">Yes</option>
@@ -199,7 +200,7 @@ export default class Review extends Component {
         }
     }
 
-    render() {
+    render () {
         return (
             <div className="step review">
                 <div className="row">
@@ -236,3 +237,9 @@ export default class Review extends Component {
         );
     }
 }
+
+Review.propTypes = {
+    getLogger: PropTypes.func.isRequired,
+    getStore: PropTypes.func.isRequired,
+    updateStore: PropTypes.func.isRequired
+};

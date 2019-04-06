@@ -1,11 +1,12 @@
 /* jshint ignore:start */
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Constants from '../constants/launcher';
 import axios from 'axios';
 
 export default class SpaceAndGeometry extends Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
 
         this.log = props.getLogger();
@@ -21,11 +22,11 @@ export default class SpaceAndGeometry extends Component {
         this.log.debug('Displaying step:', SpaceAndGeometry.name);
     }
 
-    componentDidMount() { }
+    componentDidMount () { }
 
-    componentWillUnmount() { }
+    componentWillUnmount () { }
 
-    isValidated() {
+    isValidated () {
         const userInput = this._grabUserInput(); // grab user entered vals
         const validateNewInput = this._validateData(userInput, true); // run the new input against the validator
 
@@ -77,7 +78,7 @@ export default class SpaceAndGeometry extends Component {
         }
     }
 
-    validationCheck() {
+    validationCheck () {
         const userInput = this._grabUserInput(); // grab user entered vals
         const validateNewInput = this._validateData(userInput); // run the new input against the validator
 
@@ -85,10 +86,10 @@ export default class SpaceAndGeometry extends Component {
         this.log.debug('Ran validation check at step:', SpaceAndGeometry.name);
     }
 
-    _validateData(data, force) {
+    _validateData (data, force) {
         const result = {
             spaceVal: (data.space !== ''),
-            currentSpace: data.space,
+            currentSpace: data.space
         };
         if (!force && data.geometry.x === '' && data.geometry.y === '' &&
             data.geometry.w === '' && data.geometry.h === '') {
@@ -102,34 +103,34 @@ export default class SpaceAndGeometry extends Component {
         }
         return {
             ...result,
-            geometryVal_x: Number.isInteger(parseFloat(data.geometry.x)) && (parseInt(data.geometry.x, 10) >= 0) && 
+            geometryVal_x: Number.isInteger(parseFloat(data.geometry.x)) && (parseInt(data.geometry.x, 10) >= 0) &&
                 (parseInt(data.geometry.x, 10) <= (!result.currentSpace ? 0 : this.state.spaces[result.currentSpace].w)),
-            geometryVal_y: Number.isInteger(parseFloat(data.geometry.y)) && (parseInt(data.geometry.y, 10) >= 0) && 
+            geometryVal_y: Number.isInteger(parseFloat(data.geometry.y)) && (parseInt(data.geometry.y, 10) >= 0) &&
                 (parseInt(data.geometry.y, 10) <= (!result.currentSpace ? 0 : this.state.spaces[result.currentSpace].h)),
-            geometryVal_w: Number.isInteger(parseFloat(data.geometry.w)) && (parseInt(data.geometry.w, 10) > 0) && 
+            geometryVal_w: Number.isInteger(parseFloat(data.geometry.w)) && (parseInt(data.geometry.w, 10) > 0) &&
                 (parseInt(data.geometry.w, 10) <= (!result.currentSpace ? 0 : this.state.spaces[result.currentSpace].w)),
-            geometryVal_h: Number.isInteger(parseFloat(data.geometry.h)) && (parseInt(data.geometry.h, 10) > 0) && 
-                (parseInt(data.geometry.h, 10) <= (!result.currentSpace ? 0 : this.state.spaces[result.currentSpace].h)),
+            geometryVal_h: Number.isInteger(parseFloat(data.geometry.h)) && (parseInt(data.geometry.h, 10) > 0) &&
+                (parseInt(data.geometry.h, 10) <= (!result.currentSpace ? 0 : this.state.spaces[result.currentSpace].h))
         };
     }
 
-    _validationMessages(val) {
+    _validationMessages (val) {
         return {
             spaceValMsg: val.spaceVal ? '' : 'A space must be selected',
             geometryValMsg: {
                 x: val.geometryVal_x ? '' : 'x coordinate is not provided or out of bounds',
                 y: val.geometryVal_y ? '' : 'y coordinate is not provided or out of bounds',
                 w: val.geometryVal_w ? '' : 'The width is not provided or out of bounds',
-                h: val.geometryVal_h ? '' : 'The height is not provided or out of bounds',
+                h: val.geometryVal_h ? '' : 'The height is not provided or out of bounds'
             },
             bounds: {
                 w: !val.currentSpace ? 0 : this.state.spaces[val.currentSpace].w,
-                h: !val.currentSpace ? 0 : this.state.spaces[val.currentSpace].h,
+                h: !val.currentSpace ? 0 : this.state.spaces[val.currentSpace].h
             }
         };
     }
 
-    _grabUserInput() {
+    _grabUserInput () {
         return {
             space: this.refs.space.value,
             geometry: {
@@ -141,7 +142,7 @@ export default class SpaceAndGeometry extends Component {
         };
     }
 
-    _getSelectionItems() {
+    _getSelectionItems () {
         let items = [];
         if (this.state.spaces) {
             Object.keys(this.state.spaces).forEach(e => {
@@ -151,11 +152,11 @@ export default class SpaceAndGeometry extends Component {
         return items;
     }
 
-    render() {
+    render () {
         // explicit class assigning based on validation
         let notValidClasses = {};
 
-        if (typeof this.state.spaceVal == Constants.UNDEFINED || this.state.spaceVal) {
+        if (typeof this.state.spaceVal === 'undefined' || this.state.spaceVal) {
             notValidClasses.spaceCls = 'no-error col-md-5';
         } else {
             notValidClasses.spaceCls = 'has-error col-md-5';
@@ -163,13 +164,13 @@ export default class SpaceAndGeometry extends Component {
         }
 
         ['x', 'y', 'w', 'h'].forEach(e => {
-            if (typeof this.state['geometryVal_' + e] == Constants.UNDEFINED || this.state['geometryVal_' + e]) {
+            if (typeof this.state['geometryVal_' + e] === 'undefined' || this.state['geometryVal_' + e]) {
                 notValidClasses['geometryCls_' + e] = 'no-error col-sm-3';
             } else {
                 notValidClasses['geometryCls_' + e] = 'has-error col-sm-3';
                 notValidClasses['geometryValGrpCls_' + e] = 'val-err-tooltip';
             }
-        })
+        });
 
         return (
             <div className="step selectSpaceAndGeometry">
@@ -281,3 +282,10 @@ export default class SpaceAndGeometry extends Component {
         );
     }
 }
+
+SpaceAndGeometry.propTypes = {
+    getLogger: PropTypes.func.isRequired,
+    getStore: PropTypes.func.isRequired,
+    updateStore: PropTypes.func.isRequired,
+    jumpToStep: PropTypes.func.isRequired
+};
