@@ -29,7 +29,7 @@ Then run it:
 npm run start
 ```
 
-You should then be able to access the UI by opening `http://localhost:8080?oveSpace=<SPACE_NAME>` with a web browser (replacing `<SPACE_NAME>` with the name of the space that you wish to view).
+You should then be able to access the UI by opening `http://localhost:8282?oveSpace=<SPACE_NAME>` with a web browser (replacing `<SPACE_NAME>` with the name of the space that you wish to view).
 
 ## Development mode
 
