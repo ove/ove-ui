@@ -30,7 +30,7 @@ Then run it:
 npm run start
 ```
 
-You should then be able to access the UI by opening `http://localhost:8080` with a web browser.
+You should then be able to access the UI by opening `http://localhost:8281` with a web browser.
 
 
 ### Development mode
