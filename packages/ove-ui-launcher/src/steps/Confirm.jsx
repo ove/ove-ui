@@ -134,12 +134,11 @@ export default class Confirm extends Component {
                                 <h1>Step 5: Launch application</h1>
                                 <h3>Pressing <code>Launch</code> below will create a new instance of an application of
                                     type <code>{this.state.app}</code> in space <code>{this.state.space}</code>.<br />
-                                    Please note that the application's controller may not automatically launch if you
+                                    Please note that the application&#39;s controller may not automatically launch if you
                                     have any pop-up blockers on your web browser.<br />
-                                    The same operation can also be executed using 
-                                    <a href="https://curl.haxx.se/docs/manpage.html" target="_blank" rel="noopener noreferrer">curl</a>
+                                    The same operation can also be executed using <a href="https://curl.haxx.se/docs/manpage.html" target="_blank" rel="noopener noreferrer">curl</a>
                                     on a command line.
-                                    </h3>
+                                </h3>
                             </label>
                             <div className="col-md-12">
                                 <div className="form-group col-md-9 content form-block-holder">

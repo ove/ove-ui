@@ -9,6 +9,14 @@
         "Constants": true,
         "OVE": true
     },
+    "overrides": [
+        {
+            "files": [ "**/*.js" ],
+            "globals": {
+                "fetch": true
+            }
+        }
+    ],
     "rules": {
         "indent": ["error", 4, {
             "SwitchCase": 1,
