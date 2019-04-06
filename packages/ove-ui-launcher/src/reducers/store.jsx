@@ -26,7 +26,7 @@ export default () => {
             default:
                 return state;
         }
-    };   
+    };
     const persistedReducer = persistReducer({
         key: 'root',
         storage,

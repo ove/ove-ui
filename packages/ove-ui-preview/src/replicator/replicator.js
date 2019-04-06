@@ -1,4 +1,5 @@
 import Constants from '../constants/preview';
+import axios from 'axios';
 import * as d3 from 'd3';
 
 // Setup jQuery to work inside React
@@ -6,23 +7,40 @@ import $ from 'jquery';
 window.$ = $;
 
 export default class Replicator {
-    constructor() {
+    constructor () {
         if (window.OVE && window.OVE.Utils) {
             this.space = window.OVE.Utils.getQueryParam(Constants.SPACE);
             this.hostname = '//' + Constants.REACT_APP_OVE_HOST;
         }
     }
 
-    init() {
+    init () {
         const __private = {
-            displayError: _ => {
-                $('<div>').addClass('alert alert-danger')
-                    .html('<strong>Error:</strong> Please provide <strong>' + Constants.SPACE + '</strong> query parameter.')
-                    .appendTo(Constants.CONTENT_DIV).css({ display: 'block', margin: '0.5vw auto', width: '85vw', maxWidth: '980px' });
+            displayError: () => {
+                $('<div id=\'no-space-selected\'>').addClass('alert alert-danger')
+                    .html('No <strong>' + Constants.SPACE + '</strong> query parameter provided. Available spaces:')
+                    .appendTo(Constants.CONTENT_DIV).css({
+                        display: 'block',
+                        margin: '0.5vw auto',
+                        width: '85vw',
+                        maxWidth: '980px'
+                    });
+
+                axios.get('//' + Constants.REACT_APP_OVE_HOST + '/spaces').then(res => res.data).then(spaces => {
+                    d3.select('#no-space-selected')
+                        .append('ul')
+                        .selectAll('li')
+                        .data(Object.keys(spaces))
+                        .enter()
+                        .append('li')
+                        .append('a')
+                        .attr('href', d => `?oveSpace=${d}`)
+                        .text(d => d);
+                });
             },
             replicate: (space, hostname, bounds, scale, __private) => {
                 const log = __private.log;
-                
+
                 log.debug('Displaying content on a canvas with width:', bounds.w * scale, 'height:', bounds.h * scale);
                 $('<div>', {
                     class: Constants.SPACE_DIV.substring(1)
@@ -36,7 +54,7 @@ export default class Replicator {
                     background: Constants.BACKGROUND,
                     overflow: 'hidden'
                 }).appendTo(Constants.CONTENT_DIV);
-        
+
                 const width = Math.min(bounds.w * scale, Math.min(document.documentElement.clientWidth, window.innerWidth));
                 const height = Math.min(bounds.h * scale, Math.min(document.documentElement.clientHeight, window.innerHeight));
                 log.debug('Displaying control canvas with width:', width, 'height:', height);
@@ -64,15 +82,15 @@ export default class Replicator {
                 log.debug('Translation is limited to a maximum of:', maxTranslate);
                 // We are only interested in translations and not in scaling.
                 d3.select(Constants.CONTROL_CANVAS).call(d3.zoom().scaleExtent([1, 1.000001]).on('zoom', function () {
-                        const event = d3.event.transform;
-                        log.trace('Got D3 event with, k:', event.k, 'x:', event.x, 'y:', event.y);
-                        const x = Math.max(-maxTranslate.x, Math.min(event.x, 0));
-                        const y = Math.max(-maxTranslate.y, Math.min(event.y, 0));
-                        $(Constants.SPACE_DIV).css({
-                            transform: 'translate(' + x + 'px,' + y + 'px)'
-                        });
+                    const event = d3.event.transform;
+                    log.trace('Got D3 event with, k:', event.k, 'x:', event.x, 'y:', event.y);
+                    const x = Math.max(-maxTranslate.x, Math.min(event.x, 0));
+                    const y = Math.max(-maxTranslate.y, Math.min(event.y, 0));
+                    $(Constants.SPACE_DIV).css({
+                        transform: 'translate(' + x + 'px,' + y + 'px)'
+                    });
                 }));
-            
+
                 fetch(hostname + '/spaces').then(function (r) { return r.text(); }).then(function (text) {
                     log.debug('Loading space:', space);
                     let clients = JSON.parse(text)[space];

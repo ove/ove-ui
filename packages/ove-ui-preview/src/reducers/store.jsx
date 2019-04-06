@@ -10,12 +10,12 @@ export default () => {
         switch (action.type) {
             case Constants.UPDATE:
                 return {
-                    ...state,
+                    ...state
                 };
             default:
                 return state;
         }
-    };   
+    };
     const persistedReducer = persistReducer({
         key: 'root',
         storage,
