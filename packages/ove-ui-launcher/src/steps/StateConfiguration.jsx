@@ -114,11 +114,11 @@ export default class StateConfiguration extends Component {
                     Please press <code>Next</code> to proceed.</h3>);
             case Constants.App.MAPS:
             case Constants.App.WEBRTC:
-                return (<h3>You are creating an application of type <code>{this.state.app}</code> in space <code>{this.state.space}</code>.
+                return (<h3>You are creating an application of type <code>{this.state.app}</code> in space <code>{this.state.space}</code>.<br />
                     Please select one of the following pre-loaded states.</h3>);
             default:
-                return (<h3>You are creating an application of type <code>{this.state.app}</code> in space <code>{this.state.space}</code>.
-                    Please select an existing state or provide an asset URL to create a new state configuration.</h3>);
+                return (<h3>You are creating an application of type <code>{this.state.app}</code> in space <code>{this.state.space}</code>.<br />
+                    Please select an existing state or create a new state by providing an asset URL.</h3>);
         }
     }
 
@@ -218,7 +218,7 @@ export default class StateConfiguration extends Component {
                     <form id="Form" className="form-horizontal">
                         <div className="form-group">
                             <label className="col-md-12 control-label">
-                                <h1>Step 3: Configure application state for section</h1>
+                                <h1>Step 3: Configure application state</h1>
                                 {this._getInstructions()}
                             </label>
                             {this._getMode()}

@@ -128,8 +128,8 @@ export default class SelectApp extends Component {
                     <form id="Form" className="form-horizontal">
                         <div className="form-group">
                             <label className="col-md-12 control-label">
-                                <h1>Step 1: Choose the type of application to launch</h1>
-                                <h3>A complete list of applications along with more information, is available in the <a href="https://ove.readthedocs.io/en/stable/ove-apps/README.html" target="_blank" rel="noopener noreferrer">Documentation</a>.</h3>
+                                <h1>Step 1: Choose which application to launch</h1>
+                                <h3> For details of each application, see the <a href="https://ove.readthedocs.io/en/stable/ove-apps/README.html" target="_blank" rel="noopener noreferrer">documentation</a>.</h3>
                             </label>
                             <div className="col-md-12">
                                 <div className="form-group col-md-8 content form-block-holder">

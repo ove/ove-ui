@@ -110,15 +110,16 @@ export default class Review extends Component {
                 return (
                     <h3>Pressing <code>Next</code> will finalise the configuration for creating an instance of an application of
                     type <code>{this.state.app}</code> in space <code>{this.state.space}</code> with
-                    geometry <code>{JSON.stringify(this.state.geometry)}</code>. The <code>{this.state.state}</code> state
-                    configuration will be pre-loaded with this application instance.</h3>
+                    geometry <code>{JSON.stringify(this.state.geometry)}</code>.<br />
+                    The <code>{this.state.state}</code> state configuration will be pre-loaded with this application instance.</h3>
                 );
             } else {
                 return (
-                    <h3>Pressing <code>Next</code> finalise the configuration for creating an instance of an application of
+                    <h3>Pressing <code>Next</code> will finalise the configuration for creating an instance of an application of
                     type <code>{this.state.app}</code> in space <code>{this.state.space}</code> with
-                    geometry <code>{JSON.stringify(this.state.geometry)}</code>. The following state configuration
-                    will be pre-loaded with this application instance. <a href={'https://ove.readthedocs.io/en/stable/ove-apps/packages/ove-app-' + this.state.app + '/README.html#application-state'} target="_blank" rel="noopener noreferrer">Advanced configuration options</a> can
+                    geometry <code>{JSON.stringify(this.state.geometry)}</code>.<br />
+                    The following state configuration will be pre-loaded with this application instance.<br />
+                    <a href={"https://ove.readthedocs.io/en/stable/ove-apps/packages/ove-app-" + this.state.app + "/README.html#application-state"} target="_blank" rel="noopener noreferrer">Advanced configuration options</a> can
                     be passed by modifying the state configuration displayed below.</h3>
                 );
             }
@@ -213,13 +214,13 @@ export default class Review extends Component {
                             <div className="col-md-12">
                                 <div className="form-group col-md-8 content form-block-holder">
                                     <label className="control-label col-md-3">
-                                        Delete sections
+                                        Delete existing sections
                                     </label>
                                     <div className="no-error col-sm-2">
                                         {this._showDeleteSections()}
                                     </div>
                                     <label className="control-label col-md-3">
-                                        Show controller
+                                        Open controller
                                     </label>
                                     <div className="no-error col-sm-2">
                                         {this._showControllerStates()}
