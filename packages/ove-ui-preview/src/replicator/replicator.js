@@ -17,7 +17,7 @@ export default class Replicator {
     init() {
         const __private = {
             displayError: () => {
-                $('<div id="no-space-selected">').addClass('alert alert-danger')
+                $('<div id=\'no-space-selected\'>').addClass('alert alert-danger')
                     .html('No <strong>' + Constants.SPACE + '</strong> query parameter provided. Available spaces:')
                     .appendTo(Constants.CONTENT_DIV).css({
                     display: 'block',
@@ -28,7 +28,7 @@ export default class Replicator {
 
                 axios.get('//' + Constants.REACT_APP_OVE_HOST + '/spaces').then(res => res.data).then(spaces => {
                     d3.select('#no-space-selected')
-                        .append("ul")
+                        .append('ul')
                         .selectAll('li')
                         .data(Object.keys(spaces))
                         .enter()
