@@ -6,7 +6,13 @@ It will also display the [curl](https://curl.haxx.se/docs/manpage.html) command 
 
 ## Installation
 
-The launcher UI can be launched either for development or in a production environment.
+The launcher UI can be launched either for development or in a production environment. 
+
+In either case, fist install dependencies by running:
+
+```sh
+npm install
+```
 
 Unless [OVE Core](https://github.com/ove/ove) and the OVE Apps are running on localhost on their default ports, you will also need to modify the configuration file `.env` appropriately.
 
