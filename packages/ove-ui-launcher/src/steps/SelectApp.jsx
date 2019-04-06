@@ -1,11 +1,12 @@
 /* jshint ignore:start */
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Constants from '../constants/launcher';
 import axios from 'axios';
 
 export default class SelectApp extends Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
 
         this.log = props.getLogger();
@@ -18,11 +19,11 @@ export default class SelectApp extends Component {
         this.log.debug('Displaying step:', SelectApp.name);
     }
 
-    componentDidMount() { }
+    componentDidMount () { }
 
-    componentWillUnmount() { }
+    componentWillUnmount () { }
 
-    isValidated() {
+    isValidated () {
         const userInput = this._grabUserInput(); // grab user entered vals
         const validateNewInput = this._validateData(userInput); // run the new input against the validator
 
@@ -36,7 +37,7 @@ export default class SelectApp extends Component {
             const valid = true;
             this.log.debug('Input is valid:', valid, 'step:', SelectApp.name);
             const __self = this;
-            return new Promise((resolve, _reject) => {
+            return new Promise((resolve, reject) => {
                 const hostname = Constants.REACT_APP_OVE_HOST;
                 let result = {};
                 let count = 0;
@@ -84,7 +85,7 @@ export default class SelectApp extends Component {
         }
     }
 
-    validationCheck() {
+    validationCheck () {
         const userInput = this._grabUserInput(); // grab user entered vals
         const validateNewInput = this._validateData(userInput); // run the new input against the validator
 
@@ -92,29 +93,29 @@ export default class SelectApp extends Component {
         this.log.debug('Ran validation check at step:', SelectApp.name);
     }
 
-    _validateData(data) {
+    _validateData (data) {
         return {
             appVal: (data.app !== '')
         };
     }
 
-    _validationMessages(val) {
+    _validationMessages (val) {
         return {
             appValMsg: val.appVal ? '' : 'An application must be selected'
         };
     }
 
-    _grabUserInput() {
+    _grabUserInput () {
         return {
             app: this.refs.app.value
         };
     }
 
-    render() {
+    render () {
         // explicit class assigning based on validation
         let notValidClasses = {};
 
-        if (typeof this.state.appVal == Constants.UNDEFINED || this.state.appVal) {
+        if (typeof this.state.appVal === 'undefined' || this.state.appVal) {
             notValidClasses.appCls = 'no-error col-md-5';
         } else {
             notValidClasses.appCls = 'has-error col-md-5';
@@ -127,8 +128,8 @@ export default class SelectApp extends Component {
                     <form id="Form" className="form-horizontal">
                         <div className="form-group">
                             <label className="col-md-12 control-label">
-                                <h1>Step 1: Choose the type of application to launch</h1>
-                                <h3>A complete list of applications along with more information, is available in the <a href="https://ove.readthedocs.io/en/stable/ove-apps/README.html" target="_blank" rel="noopener noreferrer">Documentation</a>.</h3>
+                                <h1>Step 1: Choose which application to launch</h1>
+                                <h3> For details of each application, see the <a href="https://ove.readthedocs.io/en/stable/ove-apps/README.html" target="_blank" rel="noopener noreferrer">documentation</a>.</h3>
                             </label>
                             <div className="col-md-12">
                                 <div className="form-group col-md-8 content form-block-holder">
@@ -164,3 +165,9 @@ export default class SelectApp extends Component {
         );
     }
 }
+
+SelectApp.propTypes = {
+    getLogger: PropTypes.func.isRequired,
+    getStore: PropTypes.func.isRequired,
+    updateStore: PropTypes.func.isRequired
+};

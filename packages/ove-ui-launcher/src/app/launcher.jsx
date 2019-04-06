@@ -1,6 +1,7 @@
 /* jshint ignore:start */
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import StepZilla from 'react-stepzilla';
 import 'react-stepzilla/src/css/main.css';
 import Constants from '../constants/launcher';
@@ -15,7 +16,7 @@ import 'bootstrap/dist/css/bootstrap-theme.min.css';
 import './launcher.css';
 
 export default class Launcher extends Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
         this.store = JSON.parse(JSON.stringify(props));
         delete this.store.log;
@@ -23,37 +24,37 @@ export default class Launcher extends Component {
         this.log.debug('Successfully loaded React App');
     }
 
-    componentDidMount() { }
+    componentDidMount () { }
 
-    componentWillUnmount() { }
+    componentWillUnmount () { }
 
-    getStore() {
+    getStore () {
         this.log.debug('Retrieving store', this.store);
         return this.store;
     }
 
-    updateStore(update) {
+    updateStore (update) {
         this.log.debug('Updating store with:', update);
         this.store = {
             ...this.store,
-            ...update,
+            ...update
         };
         this.props.dispatch({
             type: Constants.UPDATE,
             ...this.store,
-            ...update,
+            ...update
         });
     }
 
-    render() {
+    render () {
         const steps =
             [
-                { name: 'Select Application', component: <SelectApp getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u);}} /> },
+                { name: 'Select Application', component: <SelectApp getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
                 { name: 'Define Geometry', component: <SpaceAndGeometry getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
                 { name: 'Configure State', component: <StateConfiguration getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
                 { name: 'Review Configuration', component: <Review getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
                 { name: 'Confirm Operation', component: <Confirm getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
-                { name: 'Complete', component: <Complete getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
+                { name: 'Complete', component: <Complete getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> }
             ];
         steps.forEach(e => {
             this.log.debug('Loading step:', e.name);
@@ -75,3 +76,8 @@ export default class Launcher extends Component {
         );
     }
 }
+
+Launcher.propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    log: PropTypes.object.isRequired
+};

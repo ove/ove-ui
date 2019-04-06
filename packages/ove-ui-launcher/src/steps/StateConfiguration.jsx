@@ -1,10 +1,11 @@
 /* jshint ignore:start */
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Constants from '../constants/launcher';
 
 export default class StateConfiguration extends Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
 
         this.log = props.getLogger();
@@ -27,11 +28,11 @@ export default class StateConfiguration extends Component {
         this.log.debug('Displaying step:', StateConfiguration.name);
     }
 
-    componentDidMount() { }
+    componentDidMount () { }
 
-    componentWillUnmount() { }
+    componentWillUnmount () { }
 
-    isValidated() {
+    isValidated () {
         const userInput = this._grabUserInput(); // grab user entered vals
         const validateNewInput = this._validateData(userInput); // run the new input against the validator
 
@@ -56,7 +57,7 @@ export default class StateConfiguration extends Component {
         }
     }
 
-    validationCheck() {
+    validationCheck () {
         const userInput = this._grabUserInput(); // grab user entered vals
         const validateNewInput = this._validateData(userInput); // run the new input against the validator
 
@@ -64,7 +65,7 @@ export default class StateConfiguration extends Component {
         this.log.debug('Ran validation check at step:', StateConfiguration.name);
     }
 
-    _validateData(data) {
+    _validateData (data) {
         return {
             stateVal: (data.mode === Constants.Mode.NEW || data.state !== ''),
             urlVal: (data.mode !== Constants.Mode.NEW ||
@@ -72,20 +73,20 @@ export default class StateConfiguration extends Component {
         };
     }
 
-    _validateVideoURL(data) {
+    _validateVideoURL (data) {
         return this.state.app !== Constants.App.VIDEOS || data.mode !== Constants.Mode.NEW || Constants.YOUTUBE_URL_REGEX.test(data.url) || !data.url.includes("youtube.com");
     }
 
-    _validationMessages(data, val) {
+    _validationMessages (data, val) {
         return {
             stateValMsg: val.stateVal ? '' : 'A state must be selected',
             urlValMsg: this._validateVideoURL(data) ? (
-                val.urlVal ? ''  : 'The asset URL is not valid') : 'Youtube URLs ' +
+                val.urlVal ? '' : 'The asset URL is not valid') : 'Youtube URLs ' +
                 'must have the format http://www.youtube.com/embed/<VIDEO_ID>'
         };
     }
 
-    _grabUserInput() {
+    _grabUserInput () {
         return {
             mode: this.refs.mode ? this.refs.mode.value : undefined,
             state: this.refs.state ? this.refs.state.value : undefined,
@@ -93,7 +94,7 @@ export default class StateConfiguration extends Component {
         };
     }
 
-    _getSelectionItems() {
+    _getSelectionItems () {
         let items = [];
         if (this.state.states) {
             this.state.states.forEach(e => {
@@ -103,7 +104,7 @@ export default class StateConfiguration extends Component {
         return items;
     }
 
-    _getInstructions() {
+    _getInstructions () {
         switch (this.state.app) {
             case Constants.App.ALIGNMENT:
                 return (<h3>The <code>Alignment App</code> does not require a state configuration.
@@ -121,7 +122,7 @@ export default class StateConfiguration extends Component {
         }
     }
 
-    _getMode() {
+    _getMode () {
         if ([Constants.App.MAPS, Constants.App.WEBRTC].includes(this.state.app)) {
             return (
                 <input type="hidden" ref="mode" value={Constants.Mode.EXISTING} />
@@ -145,11 +146,11 @@ export default class StateConfiguration extends Component {
         }
     }
 
-    _getStateSelection() {
+    _getStateSelection () {
         // explicit class assigning based on validation
         let notValidClasses = {};
 
-        if (typeof this.state.stateVal == Constants.UNDEFINED || this.state.stateVal) {
+        if (typeof this.state.stateVal === 'undefined' || this.state.stateVal) {
             notValidClasses.stateCls = 'no-error col-md-5';
         } else {
             notValidClasses.stateCls = 'has-error col-md-5';
@@ -175,11 +176,11 @@ export default class StateConfiguration extends Component {
         }
     }
 
-    _getConfigurationEntry() {
+    _getConfigurationEntry () {
         // explicit class assigning based on validation
         let notValidClasses = {};
 
-        if (typeof this.state.urlVal == Constants.UNDEFINED || this.state.urlVal) {
+        if (typeof this.state.urlVal === 'undefined' || this.state.urlVal) {
             notValidClasses.urlCls = 'no-error col-md-8';
         } else {
             notValidClasses.urlCls = 'has-error col-md-8';
@@ -210,7 +211,7 @@ export default class StateConfiguration extends Component {
         }
     }
 
-    render() {
+    render () {
         return (
             <div className="step selectStateConfiguration">
                 <div className="row">
@@ -230,3 +231,10 @@ export default class StateConfiguration extends Component {
         );
     }
 }
+
+StateConfiguration.propTypes = {
+    getLogger: PropTypes.func.isRequired,
+    getStore: PropTypes.func.isRequired,
+    updateStore: PropTypes.func.isRequired,
+    jumpToStep: PropTypes.func.isRequired
+};

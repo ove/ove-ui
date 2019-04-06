@@ -1,6 +1,7 @@
 /* jshint ignore:start */
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Constants from '../constants/launcher';
 import axios from 'axios';
 import CodeMirror from 'react-codemirror';
@@ -13,7 +14,7 @@ import $ from 'jquery';
 window.$ = $;
 
 export default class Confirm extends Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
 
         this.log = props.getLogger();
@@ -32,7 +33,7 @@ export default class Confirm extends Component {
                 }
             },
             os: Constants.OS.UNIX
-        }
+        };
 
         if ([Constants.App.REPLICATOR, Constants.App.CONTROLLER].includes(this.state.app)) {
             this.state.payload.app.states.load = JSON.parse(props.getStore().config);
@@ -50,18 +51,18 @@ export default class Confirm extends Component {
         this.log.debug('Displaying step:', Confirm.name);
     }
 
-    componentDidMount() { }
+    componentDidMount () { }
 
-    componentWillUnmount() { }
+    componentWillUnmount () { }
 
-    changeSelect() {
+    changeSelect () {
         if (this.refs.os && this.state.os !== this.refs.os.value) {
             this.setState({ os: this.refs.os.value });
         }
     }
 
-    isValidated() {
-        return new Promise((resolve, _reject) => {
+    isValidated () {
+        return new Promise((resolve, reject) => {
             const launchApp = _ => {
                 axios.post('http://' + Constants.REACT_APP_OVE_HOST + '/section', this.state.payload).then(res => {
                     if (this.state.app !== Constants.App.REPLICATOR && (res.data.id || res.data.id === 0)) {
@@ -99,9 +100,9 @@ export default class Confirm extends Component {
         });
     }
 
-    _getCurlPayload() {
+    _getCurlPayload () {
         const DELETE_SECTIONS_COMMAND = 'curl --header "Content-Type: application/json" --request DELETE http://' +
-        Constants.REACT_APP_OVE_HOST + '/sections'
+            Constants.REACT_APP_OVE_HOST + '/sections';
         if (this.state.os === Constants.OS.UNIX) {
             return (this.state.deleteSections ? DELETE_SECTIONS_COMMAND + '\n' : '') +
                 'curl --header "Content-Type: application/json" --request POST --data \'' +
@@ -114,7 +115,7 @@ export default class Confirm extends Component {
         }
     }
 
-    render() {
+    render () {
         let cmOptions = {
             lineNumberFormatter: _ => '',
             lineNumbers: true,
@@ -130,11 +131,14 @@ export default class Confirm extends Component {
                     <form id="Form" className="form-horizontal">
                         <div className="form-group">
                             <label className="col-md-12 control-label">
-                                <h1>Step 5: Launch a new application instance</h1>
+                                <h1>Step 5: Launch application</h1>
                                 <h3>Pressing <code>Launch</code> below will create a new instance of an application of
-                                    type <code>{this.state.app}</code> in space <code>{this.state.space}</code>.
-                                    The same operation can also be executed on a CLI using <a href="https://curl.haxx.se/docs/manpage.html" target="_blank" rel="noopener noreferrer">curl</a>.
-                                    Please note that the application's controller may not automatically launch if you have any pop-up blockers on your web browser.</h3>
+                                    type <code>{this.state.app}</code> in space <code>{this.state.space}</code>.<br />
+                                    Please note that the application&#39;s controller may not automatically launch if you
+                                    have any pop-up blockers on your web browser.<br />
+                                    The same operation can also be executed using <a href="https://curl.haxx.se/docs/manpage.html" target="_blank" rel="noopener noreferrer">curl</a>
+                                    on a command line.
+                                </h3>
                             </label>
                             <div className="col-md-12">
                                 <div className="form-group col-md-9 content form-block-holder">
@@ -161,3 +165,9 @@ export default class Confirm extends Component {
         );
     }
 }
+
+Confirm.propTypes = {
+    getLogger: PropTypes.func.isRequired,
+    getStore: PropTypes.func.isRequired,
+    updateStore: PropTypes.func.isRequired
+};
