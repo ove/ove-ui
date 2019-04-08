@@ -136,8 +136,8 @@ export default class Confirm extends Component {
                                     type <code>{this.state.app}</code> in space <code>{this.state.space}</code>.<br />
                                     Please note that the application&#39;s controller may not automatically launch if you
                                     have any pop-up blockers on your web browser.<br />
-                                    The same operation can also be executed using <a href="https://curl.haxx.se/docs/manpage.html" target="_blank" rel="noopener noreferrer">curl</a>
-                                    on a command line.
+                                    The same operation can also be executed on a command line
+                                    using <a href="https://curl.haxx.se/docs/manpage.html" target="_blank" rel="noopener noreferrer">curl</a>.
                                 </h3>
                             </label>
                             <div className="col-md-12">
