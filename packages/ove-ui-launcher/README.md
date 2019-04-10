@@ -2,87 +2,9 @@
 
 This [React](https://reactjs.org/) web application provides a wizard that will guide you through launching an [OVE App](https://ove.readthedocs.io/en/stable/ove-apps/README.html) step-by-step.
 
-It will also display the [curl](https://curl.haxx.se/docs/manpage.html) command that can be used to repeat this action at the commandline.
+It will also display the [curl](https://curl.haxx.se/docs/manpage.html) command that can be used to repeat this action at the command line.
 
-## Installation
-
-The launcher UI can be launched either for development or in a production environment. 
-
-In either case, fist install dependencies by running:
-
-```sh
-npm install
-```
-
-Unless [OVE Core](https://github.com/ove/ove) and the OVE Apps are running on localhost on their default ports, you will also need to modify the configuration file `.env` appropriately.
-
-### Production mode
-
-To launch in a production environment, first build the project:
-
-```sh
-npm run build
-```
-
-Then run it:
-
-```sh
-npm run start
-```
-
-You should then be able to access the UI by opening `http://localhost:8281` with a web browser.
-
-
-### Development mode
-
-Alternatively, to launch in development mode, simply run:
-
-```sh
-npm run start:dev
-```
-
-You should then be able to access the UI by opening `http://localhost:8281` with a web browser.
-
-
-## Hosting content
-
-Before using the launcher UI, you will need to host the content that you plan to load into the respective applications. [OVE](https://github.com/ove/ove) expects content to be accessible via URLs both locally and also in a distributed deployment. There are multiple options to host your content such that they are accessible via URLs.
-
-1. Externally hosted static content: this is a straightforward option, but may expose your content to 3rd parties. Choices include cloud hosting providers such as [Amazon AWS](https://aws.amazon.com/getting-started/projects/host-static-website/) and [Google Cloud](https://cloud.google.com/storage/docs/hosting-static-website) or specialised cloud application platform providers such as [Heroku](https://www.heroku.com/) and [Netlify](https://www.netlify.com/).
-2. [Locally hosted static content](#locally-hosted-static-content): this is a convenient choice for local testing and also does not expose your content to third parties. Choices include web servers such as [Apache HTTP Server](https://httpd.apache.org/), [NGinx](https://www.nginx.com/), and [Microsoft IIS](https://www.iis.net/), or simpler alternatives such as [Node.js HTTP Server](https://www.npmjs.com/package/http-server) or [Python Simple HTTP Server](https://docs.python.org/2/library/simplehttpserver.html).
-3. Using an object storage: an object storage can be setup either locally or externally and can have open or restricted access. Choices include cloud storage services such as [Amazon S3](https://aws.amazon.com/what-is-cloud-object-storage/) and locally deployed alternatives (private cloud storage) such as [Minio](https://www.minio.io/).
-4. [Using the OVE Asset Manager](#using-the-ove-asset-manager): this internally uses an object storage but is optimised for OVE projects and provides a much better user experience.
-
-### Locally hosted static content
-
-Once you have stored the desired content in a directory structure, all you need is to start a web-server. This can be done using one of the approaches shown below:
-
-Node.js:
-
-```sh
-npm install http-server -g
-http-server
-```
-
-Python 2:
-
-```sh
-python -m SimpleHTTPServer 9999
-```
-
-Python 3:
-
-```sh
-python3 -m http.server 9999
-```
-
-Please note that you may need to specify a port number if you have chosen to use Python and the default of port 8000 is already in use (the examples above specify 9999 as the port to use).
-
-Once the server has started, the content will be available at the any of the URLs printed on the console, if you have chosen to use Node.js or at `http://localhost:8000` (or corresponding port number), if you have chosen to use Python.
-
-### Using the [OVE Asset Manager](https://github.com/ove/ove-asset-manager)
-
-The [OVE Asset Manager](https://github.com/ove/ove-asset-manager) is still work in progress.
+The launcher UI can be accessed by opening the URL `http://OVE_UI_LAUNCHER_HOST:PORT` with a web browser. Before using the launcher UI, you will need to host the content that you plan to load into the respective applications. For more information on hosting content for OVE, see the [Usage](https://ove.readthedocs.io/en/stable/docs/USAGE.html) page.
 
 ## Using the Launcher UI
 
