@@ -27,9 +27,6 @@ export default {
             if (host.indexOf('//') >= 0) {
                 host = host.substring(host.indexOf('//') + 2);
             }
-            if (host.indexOf('/') >= 0) {
-                host = host.substring(0, host.indexOf('/'));
-            }
         }
         return host;
     })(),
@@ -39,9 +36,6 @@ export default {
         if (host) {
             if (host.indexOf('//') >= 0) {
                 host = host.substring(host.indexOf('//') + 2);
-            }
-            if (host.indexOf('/') >= 0) {
-                host = host.substring(0, host.indexOf('/'));
             }
         }
         return host;

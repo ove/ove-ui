@@ -4,7 +4,7 @@ This [React](https://reactjs.org/) web application provides a wizard that will g
 
 It will also display the [curl](https://curl.haxx.se/docs/manpage.html) command that can be used to repeat this action at the command line.
 
-The launcher UI can be accessed by opening the URL `http://OVE_UI_LAUNCHER_HOST:PORT` with a web browser. Before using the launcher UI, you will need to host the content that you plan to load into the respective applications. For more information on hosting content for OVE, see the [Usage](https://ove.readthedocs.io/en/stable/docs/USAGE.html) page.
+The launcher UI can be accessed by opening the URL `http://OVE_CORE_HOST:PORT/ui/launcher` with a web browser. Before using the launcher UI, you will need to host the content that you plan to load into the respective applications. For more information on hosting content for OVE, see the [Usage](https://ove.readthedocs.io/en/stable/docs/USAGE.html) page.
 
 ## Using the Launcher UI
 
