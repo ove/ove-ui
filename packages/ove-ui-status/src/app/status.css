@@ -1,0 +1,64 @@
+.markdown-body, .jumbotron, .status {
+    min-width: 200px;
+    max-width: 767px;
+    margin: 0 auto;
+}
+
+.status > table {
+    border-radius: .25rem
+}
+
+.jumbotron > p, .status > div > table {
+    margin-bottom: 0;
+}
+
+.outer {
+    padding-left: 45px;
+    padding-right: 45px;
+}
+
+.markdown-body {
+    background-color:white;
+    padding-top: 45px;
+    padding-bottom: 25px;
+}
+
+.table-bordered td {
+    border: unset;
+}
+
+.table td {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.td-c {
+    width: 45%;
+    border-right: none;
+}
+
+.td-csl {
+    width: 5%; 
+    border-right: 1px solid #dee2e6 !important;
+}
+
+.td-csr {
+    width: 5%;
+    border-right: none;
+}
+
+.td-c, .td-csr, .td-csl {
+    border-left: none;
+    border-top: none; 
+}
+
+@media (max-width: 767px) {
+    .markdown-body {
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+    .outer {
+        padding-left: 15px;
+        padding-right: 15px
+    }
+}
