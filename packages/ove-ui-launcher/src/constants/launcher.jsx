@@ -1,3 +1,16 @@
+const getOVEHost = function () {
+    let host = process.env.REACT_APP_OVE_HOST;
+    if (host) {
+        if (host.indexOf('//') >= 0) {
+            host = host.substring(host.indexOf('//') + 2);
+        }
+        if (host.indexOf('/') >= 0) {
+            host = host.substring(0, host.indexOf('/'));
+        }
+    }
+    return host;
+};
+
 export default {
     UPDATE: 'UPDATE',
     STEP: 'step',
@@ -8,37 +21,12 @@ export default {
     LOG_LEVEL: +(process.env.LOG_LEVEL || 5), // Level (from 0 - 6): 5 == TRACE
     SECTION_CONTROLLER: '.section-controller',
 
-    REACT_APP_OVE_HOST: (function () {
-        let host = process.env.REACT_APP_OVE_HOST;
-        if (host) {
-            if (host.indexOf('//') >= 0) {
-                host = host.substring(host.indexOf('//') + 2);
-            }
-            if (host.indexOf('/') >= 0) {
-                host = host.substring(0, host.indexOf('/'));
-            }
-        }
-        return host;
-    })(),
+    REACT_APP_OVE_HOST: getOVEHost(),
 
-    REACT_APP_OVE_UI_PREVIEW: (function () {
-        let host = process.env.REACT_APP_OVE_UI_PREVIEW;
-        if (host) {
-            if (host.indexOf('//') >= 0) {
-                host = host.substring(host.indexOf('//') + 2);
-            }
-        }
-        return host;
-    })(),
+    REACT_APP_OVE_UI_PREVIEW: getOVEHost() + '/ui/preview',
 
     REACT_APP_OVE_APP: function (appName) {
-        let host = process.env['REACT_APP_OVE_APP_' + appName.toUpperCase()];
-        if (host) {
-            if (host.indexOf('//') >= 0) {
-                host = host.substring(host.indexOf('//') + 2);
-            }
-        }
-        return host;
+        return getOVEHost() + '/app/' + appName.toLowerCase();
     },
 
     NEXT_BUTTON_CLASS: 'btn btn-prev btn-primary btn-md pull-right',
