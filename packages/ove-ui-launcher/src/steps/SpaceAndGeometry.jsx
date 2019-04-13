@@ -287,5 +287,5 @@ SpaceAndGeometry.propTypes = {
     getLogger: PropTypes.func.isRequired,
     getStore: PropTypes.func.isRequired,
     updateStore: PropTypes.func.isRequired,
-    jumpToStep: PropTypes.func.isRequired
+    jumpToStep: PropTypes.func // Added by stepzilla
 };

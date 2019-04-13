@@ -23,8 +23,7 @@ export default {
 
     REACT_APP_OVE_SERVICE: function (serviceName) {
         if (serviceName.toLowerCase() === 'persistence') {
-            // return getOVEHost() + '/service/persistence/inmemory';
-            return null;
+            return getOVEHost() + '/service/persistence/inmemory';
         }
         // return getOVEHost() + '/service/' + serviceName.toLowerCase();
         return null;

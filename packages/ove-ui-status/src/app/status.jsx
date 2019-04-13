@@ -14,7 +14,7 @@ export default class Status extends Component {
     constructor (props) {
         super(props);
         this.log = props.log;
-        this.status = props.status;
+        this.status = props.status || {};
         this.log.debug('Successfully loaded React App');
     }
 
@@ -27,10 +27,14 @@ export default class Status extends Component {
         if (type !== 'Core') {
             url = Constants['REACT_APP_OVE_' + type.toUpperCase()](id);
             if (url !== null) {
-                url += '/name';
+                if (id.toUpperCase() === Constants.Service.PERSISTENCE.toUpperCase()) {
+                    url += '/empty';
+                } else {
+                    url += '/name';
+                }
             }
         } else {
-            url = Constants.REACT_APP_OVE_HOST + '/spaces';
+            url = Constants.REACT_APP_OVE_HOST + '/sections?geometry=0,0,0,0';
         }
         return url;
     }
