@@ -1,7 +1,7 @@
 {
-  "name": "@ove/ove-ui-launcher",
+  "name": "@ove/ove-ui-status",
   "version": "0.1.0",
-  "description": "Launch applications on the OVE framework",
+  "description": "Displays status of all OVE components",
   "main": "server.js",
   "private": true,
   "keywords": [],
@@ -13,21 +13,17 @@
     "dotenv": "7.0.0",
     "express": "4.16.4",
     "little-loader": "0.2.0",
-    "js-beautify": "1.9.1",
     "jquery": "3.3.1",
     "react": "16.8.6",
-    "react-codemirror": "1.0.0",
     "react-dom": "16.8.6",
-    "react-redux": "6.0.1",
     "react-scripts": "2.1.8",
-    "react-stepzilla": "5.0.0",
-    "redux": "4.0.1",
-    "redux-persist": "5.10.0",
-    "bootstrap": "3.4.1"
+    "bootstrap": "4.3.1",
+    "github-markdown-css": "3.0.1",
+    "@fortawesome/fontawesome-free": "5.8.1"
   },
   "scripts": {
-    "start": "npm run build && PORT=8281 node -r dotenv/config server.js dotenv_config_path=.env",
-    "start:dev": "PORT=8281 node -r dotenv/config ../../node_modules/.bin/react-scripts start dotenv_config_path=.env",
+    "start": "npm run build && PORT=8283 node -r dotenv/config server.js dotenv_config_path=.env",
+    "start:dev": "PORT=8283 node -r dotenv/config ../../node_modules/.bin/react-scripts start dotenv_config_path=.env",
     "build": "react-scripts build",
     "test": "react-scripts test --no-watch",
     "lint": "eslint src/. --ext .jsx"

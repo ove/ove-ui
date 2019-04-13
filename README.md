@@ -7,7 +7,8 @@ These components are all browser based, and provide an alternative to using the 
 The currently available components are:
 
 * [Launcher](packages/ove-ui-launcher/README.md), which launches OVE applications
-* [Preview](packages/ove-ui-preview/README.md), which provides a preview of an OVE Space 
+* [Preview](packages/ove-ui-preview/README.md), which provides a preview of an OVE Space
+* [Status](packages/ove-ui-status/README.md), which displays status of all OVE components
 
 OVE must be installed before the OVE UIs can be used. The [OVE Documentation](https://ove.readthedocs.io/en/stable/) provides [installation instructions](https://ove.readthedocs.io/en/stable/docs/INSTALLATION.html) and a [user guide](https://ove.readthedocs.io/en/stable/docs/USAGE.html).
 

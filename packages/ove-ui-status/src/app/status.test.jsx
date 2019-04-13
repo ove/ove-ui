@@ -2,11 +2,11 @@
 // JSHint cannot deal with React.
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Launcher from './launcher';
+import Status from './status';
 
 it('renders without crashing', () => {
     const div = document.createElement('div');
     const log = { debug: jest.fn(x => x), warn: jest.fn(x => x), error: jest.fn(x => x) };
-    ReactDOM.render(<Launcher log={log} dispatch={_ => {}} />, div);
+    ReactDOM.render(<Status log={log} status={{}} />, div);
     ReactDOM.unmountComponentAtNode(div);
 });
