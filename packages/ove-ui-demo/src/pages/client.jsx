@@ -11,7 +11,21 @@ export default class Client extends Component {
     constructor (props) {
         super(props);
         this.log = props.log;
-        let viewId = new URLSearchParams(props.query).get('oveViewId');
+        let queryParams = new URLSearchParams(props.query);
+
+        let geometry = (_ => {
+            const x = queryParams.get('x');
+            const y = queryParams.get('y');
+            const w = queryParams.get('w');
+            const h = queryParams.get('h');
+            return ((x || x === 0) && (y || y === 0) && w && h) ? { x: x, y: y, w: w, h: h } : null;
+        })();
+        this.log.debug('Got client geometry:', geometry);
+        if (geometry) {
+            this.geometry = geometry;
+        }
+
+        let viewId = queryParams.get('oveViewId');
         this.log.debug('Got viewId:', viewId);
         if (viewId && viewId.includes('-')) {
             this.clientId = viewId.split('-')[1];
@@ -25,14 +39,24 @@ export default class Client extends Component {
     componentWillUnmount () { }
 
     render () {
+        const code = code => {
+            return '<code style=\'color: White\'>' + code + '</code>';
+        };
+
         const time = _ => {
-            return '<strong>Time:</strong> <code style=\'color: White\'>' +
-                new Date().toLocaleString() + '</code>';
+            return '<strong>Time:</strong> ' + code(new Date().toLocaleString());
         };
 
         const resolution = _ => {
-            return '<strong>Resolution:</strong> <code style=\'color: White\'>' +
-                window.innerWidth + 'x' + window.innerHeight + '</code>';
+            return '<strong>Resolution:</strong> ' + code(window.innerWidth + 'x' + window.innerHeight);
+        };
+
+        const geometry = _ => {
+            if (this.geometry) {
+                const g = this.geometry;
+                return `<strong>Geometry:</strong> x: ${code(g.x)}, y: ${code(g.y)}, w: ${code(g.w)}, h: ${code(g.h)}`;
+            }
+            return '';
         };
 
         const browser = _ => {
@@ -53,6 +77,8 @@ export default class Client extends Component {
                     <span id='space' dangerouslySetInnerHTML={{ __html:
                         (_ => { return this.space ? '<strong>Space:</strong> ' + this.space : ''; })() }} />
                     <br/>
+                    <span id='geometry' dangerouslySetInnerHTML={{ __html: geometry() }} />
+                    <br/>
                     <span id='resolution' dangerouslySetInnerHTML={{ __html: resolution() }} />
                     <br/>
                     <strong>Browser:</strong> {browser()}
@@ -62,10 +88,10 @@ export default class Client extends Component {
                     <span id='time' dangerouslySetInnerHTML={{ __html: time() }} />
                 </p>
                 {
-                    setInterval(() => {
+                    setInterval(_ => {
                         document.getElementById('time').innerHTML = time();
                         document.getElementById('resolution').innerHTML = resolution();
-                    }, 1000)
+                    }, Constants.CLOCK_UPDATE_FREQUENCY)
                 }
             </div>
         );

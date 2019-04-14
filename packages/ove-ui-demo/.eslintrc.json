@@ -24,7 +24,9 @@
             "flatTernaryExpressions": false,
             "ignoreComments": false
         }],
-        "quotes": [1, "single"],
+        "quotes": [1, "single", {
+            "allowTemplateLiterals": true
+        }],
         "semi": ["error", "always"],
         "react/no-string-refs": ["false"]
     }

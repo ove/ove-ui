@@ -73,8 +73,8 @@ export default class SelectApp extends Component {
                                 }
                             });
                         }
-                    }, 1000);
-                }, 2000);
+                    }, Constants.SPACE_NAMES_LOADED_TEST_TIME);
+                }, Constants.SPACE_NAMES_LOADED_INITIAL_WAIT_TIME);
             });
         } else {
             // if anything fails then update the UI validation state but NOT the UI Data State

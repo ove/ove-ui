@@ -15,6 +15,19 @@ export default {
         return host;
     })(),
 
+    PUBLIC_URL: (function () {
+        let host = window.location.href;
+        if (host) {
+            if (host.indexOf('//') >= 0) {
+                host = host.substring(host.indexOf('//') + 2);
+            }
+            if (host.endsWith('/')) {
+                host = host.substring(0, host.length - 1);
+            }
+        }
+        return '//' + host;
+    })(),
+
     BROWSER: function (name) {
         switch (name) {
             case 'chrome':
@@ -29,6 +42,13 @@ export default {
                 return name;
         }
     },
+
+    MAX_DOT_COUNT: 5,
+    DOT_LOAD_SPEED: 800, // Unit: milliseconds
+    CLOCK_UPDATE_FREQUENCY: 1000, // Unit: milliseconds
+    SECTION_DELETE_WAIT_TIME: 1000, // Unit: milliseconds
+    POST_WELCOME_DELAY: 15000, // Unit: milliseconds
+    POST_CLIENT_STATUS_DELAY: 45000, // Unit: milliseconds
 
     /**************************************************************
                             Enums

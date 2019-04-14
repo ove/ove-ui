@@ -79,8 +79,8 @@ export default class Status extends Component {
                         clearInterval(x);
                         resolve(status);
                     }
-                }, 2000);
-            }, 1000);
+                }, Constants.COMPONENT_STATUS_TEST_TIME);
+            }, Constants.COMPONENT_STATUS_TEST_INITIAL_WAIT_TIME);
         });
     };
 

@@ -92,7 +92,7 @@ export default class Confirm extends Component {
             };
             if (this.state.deleteSections) {
                 axios.delete('http://' + Constants.REACT_APP_OVE_HOST + '/sections').then(_ => {
-                    setTimeout(launchApp, 1000);
+                    setTimeout(launchApp, Constants.SECTION_DELETE_WAIT_TIME);
                 }).catch(this.log.error);
             } else {
                 launchApp();

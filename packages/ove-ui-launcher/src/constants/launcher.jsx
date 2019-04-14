@@ -21,6 +21,10 @@ export default {
     LOG_LEVEL: +(process.env.LOG_LEVEL || 5), // Level (from 0 - 6): 5 == TRACE
     SECTION_CONTROLLER: '.section-controller',
 
+    SPACE_NAMES_LOADED_TEST_TIME: 1000, // Unit: milliseconds
+    SPACE_NAMES_LOADED_INITIAL_WAIT_TIME: 2000, // Unit: milliseconds
+    SECTION_DELETE_WAIT_TIME: 1000, // Unit: milliseconds
+
     REACT_APP_OVE_HOST: getOVEHost(),
 
     REACT_APP_OVE_UI_PREVIEW: getOVEHost() + '/ui/preview',
@@ -32,8 +36,8 @@ export default {
     NEXT_BUTTON_CLASS: 'btn btn-prev btn-primary btn-md pull-right',
     BACK_BUTTON_CLASS: 'btn btn-next btn-primary btn-md pull-left',
 
-    DEFAULT_HEIGHT: 2424,
-    DEFAULT_WIDTH: 4320,
+    DEFAULT_HEIGHT: 2424, // Unit: pixels
+    DEFAULT_WIDTH: 4320, // Unit: pixels
 
     YOUTUBE_URL_REGEX: new RegExp('^(?:(?:(?:https?|ftp):)?\\/\\/)' +
         '(?:www.youtube.com\\/embed\\/)(?:[a-z0-9_-]{0,11})$', 'i'),
