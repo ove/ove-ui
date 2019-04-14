@@ -1,0 +1,16 @@
+.client-text-middle, .client-text-lower {
+    position: absolute;
+    left: 50%;
+}
+
+.client-text-middle {
+    opacity: 0.9;
+    top: 50%;
+    transform: translate(-50%, -70%);
+}
+
+.client-text-lower {
+    opacity: 0.6;
+    top: 80%;
+    transform: translate(-50%, -50%);
+}

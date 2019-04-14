@@ -14,6 +14,8 @@ const getOVEHost = function () {
 export default {
     COMPONENT_NAME: 'status',
     LOG_LEVEL: +(process.env.LOG_LEVEL || 5), // Level (from 0 - 6): 5 == TRACE
+    COMPONENT_STATUS_TEST_TIME: 2000, // Unit: milliseconds
+    COMPONENT_STATUS_TEST_INITIAL_WAIT_TIME: 1000, // Unit: milliseconds
 
     REACT_APP_OVE_HOST: getOVEHost(),
 
@@ -78,6 +80,7 @@ export default {
     },
 
     UI: {
+        DEMO: 'Demo',
         LAUNCHER: 'Launcher',
         PREVIEW: 'Preview',
         STATUS: 'Status'

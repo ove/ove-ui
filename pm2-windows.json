@@ -29,6 +29,16 @@
         "env": {
             "PORT": "8283"
         }
+    },
+    {
+        "name": "@ove/ove-ui-demo",
+        "cwd": "./packages/ove-ui-demo",
+        "kill_timeout": 3000,
+        "restart_delay": 3000,
+        "script": "-r dotenv/config server.js dotenv_config_path=.env",
+        "env": {
+            "PORT": "8284"
+        }
     }
   ]
 }

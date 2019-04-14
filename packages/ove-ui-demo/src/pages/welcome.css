@@ -1,0 +1,10 @@
+.welcome-text-middle {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -80%);
+}
+
+.text-white {
+    color: white;
+}
