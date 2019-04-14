@@ -50,7 +50,8 @@ export default class Client extends Component {
                     <strong>{this.clientId}</strong>
                 </p>
                 <p style={{ fontSize: '3vh', position: 'absolute' }} className='text-white text-center client-text-lower'>
-                    <strong>Space:</strong> {this.space}
+                    <span id='space' dangerouslySetInnerHTML={{ __html:
+                        (_ => { return this.space ? '<strong>Space:</strong> ' + this.space : ''; })() }} />
                     <br/>
                     <span id='resolution' dangerouslySetInnerHTML={{ __html: resolution() }} />
                     <br/>
