@@ -40,7 +40,7 @@ export default class Client extends Component {
 
     render () {
         const code = code => {
-            return '<code style=\'color: White\'>' + code + '</code>';
+            return '<code style=\'color: white\'>' + code + '</code>';
         };
 
         const time = _ => {

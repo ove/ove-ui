@@ -28,8 +28,8 @@ export default class Welcome extends Component {
                 }
                 return dots;
             };
-            return paint(count % (Constants.MAX_DOT_COUNT + 1), 'White') +
-                paint(Constants.MAX_DOT_COUNT - (count % (Constants.MAX_DOT_COUNT + 1)), 'Black');
+            return paint(count % (Constants.MAX_DOT_COUNT + 1), 'white') +
+                paint(Constants.MAX_DOT_COUNT - (count % (Constants.MAX_DOT_COUNT + 1)), 'black');
         };
         let count = 0;
 

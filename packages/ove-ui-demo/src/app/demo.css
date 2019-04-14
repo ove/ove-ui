@@ -4,5 +4,34 @@ html, body, #root {
 }
 
 .bg-black {
-    background-color: Black!important;
+    background-color: black !important;
+}
+
+.markdown-body {
+    min-width: 200px;
+    max-width: 767px;
+    margin: 0 auto;
+}
+
+.outer {
+    padding-left: 45px;
+    padding-right: 45px;
+}
+
+.markdown-body {
+    background-color: white;
+    padding-top: 45px;
+    padding-bottom: 25px;
+}
+
+@media (max-width: 767px) {
+    .markdown-body {
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+    .outer {
+        padding-left: 15px;
+        padding-right: 15px
+    }
 }

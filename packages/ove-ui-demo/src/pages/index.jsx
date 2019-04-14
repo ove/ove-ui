@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import Constants from '../constants/demo';
+import 'github-markdown-css/github-markdown.css';
 
 export default class Index extends Component {
     constructor (props) {
@@ -86,8 +87,21 @@ export default class Index extends Component {
 
     render () {
         return (
-            <div>
-                Hello World!
+            <div className='outer'>
+                <div className='markdown-body'>
+                    <h1>Open Visualisation Environment Demos</h1>
+                    <p>
+                        This page provides a list of demonstrations that can be launched on an installation of
+                        Open Visualisation Environment (OVE). Simply loading this page and taking no action will
+                        leading to the displaying of the OVE splash screen followed by the details of the OVE
+                        clients.
+                    </p>
+                    <p>
+                        This demo launcher is associated with an instance of OVE Core accessible
+                        at <a href={'//' + Constants.REACT_APP_OVE_HOST}>{Constants.REACT_APP_OVE_HOST}</a> - more
+                        information about OVE and how it has been configured is available there.
+                    </p>
+                </div>
             </div>
         );
     }
