@@ -78,6 +78,7 @@ export default {
     },
 
     UI: {
+        DEMO: 'Demo',
         LAUNCHER: 'Launcher',
         PREVIEW: 'Preview',
         STATUS: 'Status'
