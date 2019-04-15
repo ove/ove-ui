@@ -64,9 +64,9 @@ export default class Confirm extends Component {
     isValidated () {
         return new Promise((resolve, reject) => {
             const launchApp = _ => {
-                axios.post('http://' + Constants.REACT_APP_OVE_HOST + '/section', this.state.payload).then(res => {
+                axios.post('//' + Constants.REACT_APP_OVE_HOST + '/section', this.state.payload).then(res => {
                     if (this.state.app !== Constants.App.REPLICATOR && (res.data.id || res.data.id === 0)) {
-                        let controllerURL = 'http://' + Constants.REACT_APP_OVE_APP(this.state.app) +
+                        let controllerURL = '//' + Constants.REACT_APP_OVE_APP(this.state.app) +
                             '/control.html?oveSectionId=' + res.data.id;
                         if (this.state.showController) {
                             $('<a>', {
@@ -91,7 +91,7 @@ export default class Confirm extends Component {
                 }).catch(this.log.error);
             };
             if (this.state.deleteSections) {
-                axios.delete('http://' + Constants.REACT_APP_OVE_HOST + '/sections').then(_ => {
+                axios.delete('//' + Constants.REACT_APP_OVE_HOST + '/sections').then(_ => {
                     setTimeout(launchApp, Constants.SECTION_DELETE_WAIT_TIME);
                 }).catch(this.log.error);
             } else {

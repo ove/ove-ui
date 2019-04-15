@@ -1,3 +1,7 @@
+// Setup jQuery to work inside React
+import $ from 'jquery';
+window.$ = $;
+
 export default {
     COMPONENT_NAME: 'demo',
     LOG_LEVEL: +(process.env.LOG_LEVEL || 5), // Level (from 0 - 6): 5 == TRACE
@@ -16,16 +20,14 @@ export default {
     })(),
 
     PUBLIC_URL: (function () {
-        let host = window.location.href;
+        let manifestURL = $('link[rel=\'manifest\'')[0].href;
+        let host = manifestURL.substring(0, manifestURL.indexOf('/manifest.json'));
         if (host) {
             if (host.indexOf('//') >= 0) {
                 host = host.substring(host.indexOf('//') + 2);
             }
-            if (host.endsWith('/')) {
-                host = host.substring(0, host.length - 1);
-            }
         }
-        return '//' + host;
+        return host;
     })(),
 
     BROWSER: function (name) {
