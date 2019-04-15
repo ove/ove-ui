@@ -20,14 +20,18 @@ export default {
     })(),
 
     PUBLIC_URL: (function () {
-        let manifestURL = $('link[rel=\'manifest\'')[0].href;
-        let host = manifestURL.substring(0, manifestURL.indexOf('/manifest.json'));
-        if (host) {
-            if (host.indexOf('//') >= 0) {
-                host = host.substring(host.indexOf('//') + 2);
+        try {
+            let manifestURL = $('link[rel=\'manifest\'')[0].href;
+            let host = manifestURL.substring(0, manifestURL.indexOf('/manifest.json'));
+            if (host) {
+                if (host.indexOf('//') >= 0) {
+                    host = host.substring(host.indexOf('//') + 2);
+                }
             }
+            return host;
+        } catch (_) {
+            return process.env.PUBLIC_URL;
         }
-        return host;
     })(),
 
     BROWSER: function (name) {
