@@ -4,4 +4,9 @@ services:
     image: ovehub/ove-ui:${SERVICE_VERSION}
     build: .
     ports:
-    - "8281:8281"
+    - "8281-8284:8281-8284"
+
+# this is not going to work because localhost is reserved for the local docker network
+# in order to make this work you should either replace uses of localhost in the .env file
+# of each individual package with the hostname or place the ove-core in the same docker
+# compose file as ove-ui.

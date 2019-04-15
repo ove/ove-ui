@@ -7,7 +7,7 @@ RUN npm install -global lerna
 COPY . .
 RUN npm run install:prod
 
-EXPOSE 8281
+EXPOSE 8281-8284
 
 CMD [ "pm2-runtime", "pm2.json" ]
 
