@@ -5,8 +5,10 @@ export default {
     SPACE_DIV: '.space',
     BACKGROUND: '#222',
     CONTROL_CANVAS: '.unselectable',
+    CONTROLLER: '.operation',
     OVE_FRAME: '.ove-frame',
     SPACE: 'oveSpace',
+    DEFAULT_FILE_NAME: 'project.json',
     MAX_ZOOM_LEVEL: 1,
     MIN_ZOOM_LEVEL: 1.000001,
     LOG_LEVEL: +(process.env.LOG_LEVEL || 5), // Level (from 0 - 6): 5 == TRACE
@@ -23,5 +25,14 @@ export default {
             }
         }
         return host;
-    })()
+    })(),
+
+    /**************************************************************
+                            Enums
+    **************************************************************/
+    Button: {
+        UPLOAD: '#btnUpload',
+        DOWNLOAD: '#btnDownload',
+        DELETE: '#btnDelete'
+    }
 };

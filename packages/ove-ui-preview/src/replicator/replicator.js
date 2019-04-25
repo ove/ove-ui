@@ -1,6 +1,9 @@
 import Constants from '../constants/preview';
 import axios from 'axios';
 import * as d3 from 'd3';
+import UploadImg from '@fortawesome/fontawesome-free/svgs/solid/upload.svg';
+import DownloadImg from '@fortawesome/fontawesome-free/svgs/solid/download.svg';
+import DeleteImg from '@fortawesome/fontawesome-free/svgs/solid/trash-alt.svg';
 
 // Setup jQuery to work inside React
 import $ from 'jquery';
@@ -15,6 +18,26 @@ export default class Replicator {
     }
 
     init () {
+        const toProjectFormat = json => {
+            let payload = [];
+            json.forEach((e, i) => {
+                payload.push({
+                    name: 'section' + i,
+                    type: 'section',
+                    positionConstraints: { h: e.h, w: e.w, x: e.x, y: e.y },
+                    app: e.app
+                });
+            });
+            return payload;
+        };
+        const fromProjectFormat = (json, space) => {
+            let payload = [];
+            json.forEach((e, i) => {
+                let p = e.positionConstraints;
+                payload.push({ id: i, space: space, h: p.h, w: p.w, x: p.x, y: p.y, app: e.app });
+            });
+            return payload;
+        };
         const __private = {
             displayError: () => {
                 $('<div id=\'no-space-selected\'>').addClass('alert alert-danger')
@@ -72,6 +95,113 @@ export default class Replicator {
                     opacity: '0%',
                     overflow: 'hidden'
                 }).appendTo(Constants.CONTENT_DIV);
+
+                log.debug('Displaying controller');
+                $('<div>', {
+                    class: Constants.CONTROLLER.substring(1)
+                }).css({
+                    zIndex: 1,
+                    position: 'absolute',
+                    bottom: '40px',
+                    textAlign: 'center',
+                    width: '100%'
+                }).appendTo(Constants.CONTENT_DIV);
+                const css = {
+                    display: 'inline-block',
+                    width: '48px',
+                    height: '48px',
+                    position: 'relative',
+                    paddingRight: '5px', /* required for the oval shape */
+                    marginRight: '5px',
+                    borderRadius: '50%',
+                    textShadow: '1px 1px 2px #000',
+                    color: '#fff',
+                    fontSize: '32px',
+                    lineHeight: '46px'
+                };
+
+                let span = $('<span>').css(Object.assign({ background: 'snow' }, css));
+                span.appendTo(Constants.CONTROLLER);
+                $('<div>', {
+                    id: Constants.Button.DOWNLOAD.substring(1)
+                }).css(Object.assign({
+                    background: `url(${DownloadImg}) center/45% no-repeat`,
+                    opacity: 0.8
+                }, css)).appendTo(span);
+
+                span = $('<span>').css(Object.assign({ background: 'snow' }, css));
+                span.appendTo(Constants.CONTROLLER);
+                $('<div>', {
+                    id: Constants.Button.UPLOAD.substring(1)
+                }).css(Object.assign({
+                    background: `url(${UploadImg}) center/45% no-repeat`,
+                    opacity: 0.8
+                }, css)).appendTo(span);
+
+                span = $('<span>').css(Object.assign({ background: 'snow' }, css));
+                span.appendTo(Constants.CONTROLLER);
+                $('<div>', {
+                    id: Constants.Button.DELETE.substring(1)
+                }).css(Object.assign({
+                    background: `url(${DeleteImg}) center/45% no-repeat`,
+                    opacity: 0.8
+                }, css)).appendTo(span);
+
+                const controllerScale = Math.min(Math.min(document.documentElement.clientWidth, window.innerWidth) / 1440,
+                    Math.min(document.documentElement.clientHeight, window.innerHeight) / 720);
+                $(Constants.CONTROLLER).css({ display: 'block', transformOrigin: '50% 50%', transform: 'scale(' + controllerScale + ')' });
+
+                $(Constants.Button.DOWNLOAD).click(_ => {
+                    axios.get('//' + Constants.REACT_APP_OVE_HOST + '/sections?space=' + space).then(res => {
+                        const payload = {
+                            Space: space,
+                            Layout: {
+                                oveSpaceGeometry: '//' + Constants.REACT_APP_OVE_HOST + '/spaces/' + space + '/geometry',
+                                canvas: { layout: { type: 'static' }, sections: toProjectFormat(res.data) }
+                            }
+                        };
+                        let fileName = prompt('Please provide a name for your file', Constants.DEFAULT_FILE_NAME);
+                        // return if cancel button is pressed or filename is blank.
+                        if (fileName) {
+                            let fn = fileName.split('.')[0] + '.json';
+                            $('<a>', {
+                                download: fn,
+                                target: '_blank',
+                                href: 'data:application/octet-stream;charset=utf-8,' +
+                                    encodeURIComponent(JSON.stringify(payload))
+                            }).css('display', 'none').appendTo($('body'));
+                            log.debug('Downloading sections to file:', fn);
+                            $('a')[0].click();
+                            $('a').remove();
+                        }
+                    });
+                });
+
+                $(Constants.Button.UPLOAD).click(_ => {
+                    $('<input>', {
+                        type: 'file'
+                    }).css('visibility', 'hidden').appendTo($('body')).change(function () {
+                        const __self = $(this)[0];
+                        if (__self.files.length > 0) {
+                            let fileReader = new FileReader();
+                            fileReader.onload = function (e) {
+                                axios.delete('//' + Constants.REACT_APP_OVE_HOST + '/sections').then(_ => {
+                                    const sections = fromProjectFormat(JSON.parse(e.target.result).Layout.canvas.sections, space);
+                                    sections.forEach(section => {
+                                        axios.post('//' + Constants.REACT_APP_OVE_HOST + '/section', section).catch(log.error);
+                                    });
+                                    log.debug('Restoring sections from file');
+                                }).catch(log.error);
+                            };
+                            fileReader.readAsText(__self.files.item(0));
+                            __self.remove();
+                        }
+                    }).click();
+                });
+
+                $(Constants.Button.DELETE).click(_ => {
+                    axios.delete('//' + Constants.REACT_APP_OVE_HOST + '/sections?space=' + space).catch(log.error);
+                });
 
                 // D3 is used for pan operations. Zoom is ignored.
                 log.debug('Registering pan listeners');

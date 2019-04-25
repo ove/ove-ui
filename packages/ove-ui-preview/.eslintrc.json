@@ -13,7 +13,9 @@
         {
             "files": [ "**/*.js" ],
             "globals": {
-                "fetch": true
+                "fetch": true,
+                "prompt": true,
+                "FileReader": true
             }
         }
     ],
