@@ -33,6 +33,8 @@ export default {
     Button: {
         UPLOAD: '#btnUpload',
         DOWNLOAD: '#btnDownload',
-        DELETE: '#btnDelete'
+        DELETE: '#btnDelete',
+        ADD: '#btnAdd',
+        EDIT: '#btnEdit'
     }
 };

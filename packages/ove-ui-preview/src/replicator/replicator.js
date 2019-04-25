@@ -4,6 +4,8 @@ import * as d3 from 'd3';
 import UploadImg from '@fortawesome/fontawesome-free/svgs/solid/upload.svg';
 import DownloadImg from '@fortawesome/fontawesome-free/svgs/solid/download.svg';
 import DeleteImg from '@fortawesome/fontawesome-free/svgs/solid/trash-alt.svg';
+import AddImg from '@fortawesome/fontawesome-free/svgs/solid/plus.svg';
+import EditImg from '@fortawesome/fontawesome-free/svgs/solid/edit.svg';
 
 // Setup jQuery to work inside React
 import $ from 'jquery';
@@ -120,36 +122,35 @@ export default class Replicator {
                     lineHeight: '46px'
                 };
 
-                let span = $('<span>').css(Object.assign({ background: 'snow' }, css));
-                span.appendTo(Constants.CONTROLLER);
-                $('<div>', {
-                    id: Constants.Button.DOWNLOAD.substring(1)
-                }).css(Object.assign({
-                    background: `url(${DownloadImg}) center/45% no-repeat`,
-                    opacity: 0.8
-                }, css)).appendTo(span);
-
-                span = $('<span>').css(Object.assign({ background: 'snow' }, css));
-                span.appendTo(Constants.CONTROLLER);
-                $('<div>', {
-                    id: Constants.Button.UPLOAD.substring(1)
-                }).css(Object.assign({
-                    background: `url(${UploadImg}) center/45% no-repeat`,
-                    opacity: 0.8
-                }, css)).appendTo(span);
-
-                span = $('<span>').css(Object.assign({ background: 'snow' }, css));
-                span.appendTo(Constants.CONTROLLER);
-                $('<div>', {
-                    id: Constants.Button.DELETE.substring(1)
-                }).css(Object.assign({
-                    background: `url(${DeleteImg}) center/45% no-repeat`,
-                    opacity: 0.8
-                }, css)).appendTo(span);
+                [
+                    { name: Constants.Button.ADD, icon: `${AddImg}` },
+                    { name: Constants.Button.DOWNLOAD, icon: `${DownloadImg}` },
+                    { name: Constants.Button.UPLOAD, icon: `${UploadImg}` },
+                    { name: Constants.Button.EDIT, icon: `${EditImg}` },
+                    { name: Constants.Button.DELETE, icon: `${DeleteImg}` }
+                ].forEach(e => {
+                    let span = $('<span>').css(Object.assign({ background: 'snow' }, css));
+                    span.appendTo(Constants.CONTROLLER);
+                    $('<div>', {
+                        id: e.name.substring(1)
+                    }).css(Object.assign({
+                        background: `url(${e.icon}) center/45% no-repeat`,
+                        opacity: 0.8
+                    }, css)).appendTo(span);
+                });
 
                 const controllerScale = Math.min(Math.min(document.documentElement.clientWidth, window.innerWidth) / 1440,
                     Math.min(document.documentElement.clientHeight, window.innerHeight) / 720);
                 $(Constants.CONTROLLER).css({ display: 'block', transformOrigin: '50% 50%', transform: 'scale(' + controllerScale + ')' });
+
+                $(Constants.Button.ADD).click(_ => {
+                    const launcher = window.open('', 'Launcher', '', true);
+                    try {
+                        if (launcher.location.href === 'about:blank') {
+                            launcher.location.href = '//' + Constants.REACT_APP_OVE_HOST + '/ui/launcher';
+                        }
+                    } catch (__) {}
+                });
 
                 $(Constants.Button.DOWNLOAD).click(_ => {
                     axios.get('//' + Constants.REACT_APP_OVE_HOST + '/sections?space=' + space).then(res => {
