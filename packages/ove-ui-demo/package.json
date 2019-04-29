@@ -23,8 +23,8 @@
     "github-markdown-css": "3.0.1"
   },
   "scripts": {
-    "start": "npm run build && PORT=8284 node -r dotenv/config server.js dotenv_config_path=.env",
-    "start:dev": "PORT=8284 node -r dotenv/config ../../node_modules/.bin/react-scripts start dotenv_config_path=.env",
+    "start": "PORT=8284 node -r dotenv/config server.js dotenv_config_path=.env",
+    "start:dev": "OVE_HOST='localhost:8080' PORT=8284 node -r dotenv/config ../../node_modules/.bin/react-scripts start dotenv_config_path=.env",
     "build": "react-scripts build",
     "test": "react-scripts test --no-watch",
     "lint": "eslint src/. --ext .jsx"

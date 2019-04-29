@@ -1,3 +1,7 @@
+// Setup jQuery to work inside React
+import $ from 'jquery';
+window.$ = $;
+
 export default {
     UPDATE: 'UPDATE',
     COMPONENT_NAME: 'preview',
@@ -16,6 +20,23 @@ export default {
     WAIT_FOR_SECTIONS_DOWNLOADED_INTERVAL: 1000, // Unit: milliseconds
 
     REACT_APP_OVE_HOST: (function () {
+        const publicURL = (function () {
+            try {
+                let manifestURL = $('link[rel=\'manifest\'')[0].href;
+                let host = manifestURL.substring(0, manifestURL.indexOf('/manifest.json'));
+                if (host) {
+                    if (host.indexOf('//') >= 0) {
+                        host = host.substring(host.indexOf('//') + 2);
+                    }
+                }
+                return host;
+            } catch (_) {
+                return process.env.PUBLIC_URL;
+            }
+        })();
+        if (publicURL.includes('/ui/')) {
+            return publicURL.substring(0, publicURL.indexOf('/ui/'));
+        }
         let host = process.env.REACT_APP_OVE_HOST;
         if (host) {
             if (host.indexOf('//') >= 0) {
