@@ -13,6 +13,7 @@ export default {
     MIN_ZOOM_LEVEL: 1.000001,
     LOG_LEVEL: +(process.env.LOG_LEVEL || 5), // Level (from 0 - 6): 5 == TRACE
     FRAME_LOAD_DELAY: 500, // Unit: milliseconds
+    WAIT_FOR_SECTIONS_DOWNLOADED_INTERVAL: 1000, // Unit: milliseconds
 
     REACT_APP_OVE_HOST: (function () {
         let host = process.env.REACT_APP_OVE_HOST;

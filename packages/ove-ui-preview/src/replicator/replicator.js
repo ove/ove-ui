@@ -152,31 +152,51 @@ export default class Replicator {
                     } catch (__) {}
                 });
 
+                /* jshint ignore:start */
+                // current version of JSHint does not support async/await
                 $(Constants.Button.DOWNLOAD).click(_ => {
-                    axios.get('//' + Constants.REACT_APP_OVE_HOST + '/sections?space=' + space).then(res => {
+                    let sectionsDownloaded = false;
+                    axios.get('//' + Constants.REACT_APP_OVE_HOST + '/sections?space=' + space).then(async res => {
+                        let sections = res.data;
+                        sections.forEach(async (e, i) => {
+                            await axios.get(e.app.url + '/instances/' + i + '/state').then(r => {
+                                delete e.app.state;
+                                e.app.states = { load: r.data };
+                            }).catch(log.warn);
+                        });
+                        sectionsDownloaded = true;
+                        return sections;
+                    }).then(sections => {
                         const payload = {
                             Space: space,
                             Layout: {
                                 oveSpaceGeometry: '//' + Constants.REACT_APP_OVE_HOST + '/spaces/' + space + '/geometry',
-                                canvas: { layout: { type: 'static' }, sections: toProjectFormat(res.data) }
+                                canvas: { layout: { type: 'static' }, sections: toProjectFormat(sections) }
                             }
                         };
-                        let fileName = prompt('Please provide a name for your file', Constants.DEFAULT_FILE_NAME);
-                        // return if cancel button is pressed or filename is blank.
-                        if (fileName) {
-                            let fn = fileName.split('.')[0] + '.json';
-                            $('<a>', {
-                                download: fn,
-                                target: '_blank',
-                                href: 'data:application/octet-stream;charset=utf-8,' +
-                                    encodeURIComponent(JSON.stringify(payload))
-                            }).css('display', 'none').appendTo($('body'));
-                            log.debug('Downloading sections to file:', fn);
-                            $('a')[0].click();
-                            $('a').remove();
-                        }
+                        log.debug('Computed payload:', payload);
+                        let x = setInterval(_ => {
+                            if (sectionsDownloaded) {
+                                clearInterval(x);
+                                let fileName = prompt('Please provide a name for your file', Constants.DEFAULT_FILE_NAME);
+                                // return if cancel button is pressed or filename is blank.
+                                if (fileName) {
+                                    let fn = fileName.split('.')[0] + '.json';
+                                    $('<a>', {
+                                        download: fn,
+                                        target: '_blank',
+                                        href: 'data:application/octet-stream;charset=utf-8,' +
+                                            encodeURIComponent(JSON.stringify(payload))
+                                    }).css('display', 'none').appendTo($('body'));
+                                    log.debug('Downloading sections to file:', fn);
+                                    $('a')[0].click();
+                                    $('a').remove();
+                                }
+                            }
+                        }, Constants.WAIT_FOR_SECTIONS_DOWNLOADED_INTERVAL);
                     });
                 });
+                /* jshint ignore:end */
 
                 $(Constants.Button.UPLOAD).click(_ => {
                     $('<input>', {
@@ -188,6 +208,7 @@ export default class Replicator {
                             fileReader.onload = function (e) {
                                 axios.delete('//' + Constants.REACT_APP_OVE_HOST + '/sections').then(_ => {
                                     const sections = fromProjectFormat(JSON.parse(e.target.result).Layout.canvas.sections, space);
+                                    log.debug('Computed sections:', sections);
                                     sections.forEach(section => {
                                         axios.post('//' + Constants.REACT_APP_OVE_HOST + '/section', section).catch(log.error);
                                     });
