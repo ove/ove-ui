@@ -14,7 +14,7 @@
     "express": "4.16.4",
     "little-loader": "0.2.0",
     "js-beautify": "1.9.1",
-    "jquery": "3.3.1",
+    "jquery": "3.4.0",
     "react": "16.8.6",
     "react-codemirror": "1.0.0",
     "react-dom": "16.8.6",
