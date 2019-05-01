@@ -19,6 +19,8 @@ const publicURL = (function () {
 
 export default {
     COMPONENT_NAME: 'demo',
+    SPACE: 'oveSpace',
+    ALL_SPACES: '__all__',
     LOG_LEVEL: +(process.env.LOG_LEVEL || 5), // Level (from 0 - 6): 5 == TRACE
 
     REACT_APP_OVE_HOST: (function () {
