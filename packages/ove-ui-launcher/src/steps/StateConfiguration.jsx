@@ -74,18 +74,18 @@ export default class StateConfiguration extends Component {
     }
 
     _validateVideoURL (data) {
-        if (this.state.app !== Constants.App.VIDEOS || data.mode !== Constants.Mode.NEW ){
+        if (this.state.app !== Constants.App.VIDEOS || data.mode !== Constants.Mode.NEW) {
             return true; // no need to apply a check
         }
 
         let url;
         try {
             url = new URL(data.url);
-        } catch(error) {
+        } catch (error) {
             return false; // invalid url provided
         }
 
-        if (url.hostname.toString().includes('youtube')){
+        if (url.hostname.toString().includes('youtube')) {
             return Constants.YOUTUBE_URL_REGEX.test(data.url); // check URL against youtube requirements
         }
 
