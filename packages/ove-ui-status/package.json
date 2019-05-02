@@ -8,18 +8,18 @@
   "author": "Senaka Fernando <senaka.fernando15@imperial.ac.uk>",
   "license": "MIT",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "5.8.1",
     "axios": "0.18.0",
+    "bootstrap": "4.3.1",
     "cors": "2.8.5",
     "dotenv": "7.0.0",
     "express": "4.16.4",
-    "little-loader": "0.2.0",
+    "github-markdown-css": "3.0.1",
     "jquery": "3.4.1",
+    "little-loader": "0.2.0",
     "react": "16.8.6",
     "react-dom": "16.8.6",
-    "react-scripts": "3.0.0",
-    "bootstrap": "4.3.1",
-    "github-markdown-css": "3.0.1",
-    "@fortawesome/fontawesome-free": "5.8.1"
+    "react-scripts": "3.0.0"
   },
   "scripts": {
     "start": "PORT=8283 node -r dotenv/config server.js dotenv_config_path=.env",
