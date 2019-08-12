@@ -200,10 +200,10 @@ export default class SpaceAndGeometry extends Component {
                                     <label className="control-label col-md-2">
                                         Geometry
                                     </label>
-                                    <label className="control-label col-sm-1">
-                                        x:
-                                    </label>
                                     <div className={notValidClasses.geometryCls_x}>
+                                        <label className="control-label col-sm-1">
+                                            x:
+                                        </label>
                                         <input
                                             ref="geometry_x"
                                             autoComplete="off"
@@ -217,10 +217,11 @@ export default class SpaceAndGeometry extends Component {
                                             onBlur={this.validationCheck} />
                                         <div className={notValidClasses.geometryValGrpCls_x}>{this.state.geometryValMsg ? this.state.geometryValMsg.x : ''}</div>
                                     </div>
-                                    <label className="control-label col-md-1">
-                                        y:
-                                    </label>
+
                                     <div className={notValidClasses.geometryCls_y}>
+                                        <label className="control-label col-md-1">
+                                            y:
+                                        </label>
                                         <input
                                             ref="geometry_y"
                                             autoComplete="off"
@@ -239,10 +240,10 @@ export default class SpaceAndGeometry extends Component {
                             <div className="col-md-12">
                                 <div className="form-group col-md-8 content form-block-holder">
                                     <label className="control-label col-md-2"/>
-                                    <label className="control-label col-md-1">
-                                        w:
-                                    </label>
                                     <div className={notValidClasses.geometryCls_w}>
+                                        <label className="control-label col-md-1">
+                                            w:
+                                        </label>
                                         <input
                                             ref="geometry_w"
                                             autoComplete="off"
@@ -256,10 +257,10 @@ export default class SpaceAndGeometry extends Component {
                                             onBlur={this.validationCheck} />
                                         <div className={notValidClasses.geometryValGrpCls_w}>{this.state.geometryValMsg ? this.state.geometryValMsg.w : ''}</div>
                                     </div>
-                                    <label className="control-label col-md-1">
-                                        h:
-                                    </label>
                                     <div className={notValidClasses.geometryCls_h}>
+                                        <label className="control-label col-md-1">
+                                            h:
+                                        </label>
                                         <input
                                             ref="geometry_h"
                                             autoComplete="off"
