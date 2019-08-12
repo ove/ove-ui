@@ -19,6 +19,7 @@ export default class SpaceAndGeometry extends Component {
 
         this.validationCheck = this.validationCheck.bind(this);
         this.isValidated = this.isValidated.bind(this);
+        this._fillSpace = this._fillSpace.bind(this);
         this.log.debug('Displaying step:', SpaceAndGeometry.name);
     }
 
@@ -152,6 +153,31 @@ export default class SpaceAndGeometry extends Component {
         return items;
     }
 
+    _fillSpace(ev) {
+        ev.preventDefault();
+
+        if (typeof this.state.spaceVal === 'undefined') { return; }
+
+        console.log(this.state.spaceVal);
+        console.log(this.state.spaces[this.state.spaceVal]);
+
+        this.setState({
+            geometryVal_x: true,
+            geometryVal_y: true,
+            geometryVal_w: true,
+            geometryVal_h: true,
+
+            geometryValMsg: {x: "", y: "", w: "", h: ""},
+
+            geometry: {
+                x: "0",
+                y: "0",
+                w: this.state.spaces[this.state.space].w.toString(),
+                h: this.state.spaces[this.state.space].h.toString()
+            }
+        });
+    }
+
     render () {
         // explicit class assigning based on validation
         let notValidClasses = {};
@@ -213,7 +239,7 @@ export default class SpaceAndGeometry extends Component {
                                             max={this.state.bounds ? this.state.bounds.w : Constants.DEFAULT_WIDTH}
                                             className="form-control"
                                             required
-                                            defaultValue={this.state.geometry.x}
+                                            value={this.state.geometryVal_x ? this.state.geometry.x : undefined}
                                             onBlur={this.validationCheck} />
                                         <div className={notValidClasses.geometryValGrpCls_x}>{this.state.geometryValMsg ? this.state.geometryValMsg.x : ''}</div>
                                     </div>
@@ -230,7 +256,7 @@ export default class SpaceAndGeometry extends Component {
                                             max={this.state.bounds ? this.state.bounds.h : Constants.DEFAULT_HEIGHT}
                                             className="form-control"
                                             required
-                                            defaultValue={this.state.geometry.y}
+                                            value={this.state.geometryVal_y ? this.state.geometry.y : undefined}
                                             onBlur={this.validationCheck} />
                                         <div className={notValidClasses.geometryValGrpCls_y}>{this.state.geometryValMsg ? this.state.geometryValMsg.y : ''}</div>
                                     </div>
@@ -252,7 +278,7 @@ export default class SpaceAndGeometry extends Component {
                                             max={this.state.bounds ? this.state.bounds.w : Constants.DEFAULT_WIDTH}
                                             className="form-control"
                                             required
-                                            defaultValue={this.state.geometry.w}
+                                            value={this.state.geometryVal_w ? this.state.geometry.w : undefined}
                                             onBlur={this.validationCheck} />
                                         <div className={notValidClasses.geometryValGrpCls_w}>{this.state.geometryValMsg ? this.state.geometryValMsg.w : ''}</div>
                                     </div>
@@ -269,12 +295,15 @@ export default class SpaceAndGeometry extends Component {
                                             max={this.state.bounds ? this.state.bounds.h : Constants.DEFAULT_HEIGHT}
                                             className="form-control"
                                             required
-                                            defaultValue={this.state.geometry.h}
+                                            value={this.state.geometryVal_h ? this.state.geometry.h : undefined}
                                             onBlur={this.validationCheck} />
                                         <div className={notValidClasses.geometryValGrpCls_h}>{this.state.geometryValMsg ? this.state.geometryValMsg.h : ''}</div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div className="col-md-12">
+                            <button onClick={this._fillSpace}>Fill space</button>
                         </div>
                     </form>
                 </div>
