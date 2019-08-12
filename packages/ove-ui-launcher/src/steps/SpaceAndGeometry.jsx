@@ -187,7 +187,7 @@ export default class SpaceAndGeometry extends Component {
                                         Space
                                     </label>
                                     <div className={notValidClasses.spaceCls}>
-                                        <select ref="space" autoComplete="off" className="form-control" required defaultValue={this.state.space} onBlur={this.validationCheck}>
+                                        <select ref="space" autoComplete="off" className="form-control" required defaultValue={this.state.space} onChange={this.validationCheck}>
                                             <option value="">Please select</option>
                                             {this._getSelectionItems()}
                                         </select>
@@ -214,7 +214,7 @@ export default class SpaceAndGeometry extends Component {
                                             className="form-control"
                                             required
                                             defaultValue={this.state.geometry.x}
-                                            onBlur={this.validationCheck} />
+                                            onChange={this.validationCheck} />
                                         <div className={notValidClasses.geometryValGrpCls_x}>{this.state.geometryValMsg ? this.state.geometryValMsg.x : ''}</div>
                                     </div>
                                     <label className="control-label col-md-1">
@@ -231,7 +231,7 @@ export default class SpaceAndGeometry extends Component {
                                             className="form-control"
                                             required
                                             defaultValue={this.state.geometry.y}
-                                            onBlur={this.validationCheck} />
+                                            onChange={this.validationCheck} />
                                         <div className={notValidClasses.geometryValGrpCls_y}>{this.state.geometryValMsg ? this.state.geometryValMsg.y : ''}</div>
                                     </div>
                                 </div>
@@ -253,7 +253,7 @@ export default class SpaceAndGeometry extends Component {
                                             className="form-control"
                                             required
                                             defaultValue={this.state.geometry.w}
-                                            onBlur={this.validationCheck} />
+                                            onChange={this.validationCheck} />
                                         <div className={notValidClasses.geometryValGrpCls_w}>{this.state.geometryValMsg ? this.state.geometryValMsg.w : ''}</div>
                                     </div>
                                     <label className="control-label col-md-1">
@@ -270,7 +270,7 @@ export default class SpaceAndGeometry extends Component {
                                             className="form-control"
                                             required
                                             defaultValue={this.state.geometry.h}
-                                            onBlur={this.validationCheck} />
+                                            onChange={this.validationCheck} />
                                         <div className={notValidClasses.geometryValGrpCls_h}>{this.state.geometryValMsg ? this.state.geometryValMsg.h : ''}</div>
                                     </div>
                                 </div>

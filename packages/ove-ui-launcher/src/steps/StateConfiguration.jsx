@@ -150,7 +150,7 @@ export default class StateConfiguration extends Component {
                             Mode
                         </label>
                         <div className="no-error col-md-5">
-                            <select ref="mode" autoComplete="off" className="form-control" required defaultValue={this.state.mode} onBlur={this.validationCheck}>
+                            <select ref="mode" autoComplete="off" className="form-control" required defaultValue={this.state.mode} onChange={this.validationCheck}>
                                 <option value={Constants.Mode.EXISTING}>Use existing state</option>
                                 <option value={Constants.Mode.NEW}>New state configuration</option>
                             </select>
@@ -179,7 +179,7 @@ export default class StateConfiguration extends Component {
                             Existing state
                         </label>
                         <div className={notValidClasses.stateCls}>
-                            <select ref="state" autoComplete="off" className="form-control" required defaultValue={this.state.state} onBlur={this.validationCheck}>
+                            <select ref="state" autoComplete="off" className="form-control" required defaultValue={this.state.state} onChange={this.validationCheck}>
                                 <option value="">Please select</option>
                                 {this._getSelectionItems()}
                             </select>
@@ -217,7 +217,7 @@ export default class StateConfiguration extends Component {
                                 className="form-control"
                                 required
                                 defaultValue={this.state.url}
-                                onBlur={this.validationCheck} />
+                                onChange={this.validationCheck} />
                             <div className={notValidClasses.urlValGrpCls}>{this.state.urlValMsg}</div>
                         </div>
                     </div>
