@@ -153,7 +153,7 @@ export default class SpaceAndGeometry extends Component {
         return items;
     }
 
-    _fillSpace(ev) {
+    _fillSpace (ev) {
         ev.preventDefault();
 
         if (typeof this.state.spaceVal === 'undefined') { return; }
@@ -167,11 +167,11 @@ export default class SpaceAndGeometry extends Component {
             geometryVal_w: true,
             geometryVal_h: true,
 
-            geometryValMsg: {x: "", y: "", w: "", h: ""},
+            geometryValMsg: { x: '', y: '', w: '', h: '' },
 
             geometry: {
-                x: "0",
-                y: "0",
+                x: '0',
+                y: '0',
                 w: this.state.spaces[this.state.space].w.toString(),
                 h: this.state.spaces[this.state.space].h.toString()
             }
