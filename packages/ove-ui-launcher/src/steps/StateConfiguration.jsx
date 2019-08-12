@@ -146,11 +146,11 @@ export default class StateConfiguration extends Component {
             return (
                 <div className="col-md-12">
                     <div className="form-group col-md-8 content form-block-holder">
-                        <label className="control-label col-md-3">
+                        <label className="control-label col-md-3" htmlFor="new-state">
                             Mode
                         </label>
                         <div className="no-error col-md-5">
-                            <select ref="mode" autoComplete="off" className="form-control" required defaultValue={this.state.mode} onChange={this.validationCheck}>
+                            <select ref="mode" autoComplete="off" className="form-control" id="new-state" required defaultValue={this.state.mode} onChange={this.validationCheck}>
                                 <option value={Constants.Mode.EXISTING}>Use existing state</option>
                                 <option value={Constants.Mode.NEW}>New state configuration</option>
                             </select>
@@ -175,11 +175,11 @@ export default class StateConfiguration extends Component {
             return (
                 <div className="col-md-12">
                     <div className="form-group col-md-8 content form-block-holder">
-                        <label className="control-label col-md-3">
+                        <label className="control-label col-md-3" htmlFor="state-choice">
                             Existing state
                         </label>
                         <div className={notValidClasses.stateCls}>
-                            <select ref="state" autoComplete="off" className="form-control" required defaultValue={this.state.state} onChange={this.validationCheck}>
+                            <select ref="state" autoComplete="off" className="form-control" id="state-choice" required defaultValue={this.state.state} onChange={this.validationCheck}>
                                 <option value="">Please select</option>
                                 {this._getSelectionItems()}
                             </select>
@@ -205,11 +205,12 @@ export default class StateConfiguration extends Component {
             return (
                 <div className="col-md-12">
                     <div className="form-group col-md-8 content form-block-holder">
-                        <label className="control-label col-md-3">
+                        <label className="control-label col-md-3" htmlFor="asset-url">
                             Asset URL
                         </label>
                         <div className={notValidClasses.urlCls}>
                             <input
+                                id="asset-url"
                                 ref="url"
                                 autoComplete="off"
                                 type="url"
