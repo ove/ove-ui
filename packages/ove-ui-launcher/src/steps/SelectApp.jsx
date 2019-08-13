@@ -148,6 +148,7 @@ export default class SelectApp extends Component {
                                             <option value="maps">Maps</option>
                                             <option value="networks">Networks</option>
                                             <option value="pdf">PDF</option>
+                                            <option value="qrcode">QR code</option>
                                             <option value="replicator">Replicator</option>
                                             <option value="svg">SVG</option>
                                             <option value="videos">Videos</option>

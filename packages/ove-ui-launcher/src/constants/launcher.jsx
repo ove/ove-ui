@@ -117,6 +117,7 @@ export default {
         MAPS: 'maps',
         NETWORKS: 'networks',
         PDF: 'pdf',
+        QR: 'qrcode',
         REPLICATOR: 'replicator',
         SVG: 'svg',
         VIDEOS: 'videos',
