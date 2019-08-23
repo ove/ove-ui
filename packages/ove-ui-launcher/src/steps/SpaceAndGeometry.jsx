@@ -71,7 +71,7 @@ export default class SpaceAndGeometry extends Component {
             }).catch(this.log.error);
         } else {
             // if anything fails then update the UI validation state but NOT the UI Data State
-            this.setState(Object.assign(userInput, validateNewInput, this._validationMessages(validateNewInput)));
+            this.setState(Object.assign(userInput, validateNewInput, this._getValidationMessages(userInput)));
             const valid = false;
             this.log.debug('Input is valid:', valid, 'step:', SpaceAndGeometry.name);
             return valid;
@@ -82,7 +82,7 @@ export default class SpaceAndGeometry extends Component {
         const userInput = this._grabUserInput(); // grab user entered vals
         const validateNewInput = this._validateData(userInput); // run the new input against the validator
 
-        this.setState(Object.assign(userInput, validateNewInput, this._validationMessages(validateNewInput)));
+        this.setState(Object.assign(userInput, validateNewInput, this._getValidationMessages(userInput)));
         this.log.debug('Ran validation check at step:', SpaceAndGeometry.name);
     }
 
@@ -114,20 +114,56 @@ export default class SpaceAndGeometry extends Component {
         };
     }
 
-    _validationMessages (val) {
-        return {
-            spaceValMsg: val.spaceVal ? '' : 'A space must be selected',
-            geometryValMsg: {
-                x: val.geometryVal_x ? '' : 'x coordinate is not provided or out of bounds',
-                y: val.geometryVal_y ? '' : 'y coordinate is not provided or out of bounds',
-                w: val.geometryVal_w ? '' : 'The width is not provided or out of bounds',
-                h: val.geometryVal_h ? '' : 'The height is not provided or out of bounds'
-            },
+    _getValidationMessages (data) {
+        const spaceSelected = (data.space !== '');
+
+        const result = {
+            spaceValMsg: spaceSelected ? '' : 'A space must be selected',
+            geometryValMsg: { x: '', y: '', w: '', h: '' },
             bounds: {
-                w: !val.currentSpace ? 0 : this.state.spaces[val.currentSpace].w,
-                h: !val.currentSpace ? 0 : this.state.spaces[val.currentSpace].h
+                w: !data.space ? 0 : this.state.spaces[data.space].w,
+                h: !data.space ? 0 : this.state.spaces[data.space].h
             }
         };
+
+        const currentSpace = data.space;
+
+        const spaceHeight = currentSpace ? `(${this.state.spaces[currentSpace].h})` : '';
+        const spaceWidth = currentSpace ? `(${this.state.spaces[currentSpace].w})` : '';
+
+        if (!Number.isInteger(parseFloat(data.geometry.x))) {
+            result.geometryValMsg.x = 'x coordinate is not provided';
+        } else if (parseInt(data.geometry.x, 10) < 0) {
+            result.geometryValMsg.x = 'x coordinate cannot be negative';
+        } else if (spaceSelected && parseInt(data.geometry.x, 10) > (!currentSpace ? 0 : this.state.spaces[currentSpace].w)) {
+            result.geometryValMsg.x = `x coordinate must be less than space width ${spaceWidth}`;
+        }
+
+        if (!Number.isInteger(parseFloat(data.geometry.y))) {
+            result.geometryValMsg.y = 'y coordinate is not provided';
+        } else if (parseInt(data.geometry.y, 10) < 0) {
+            result.geometryValMsg.y = 'y coordinate cannot be negative';
+        } else if (spaceSelected && parseInt(data.geometry.y, 10) > (!currentSpace ? 0 : this.state.spaces[currentSpace].h)) {
+            result.geometryValMsg.y = `y coordinate must be less than space height ${spaceHeight}`;
+        }
+
+        if (!Number.isInteger(parseFloat(data.geometry.w))) {
+            result.geometryValMsg.w = 'width is not provided';
+        } else if (parseInt(data.geometry.w, 10) <= 0) {
+            result.geometryValMsg.w = 'width must be greater than 0';
+        } else if (spaceSelected && parseInt(data.geometry.y, 10) > (!currentSpace ? 0 : this.state.spaces[currentSpace].w)) {
+            result.geometryValMsg.w = `width must be less than space width ${spaceWidth}`;
+        }
+
+        if (!Number.isInteger(parseFloat(data.geometry.h))) {
+            result.geometryValMsg.h = 'height is not provided';
+        } else if (parseInt(data.geometry.h, 10) <= 0) {
+            result.geometryValMsg.h = 'height must be greater than 0';
+        } else if (spaceSelected && parseInt(data.geometry.h, 10) > (!currentSpace ? 0 : this.state.spaces[currentSpace].h)) {
+            result.geometryValMsg.h = `height must be less than space height ${spaceHeight}`;
+        }
+
+        return result;
     }
 
     _grabUserInput () {
