@@ -180,11 +180,11 @@ export default class StateConfiguration extends Component {
                         </label>
                         <div className={notValidClasses.stateCls}>
                             <select ref="state" autoComplete="off"
-                                    className="form-control"
-                                    required
-                                    defaultValue={this.state.state}
-                                    onBlur={this.validationCheck}
-                                    disabled={this.state.mode === Constants.Mode.NEW}>
+                                className="form-control"
+                                required
+                                defaultValue={this.state.state}
+                                onBlur={this.validationCheck}
+                                disabled={this.state.mode === Constants.Mode.NEW}>
                                 <option value="">Please select</option>
                                 {this._getSelectionItems()}
                             </select>
