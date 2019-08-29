@@ -179,7 +179,8 @@ export default class StateConfiguration extends Component {
                             Existing state
                         </label>
                         <div className={notValidClasses.stateCls}>
-                            <select ref="state" autoComplete="off"
+                            <select ref="state"
+                                autoComplete="off"
                                 className="form-control"
                                 required
                                 defaultValue={this.state.state}
