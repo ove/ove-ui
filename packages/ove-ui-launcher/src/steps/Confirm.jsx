@@ -91,7 +91,7 @@ export default class Confirm extends Component {
                 }).catch(this.log.error);
             };
             if (this.state.deleteSections) {
-                axios.delete('//' + Constants.REACT_APP_OVE_HOST + '/sections').then(_ => {
+                axios.delete('//' + Constants.REACT_APP_OVE_HOST + '/sections', {data: {space: this.state.space}}).then(_ => {
                     setTimeout(launchApp, Constants.SECTION_DELETE_WAIT_TIME);
                 }).catch(this.log.error);
             } else {
@@ -101,11 +101,16 @@ export default class Confirm extends Component {
     }
 
     _getCurlPayload () {
-        const DELETE_SECTIONS_COMMAND = `curl --header "Content-Type: application/json" --request DELETE http://${Constants.REACT_APP_OVE_HOST}/sections\n`;
+        const deletePayload = {space: this.state.space};
+
         if (this.state.os === Constants.OS.UNIX) {
+            const DELETE_SECTIONS_COMMAND = `curl --header "Content-Type: application/json" --request DELETE --data '${JSON.stringify(deletePayload)}' http://${Constants.REACT_APP_OVE_HOST}/sections\n`;
+
             return (this.state.deleteSections ? DELETE_SECTIONS_COMMAND + '\n' : '') +
                 `curl --header "Content-Type: application/json" --request POST --data '${JSON.stringify(this.state.payload)}' http://${Constants.REACT_APP_OVE_HOST}/section`;
         } else {
+            const DELETE_SECTIONS_COMMAND = `curl --header "Content-Type: application/json" --request DELETE --data ${JSON.stringify(JSON.stringify(deletePayload))} http://${Constants.REACT_APP_OVE_HOST}/sections\n`;
+
             return (this.state.deleteSections ? DELETE_SECTIONS_COMMAND + '\n' : '') +
                 `curl --header "Content-Type: application/json" --request POST --data ${JSON.stringify(JSON.stringify(this.state.payload))} http://${Constants.REACT_APP_OVE_HOST}/section`;
         }
