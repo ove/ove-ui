@@ -101,17 +101,13 @@ export default class Confirm extends Component {
     }
 
     _getCurlPayload () {
-        const DELETE_SECTIONS_COMMAND = 'curl --header "Content-Type: application/json" --request DELETE http://' +
-            Constants.REACT_APP_OVE_HOST + '/sections\n';
+        const DELETE_SECTIONS_COMMAND = `curl --header "Content-Type: application/json" --request DELETE http://${Constants.REACT_APP_OVE_HOST}/sections\n`;
         if (this.state.os === Constants.OS.UNIX) {
             return (this.state.deleteSections ? DELETE_SECTIONS_COMMAND + '\n' : '') +
-                'curl --header "Content-Type: application/json" --request POST --data \'' +
-                JSON.stringify(this.state.payload) + '\' http://' + Constants.REACT_APP_OVE_HOST + '/section';
+                `curl --header "Content-Type: application/json" --request POST --data '${JSON.stringify(this.state.payload)}' http://${Constants.REACT_APP_OVE_HOST}/section`;
         } else {
             return (this.state.deleteSections ? DELETE_SECTIONS_COMMAND + '\n' : '') +
-                'curl --header "Content-Type: application/json" --request POST --data ' +
-                JSON.stringify(JSON.stringify(this.state.payload)) + ' http://' + Constants.REACT_APP_OVE_HOST +
-                '/section';
+                `curl --header "Content-Type: application/json" --request POST --data ${JSON.stringify(JSON.stringify(this.state.payload))} http://${Constants.REACT_APP_OVE_HOST}/section`;
         }
     }
 
