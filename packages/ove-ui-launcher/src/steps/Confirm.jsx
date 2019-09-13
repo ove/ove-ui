@@ -102,7 +102,7 @@ export default class Confirm extends Component {
 
     _getCurlPayload () {
         const DELETE_SECTIONS_COMMAND = 'curl --header "Content-Type: application/json" --request DELETE http://' +
-            Constants.REACT_APP_OVE_HOST + '/sections?space=' + this.state.space;
+            Constants.REACT_APP_OVE_HOST + '/sections?space=' + this.state.space + '\n';
         if (this.state.os === Constants.OS.UNIX) {
             return (this.state.deleteSections ? DELETE_SECTIONS_COMMAND + '\n' : '') +
                 'curl --header "Content-Type: application/json" --request POST --data \'' +
