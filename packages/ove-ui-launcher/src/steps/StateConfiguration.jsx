@@ -127,7 +127,6 @@ export default class StateConfiguration extends Component {
             case Constants.App.WHITEBOARD:
                 return (<h3>The <code>Whiteboard App</code> does not require a state configuration.
                     Please press <code>Next</code> to proceed.</h3>);
-            case Constants.App.MAPS:
             case Constants.App.WEBRTC:
                 return (<h3>You are creating an application of type <code>{this.state.app}</code> in space <code>{this.state.space}</code>.<br />
                     Please select one of the following pre-loaded states.</h3>);
@@ -138,7 +137,7 @@ export default class StateConfiguration extends Component {
     }
 
     _getMode () {
-        if ([Constants.App.MAPS, Constants.App.WEBRTC].includes(this.state.app)) {
+        if ([Constants.App.WEBRTC].includes(this.state.app)) {
             return (
                 <input type="hidden" ref="mode" value={Constants.Mode.EXISTING} />
             );
@@ -201,7 +200,7 @@ export default class StateConfiguration extends Component {
             notValidClasses.urlCls = 'has-error col-md-8';
             notValidClasses.urlValGrpCls = 'val-err-tooltip';
         }
-        if (![Constants.App.ALIGNMENT, Constants.App.WHITEBOARD, Constants.App.MAPS, Constants.App.WEBRTC].includes(this.state.app)) {
+        if (![Constants.App.ALIGNMENT, Constants.App.WHITEBOARD, Constants.App.WEBRTC].includes(this.state.app)) {
             return (
                 <div className="col-md-12">
                     <div className="form-group col-md-8 content form-block-holder">

@@ -39,7 +39,7 @@ export default class Confirm extends Component {
             this.state.payload.app.states.load = JSON.parse(props.getStore().config);
         } else if ([Constants.App.ALIGNMENT, Constants.App.WHITEBOARD].includes(this.state.app)) {
             delete this.state.payload.app.states;
-        } else if ([Constants.App.MAPS, Constants.App.WEBRTC].includes(this.state.app) || props.getStore().mode !== Constants.Mode.NEW) {
+        } else if ([Constants.App.WEBRTC].includes(this.state.app) || props.getStore().mode !== Constants.Mode.NEW) {
             this.state.payload.app.states.load = props.getStore().state;
         } else {
             this.state.payload.app.states.load = props.getStore().config ? JSON.parse(props.getStore().config) : {};
