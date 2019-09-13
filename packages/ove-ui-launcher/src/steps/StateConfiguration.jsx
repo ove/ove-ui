@@ -178,7 +178,13 @@ export default class StateConfiguration extends Component {
                             Existing state
                         </label>
                         <div className={notValidClasses.stateCls}>
-                            <select ref="state" autoComplete="off" className="form-control" required defaultValue={this.state.state} onBlur={this.validationCheck}>
+                            <select ref="state"
+                                autoComplete="off"
+                                className="form-control"
+                                required
+                                defaultValue={this.state.state}
+                                onBlur={this.validationCheck}
+                                disabled={this.state.mode === Constants.Mode.NEW}>
                                 <option value="">Please select</option>
                                 {this._getSelectionItems()}
                             </select>
@@ -216,7 +222,8 @@ export default class StateConfiguration extends Component {
                                 className="form-control"
                                 required
                                 defaultValue={this.state.url}
-                                onBlur={this.validationCheck} />
+                                onBlur={this.validationCheck}
+                                disabled={this.state.mode === Constants.Mode.EXISTING} />
                             <div className={notValidClasses.urlValGrpCls}>{this.state.urlValMsg}</div>
                         </div>
                     </div>
