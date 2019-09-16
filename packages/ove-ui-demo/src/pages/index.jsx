@@ -8,7 +8,7 @@ import 'github-markdown-css/github-markdown.css';
 
 // Setup jQuery to work inside React
 import $ from 'jquery';
-window.$ = $; 
+window.$ = $;
 
 export default class Index extends Component {
     constructor (props) {
