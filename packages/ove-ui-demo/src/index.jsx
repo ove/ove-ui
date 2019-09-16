@@ -9,10 +9,6 @@ import load from 'little-loader';
 import Demo from './app/demo';
 import './index.css';
 
-// Setup jQuery to work inside React
-import $ from 'jquery';
-window.$ = $;
-
 load('//' + Constants.REACT_APP_OVE_HOST + '/ove.js', _ => {
     if (window.OVE) {
         const log = window.OVE.Utils.Logger(Constants.COMPONENT_NAME, Constants.LOG_LEVEL);

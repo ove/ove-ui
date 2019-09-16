@@ -3,13 +3,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import * as d3 from 'd3';
 import Constants from '../constants/demo';
 import 'github-markdown-css/github-markdown.css';
-
-// Setup jQuery to work inside React
-import $ from 'jquery';
-window.$ = $;
 
 export default class Index extends Component {
     constructor (props) {
@@ -100,29 +95,7 @@ export default class Index extends Component {
     componentDidMount () {
         const __self = this;
         let sections = [];
-        if (!__self.space) {
-            $('.markdown-body').hide();
-            $('<div id=\'no-space-selected\'>').addClass('alert alert-danger')
-                .html('No <strong>' + Constants.SPACE + '</strong> query parameter provided. Available spaces:')
-                .appendTo('.outer').css({
-                    display: 'block',
-                    margin: '0.5vw auto',
-                    width: '85vw',
-                    maxWidth: '980px'
-                });
-
-            axios.get('//' + Constants.REACT_APP_OVE_HOST + '/spaces').then(res => res.data).then(spaces => {
-                d3.select('#no-space-selected')
-                    .append('ul')
-                    .selectAll('li')
-                    .data(Object.keys(spaces).concat([Constants.ALL_SPACES]))
-                    .enter()
-                    .append('li')
-                    .append('a')
-                    .attr('href', d => `?oveSpace=${d}`)
-                    .text(d => d === Constants.ALL_SPACES ? 'All Spaces' : d);
-            });
-        } else {
+        if (__self.space) {
             __self._loadWelcomePage(__self.space).then(res1 => {
                 sections = sections.concat(res1);
                 setTimeout(_ => {
@@ -140,24 +113,12 @@ export default class Index extends Component {
         }
     };
 
-    componentWillUnmount () { }
-
     render () {
         return (
             <div className='outer'>
                 <div className='markdown-body'>
                     <h1>Open Visualisation Environment Demos</h1>
-                    <p>
-                        This page provides a list of demonstrations that can be launched on an installation of
-                        Open Visualisation Environment (OVE). Simply loading this page and taking no action will
-                        leading to the displaying of the OVE splash screen followed by the details of the OVE
-                        clients.
-                    </p>
-                    <p>
-                        This demo launcher is associated with an instance of OVE Core accessible
-                        at <a href={'//' + Constants.REACT_APP_OVE_HOST}>{Constants.REACT_APP_OVE_HOST}</a> - more
-                        information about OVE and how it has been configured is available there.
-                    </p>
+                    {this.space ? <IntroMessage/> : <NoSpaceSelectedMessage/>}
                 </div>
             </div>
         );
@@ -167,3 +128,48 @@ export default class Index extends Component {
 Index.propTypes = {
     log: PropTypes.object.isRequired
 };
+
+const IntroMessage = () => {
+    return <>
+        <p>
+            This page provides a list of demonstrations that can be launched on an installation of
+            Open Visualisation Environment (OVE). Simply loading this page and taking no action will
+            leading to the displaying of the OVE splash screen followed by the details of the OVE
+            clients.
+        </p>
+        <p>
+            This demo launcher is associated with an instance of OVE Core accessible
+            at <a href={'//' + Constants.REACT_APP_OVE_HOST}>{Constants.REACT_APP_OVE_HOST}</a> - more
+            information about OVE and how it has been configured is available there.
+        </p>
+    </>;
+};
+
+export class NoSpaceSelectedMessage extends Component {
+    constructor (props) {
+        super(props);
+        this.state = { allSpaces: [] };
+        if (window.OVE && window.OVE.Utils) {
+            this.space = window.OVE.Utils.getQueryParam(Constants.SPACE);
+        }
+    }
+
+    componentDidMount () {
+        axios.get('//' + Constants.REACT_APP_OVE_HOST + '/spaces').then(res => res.data).then(spaces => {
+            this.setState({ allSpaces: Object.keys(spaces).concat([Constants.ALL_SPACES]) });
+        });
+    }
+
+    render () {
+        return <>
+            <div id='no-space-selected' className="alert alert-danger"
+                style={{ display: 'block', margin: '0.5vw auto', width: '85vw', maxWidth: '980px' }}>
+                No <strong> {Constants.SPACE} </strong> query parameter provided. Available spaces:
+
+                <ul>
+                    {this.state.allSpaces.map(d => <li key={d}><a href={`?oveSpace=${d}`}>{d === Constants.ALL_SPACES ? 'All Spaces' : d}</a> </li>)}
+                </ul>
+            </div>
+        </>;
+    }
+}
