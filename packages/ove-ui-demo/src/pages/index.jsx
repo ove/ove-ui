@@ -6,6 +6,10 @@ import axios from 'axios';
 import Constants from '../constants/demo';
 import 'github-markdown-css/github-markdown.css';
 
+// Setup jQuery to work inside React
+import $ from 'jquery';
+window.$ = $; 
+
 export default class Index extends Component {
     constructor (props) {
         super(props);
