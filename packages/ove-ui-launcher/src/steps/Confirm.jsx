@@ -4,7 +4,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Constants from '../constants/launcher';
 import axios from 'axios';
-import CodeMirror from 'react-codemirror';
+import { UnControlled as CodeMirror } from 'react-codemirror2';
+
 import 'codemirror/mode/shell/shell';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/dracula.css';
