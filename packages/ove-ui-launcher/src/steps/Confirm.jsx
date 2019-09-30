@@ -4,16 +4,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Constants from '../constants/launcher';
 import axios from 'axios';
-import {UnControlled as CodeMirror} from 'react-codemirror2';
+import { UnControlled as CodeMirror } from 'react-codemirror2';
 
 import 'codemirror/mode/shell/shell';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/dracula.css';
 
-import {Form, Button, Divider, Header} from 'semantic-ui-react';
+import { Form, Button, Divider, Header } from 'semantic-ui-react';
 
 const Confirm = (props) => {
-
     const constructPayload = (props) => {
         let payload = {
             space: props.space,
@@ -100,10 +99,9 @@ const Confirm = (props) => {
         theme: Constants.CodeMirror.THEME
     };
 
-    console.log(_getCurlPayload(payload))
+    console.log(_getCurlPayload(payload));
 
-
-    const osChoices = [{key: 'unix', value: Constants.OS.UNIX, text: 'Linux/Mac'}, {
+    const osChoices = [{ key: 'unix', value: Constants.OS.UNIX, text: 'Linux/Mac' }, {
         key: 'windows',
         value: Constants.OS.WINDOWS,
         text: 'Windows'
@@ -125,13 +123,13 @@ const Confirm = (props) => {
 
             <p>Alternatively, you can use a terminal to run the command listed below, which
                 uses <a href="https://curl.haxx.se/docs/manpage.html" target="_blank"
-                        rel="noopener noreferrer">curl</a>.
+                rel="noopener noreferrer">curl</a>.
             </p>
 
             <Form>
                 <Form.Group>
                     <Form.Select label="Operating System" value={props.os} options={osChoices}
-                                 onChange={(_, d) => props.updateOS(d.value)}/>
+                        onChange={(_, d) => props.updateOS(d.value)}/>
                 </Form.Group>
 
                 <Form.Group>
@@ -152,11 +150,12 @@ Confirm.propTypes = {
     mode: PropTypes.oneOf([Constants.Mode.EXISTING, Constants.Mode.NEW]),
     state: PropTypes.string,
     url: PropTypes.string,
+    config: PropTypes.string,
     deleteSections: PropTypes.bool,
     showController: PropTypes.bool,
 
     space: PropTypes.string,
-    geometry: PropTypes.shape({x: PropTypes.string, y: PropTypes.string, w: PropTypes.string, h: PropTypes.string}),
+    geometry: PropTypes.shape({ x: PropTypes.string, y: PropTypes.string, w: PropTypes.string, h: PropTypes.string }),
     os: PropTypes.oneOf([Constants.OS.UNIX, Constants.OS.WINDOWS]),
     ready: PropTypes.bool
 };
