@@ -4,6 +4,26 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Launcher from './launcher';
 
+
+// Mocking required for codemirror (see https://discuss.codemirror.net/t/working-in-jsdom-or-node-js-natively/138/6)
+global.document.body.createTextRange = function() {
+    return {
+        setEnd: function(){},
+        setStart: function(){},
+        getBoundingClientRect: function(){
+            return {right: 0};
+        },
+        getClientRects: function(){
+            return {
+                length: 0,
+                left: 0,
+                right: 0
+            }
+        }
+    }
+};
+
+
 it('renders without crashing', () => {
     const div = document.createElement('div');
     const log = { debug: jest.fn(x => x), warn: jest.fn(x => x), error: jest.fn(x => x) };
