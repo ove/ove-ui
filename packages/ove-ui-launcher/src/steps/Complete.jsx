@@ -1,69 +1,46 @@
 /* jshint ignore:start */
 // JSHint cannot deal with React.
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Constants from '../constants/launcher';
+import { Icon } from 'semantic-ui-react';
 
-export default class Complete extends Component {
-    constructor (props) {
-        super(props);
+const Complete = ({ controllerURL, app, space }) => {
+    if (!controllerURL) { return ''; }
 
-        this.log = props.getLogger();
+    return <div>
+        <h2>Application instance created</h2>
 
-        this.state = {
-            app: props.getStore().app,
-            space: props.getStore().space,
-            controllerURL: props.getStore().controllerURL
-        };
+        <p>Congratulations! You have created a new section of the <code>{app}</code> OVE Application in
+                space <code>{space}</code>.</p>
 
-        this.log.debug('Displaying step:', Complete.name);
-    }
+        <ul>
+            <li><a
+                href={'https://ove.readthedocs.io/en/stable/ove-apps/packages/ove-app-' + app + '/README.html'}
+                target="_blank" rel="noopener noreferrer"><Icon name="book"/> Documentation</a> for
+                    the <code>{app}</code> app.
+            </li>
 
-    componentDidMount () { }
+            {controllerURL &&
+                <li><a href={controllerURL} target="_blank" rel="noopener noreferrer"><Icon
+                    name="gamepad"/> Controller</a> for this section.</li>}
 
-    componentWillUnmount () { }
+            <li><a href={'//' + Constants.REACT_APP_OVE_UI_PREVIEW + '?oveSpace=' + space}
+                target="_blank" rel="noopener noreferrer"> <Icon name="binoculars"/> Preview</a> of the
+                    space <code>{space}</code>.
+            </li>
 
-    _showSummary () {
-        if (this.state.controllerURL) {
-            return (
-                <h3>Congratulations! You have created a new instance of an application of
-                    type <code>{this.state.app}</code> in space <code>{this.state.space}</code> using <a href="https://ove.readthedocs.io/en/stable/README.html" target="_blank" rel="noopener noreferrer">OVE</a>.<br />
-                    More information on using the application is available in its <a href={'https://ove.readthedocs.io/en/stable/ove-apps/packages/ove-app-' + this.state.app + '/README.html'} target="_blank" rel="noopener noreferrer">documentation</a>.<br />
-                    The controller of the application can be launched by <a href={this.state.controllerURL} target="_blank" rel="noopener noreferrer">clicking here</a>.<br />
-                    You can launch another application by <a href='#' onClick={() => this.props.jumpToStep(0)}>clicking here</a>.<br /> {/* eslint-disable-line jsx-a11y/anchor-is-valid */}
-                    To see the outcome of your operation, click <a href={'//' + Constants.REACT_APP_OVE_UI_PREVIEW + '?oveSpace=' + this.state.space} target="_blank" rel="noopener noreferrer">preview space</a>.</h3>
-            );
-        } else {
-            return (
-                <h3>Congratulations you have created a new instance of an application of
-                    type <code>{this.state.app}</code> in space <code>{this.state.space}</code> using <a href="https://ove.readthedocs.io/en/stable/README.html" target="_blank" rel="noopener noreferrer">OVE</a>.<br />
-                    More information on using the application is available in its <a href={'https://ove.readthedocs.io/en/stable/ove-apps/packages/ove-app-' + this.state.app + '/README.html'} target="_blank" rel="noopener noreferrer">documentation</a>.<br />
-                    You can launch another application by <a href='#' onClick={() => this.props.jumpToStep(0)}>clicking here</a>.<br /> {/* eslint-disable-line jsx-a11y/anchor-is-valid */}
-                    To see the outcome of your operation, click <a href={'//' + Constants.REACT_APP_OVE_UI_PREVIEW + '?oveSpace=' + this.state.space} target="_blank" rel="noopener noreferrer">preview space</a>.</h3>
-            );
-        }
-    }
+            <li><a href={'//' + Constants.REACT_APP_OVE_HOST} target="_blank" rel="noopener noreferrer"><Icon
+                name="list" /> list of sections</a> in this instance of OVE</li>
 
-    render () {
-        return (
-            <div className="step complete">
-                <div className="row">
-                    <form id="Form" className="form-horizontal">
-                        <div className="form-group">
-                            <label className="col-md-12 control-label">
-                                <h1>Step 6: Application instance created</h1>
-                                {this._showSummary()}
-                            </label>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        );
-    }
-}
+        </ul>
+    </div>;
+};
 
 Complete.propTypes = {
-    getLogger: PropTypes.func.isRequired,
-    getStore: PropTypes.func.isRequired,
-    jumpToStep: PropTypes.func // Added by stepzilla
+    app: PropTypes.string.isRequired,
+    space: PropTypes.string,
+    controllerURL: PropTypes.string
 };
+
+export default Complete;

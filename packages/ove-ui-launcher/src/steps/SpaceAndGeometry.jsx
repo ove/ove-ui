@@ -5,323 +5,206 @@ import PropTypes from 'prop-types';
 import Constants from '../constants/launcher';
 import axios from 'axios';
 
+import { Form, Button, Divider, Header } from 'semantic-ui-react';
+
 export default class SpaceAndGeometry extends Component {
     constructor (props) {
         super(props);
 
-        this.log = props.getLogger();
         this.state = {
-            app: props.getStore().app,
-            geometry: props.getStore().geometry || {},
-            space: props.getStore().space,
-            spaces: props.getStore().spaces
+            spaces: [],
+            bounds: { w: null, h: null },
+            errors: { x: null, y: null, w: null, h: null }
         };
 
-        this.validationCheck = this.validationCheck.bind(this);
-        this.isValidated = this.isValidated.bind(this);
-        this.log.debug('Displaying step:', SpaceAndGeometry.name);
+        this.determineErrors = this.determineErrors.bind(this);
+        this._fillSpace = this._fillSpace.bind(this);
     }
 
-    componentDidMount () { }
+    componentDidMount () {
+        // Add details of each space to the state
+        axios.get('//' + Constants.REACT_APP_OVE_HOST + '/spaces')
+            .then(res => res.data)
+            .then(spaces => {
+                let spacesToProcess = Object.keys(spaces).length;
+                let result = [];
 
-    componentWillUnmount () { }
+                Object.keys(spaces).forEach(space => {
+                    axios.get('//' + Constants.REACT_APP_OVE_HOST + '/spaces/' + space + '/geometry').then(res => {
+                        result[space] = res.data;
+                        spacesToProcess--;
 
-    isValidated () {
-        const userInput = this._grabUserInput(); // grab user entered vals
-        const validateNewInput = this._validateData(userInput, true); // run the new input against the validator
-
-        // if full validation passes then save to store and pass as valid
-        if (Object.keys(validateNewInput).every((k) => { return validateNewInput[k] !== false && validateNewInput[k] !== Constants.PENDING; })) {
-            if (JSON.stringify(this.props.getStore().geometry) !== JSON.stringify(userInput.geometry) ||
-                this.props.getStore().space !== userInput.space) { // only update store of something changed
-                this.props.updateStore({
-                    ...userInput,
-                    geometry: {
-                        x: parseInt(userInput.geometry.x, 10),
-                        y: parseInt(userInput.geometry.y, 10),
-                        w: parseInt(userInput.geometry.w, 10),
-                        h: parseInt(userInput.geometry.h, 10)
-                    }
+                        if (spacesToProcess === 0) { this.setState({ spaces: result }); }
+                    }).catch(error => console.log(error));
                 });
-            }
-            const valid = true;
-            this.log.debug('Input is valid:', valid, 'step:', SpaceAndGeometry.name);
-            const __self = this;
-            if ([Constants.App.CONTROLLER, Constants.App.REPLICATOR].includes(this.state.app)) {
-                let config;
-                if (this.state.app === Constants.App.CONTROLLER) {
-                    config = JSON.stringify({ mode: 'space' });
-                } else {
-                    config = JSON.stringify({ mode: 'space', spaceName: userInput.space, border: 'solid gold' });
-                }
-                this.props.updateStore({
-                    ...userInput,
-                    mode: Constants.Mode.NEW,
-                    url: undefined,
-                    config: config
-                });
-                this.props.jumpToStep(3);
-                return false;
-            }
-            return axios.get('//' + Constants.REACT_APP_OVE_APP(this.props.getStore().app) + '/states').then(res => res.data).then(states => {
-                __self.props.updateStore({
-                    ...userInput,
-                    states: states
-                });
-            }).catch(this.log.error);
-        } else {
-            // if anything fails then update the UI validation state but NOT the UI Data State
-            this.setState(Object.assign(userInput, validateNewInput, this._getValidationMessages(userInput)));
-            const valid = false;
-            this.log.debug('Input is valid:', valid, 'step:', SpaceAndGeometry.name);
-            return valid;
+            }).catch(error => console.log(error));
+
+        this.determineErrors();
+    }
+
+    componentDidUpdate () {
+        this.determineErrors();
+    }
+
+    determineErrors () {
+        const spaceSelected = (this.props.space !== '');
+
+        const currentSpace = this.props.space;
+
+        const spaceHeight = currentSpace ? `${this.state.spaces[currentSpace].h}` : '';
+        const spaceWidth = currentSpace ? `${this.state.spaces[currentSpace].w}` : '';
+
+        let errors = { space: null, x: null, y: null, w: null, h: null };
+
+        if (!currentSpace) {
+            errors.space = 'You must select a space';
+        }
+
+        if (!Number.isInteger(parseFloat(this.props.geometry.x))) {
+            errors.x = 'x coordinate is not provided';
+        } else if (parseInt(this.props.geometry.x, 10) < 0) {
+            errors.x = 'x coordinate cannot be negative';
+        } else if (spaceSelected && parseInt(this.props.geometry.x, 10) > (!currentSpace ? 0 : this.state.spaces[currentSpace].w)) {
+            errors.x = `x coordinate must be less than space width (${spaceWidth})`;
+        }
+
+        if (!Number.isInteger(parseFloat(this.props.geometry.y))) {
+            errors.y = 'y coordinate is not provided';
+        } else if (parseInt(this.props.geometry.y, 10) < 0) {
+            errors.y = 'y coordinate cannot be negative';
+        } else if (spaceSelected && parseInt(this.props.geometry.y, 10) > (!currentSpace ? 0 : this.state.spaces[currentSpace].h)) {
+            errors.y = `y coordinate must be less than space height (${spaceHeight})`;
+        }
+
+        if (!Number.isInteger(parseFloat(this.props.geometry.w))) {
+            errors.w = 'width is not provided';
+        } else if (parseInt(this.props.geometry.w, 10) <= 0) {
+            errors.w = 'width must be greater than 0';
+        } else if (spaceSelected && parseInt(this.props.geometry.w, 10) > (!currentSpace ? 0 : this.state.spaces[currentSpace].w)) {
+            errors.w = `width must be less than space width (${spaceWidth})`;
+        }
+
+        if (!Number.isInteger(parseFloat(this.props.geometry.h))) {
+            errors.h = 'height is not provided';
+        } else if (parseInt(this.props.geometry.h, 10) <= 0) {
+            errors.h = 'height must be greater than 0';
+        } else if (spaceSelected && parseInt(this.props.geometry.h, 10) > (!currentSpace ? 0 : this.state.spaces[currentSpace].h)) {
+            errors.h = `height must be less than space height (${spaceHeight})`;
+        }
+
+        if (errors.x !== this.props.errors.x || errors.y !== this.props.errors.y || errors.w !== this.props.errors.w || errors.h !== this.props.errors.h || errors.space !== this.props.errors.space) {
+            this.props.updateErrors(errors);
         }
     }
 
-    validationCheck () {
-        const userInput = this._grabUserInput(); // grab user entered vals
-        const validateNewInput = this._validateData(userInput); // run the new input against the validator
+    _fillSpace (ev) {
+        ev.preventDefault();
 
-        this.setState(Object.assign(userInput, validateNewInput, this._getValidationMessages(userInput)));
-        this.log.debug('Ran validation check at step:', SpaceAndGeometry.name);
-    }
+        if (!this.props.space) { return; }
 
-    _validateData (data, force) {
-        const result = {
-            spaceVal: (data.space !== ''),
-            currentSpace: data.space
-        };
-        if (!force && data.geometry.x === '' && data.geometry.y === '' &&
-            data.geometry.w === '' && data.geometry.h === '') {
-            return {
-                ...result,
-                geometryVal_x: Constants.PENDING,
-                geometryVal_y: Constants.PENDING,
-                geometryVal_w: Constants.PENDING,
-                geometryVal_h: Constants.PENDING
-            };
-        }
-        return {
-            ...result,
-            geometryVal_x: Number.isInteger(parseFloat(data.geometry.x)) && (parseInt(data.geometry.x, 10) >= 0) &&
-                (parseInt(data.geometry.x, 10) <= (!result.currentSpace ? 0 : this.state.spaces[result.currentSpace].w)),
-            geometryVal_y: Number.isInteger(parseFloat(data.geometry.y)) && (parseInt(data.geometry.y, 10) >= 0) &&
-                (parseInt(data.geometry.y, 10) <= (!result.currentSpace ? 0 : this.state.spaces[result.currentSpace].h)),
-            geometryVal_w: Number.isInteger(parseFloat(data.geometry.w)) && (parseInt(data.geometry.w, 10) > 0) &&
-                (parseInt(data.geometry.w, 10) <= (!result.currentSpace ? 0 : this.state.spaces[result.currentSpace].w)),
-            geometryVal_h: Number.isInteger(parseFloat(data.geometry.h)) && (parseInt(data.geometry.h, 10) > 0) &&
-                (parseInt(data.geometry.h, 10) <= (!result.currentSpace ? 0 : this.state.spaces[result.currentSpace].h))
-        };
-    }
-
-    _getValidationMessages (data) {
-        const spaceSelected = (data.space !== '');
-
-        const result = {
-            spaceValMsg: spaceSelected ? '' : 'A space must be selected',
-            geometryValMsg: { x: '', y: '', w: '', h: '' },
-            bounds: {
-                w: !data.space ? 0 : this.state.spaces[data.space].w,
-                h: !data.space ? 0 : this.state.spaces[data.space].h
-            }
-        };
-
-        const currentSpace = data.space;
-
-        const spaceHeight = currentSpace ? `(${this.state.spaces[currentSpace].h})` : '';
-        const spaceWidth = currentSpace ? `(${this.state.spaces[currentSpace].w})` : '';
-
-        if (!Number.isInteger(parseFloat(data.geometry.x))) {
-            result.geometryValMsg.x = 'x coordinate is not provided';
-        } else if (parseInt(data.geometry.x, 10) < 0) {
-            result.geometryValMsg.x = 'x coordinate cannot be negative';
-        } else if (spaceSelected && parseInt(data.geometry.x, 10) > (!currentSpace ? 0 : this.state.spaces[currentSpace].w)) {
-            result.geometryValMsg.x = `x coordinate must be less than space width ${spaceWidth}`;
-        }
-
-        if (!Number.isInteger(parseFloat(data.geometry.y))) {
-            result.geometryValMsg.y = 'y coordinate is not provided';
-        } else if (parseInt(data.geometry.y, 10) < 0) {
-            result.geometryValMsg.y = 'y coordinate cannot be negative';
-        } else if (spaceSelected && parseInt(data.geometry.y, 10) > (!currentSpace ? 0 : this.state.spaces[currentSpace].h)) {
-            result.geometryValMsg.y = `y coordinate must be less than space height ${spaceHeight}`;
-        }
-
-        if (!Number.isInteger(parseFloat(data.geometry.w))) {
-            result.geometryValMsg.w = 'width is not provided';
-        } else if (parseInt(data.geometry.w, 10) <= 0) {
-            result.geometryValMsg.w = 'width must be greater than 0';
-        } else if (spaceSelected && parseInt(data.geometry.y, 10) > (!currentSpace ? 0 : this.state.spaces[currentSpace].w)) {
-            result.geometryValMsg.w = `width must be less than space width ${spaceWidth}`;
-        }
-
-        if (!Number.isInteger(parseFloat(data.geometry.h))) {
-            result.geometryValMsg.h = 'height is not provided';
-        } else if (parseInt(data.geometry.h, 10) <= 0) {
-            result.geometryValMsg.h = 'height must be greater than 0';
-        } else if (spaceSelected && parseInt(data.geometry.h, 10) > (!currentSpace ? 0 : this.state.spaces[currentSpace].h)) {
-            result.geometryValMsg.h = `height must be less than space height ${spaceHeight}`;
-        }
-
-        return result;
-    }
-
-    _grabUserInput () {
-        return {
-            space: this.refs.space.value,
-            geometry: {
-                x: this.refs.geometry_x.value,
-                y: this.refs.geometry_y.value,
-                w: this.refs.geometry_w.value,
-                h: this.refs.geometry_h.value
-            }
-        };
-    }
-
-    _getSelectionItems () {
-        let items = [];
-        if (this.state.spaces) {
-            Object.keys(this.state.spaces).forEach(e => {
-                items.push(<option key={e} value={e}>{e}</option>);
-            });
-        }
-        return items;
+        this.props.updateGeometry({
+            x: '0',
+            y: '0',
+            w: this.state.spaces[this.props.space].w.toString(),
+            h: this.state.spaces[this.props.space].h.toString()
+        });
     }
 
     render () {
-        // explicit class assigning based on validation
-        let notValidClasses = {};
+        let spaceOptions = this.state.spaces ? Object.keys(this.state.spaces).map(e => ({ key: e, value: e, text: e })) : [];
 
-        if (typeof this.state.spaceVal === 'undefined' || this.state.spaceVal) {
-            notValidClasses.spaceCls = 'no-error col-md-5';
-        } else {
-            notValidClasses.spaceCls = 'has-error col-md-5';
-            notValidClasses.spaceValGrpCls = 'val-err-tooltip';
-        }
-
-        ['x', 'y', 'w', 'h'].forEach(e => {
-            if (typeof this.state['geometryVal_' + e] === 'undefined' || this.state['geometryVal_' + e]) {
-                notValidClasses['geometryCls_' + e] = 'no-error col-sm-3';
-            } else {
-                notValidClasses['geometryCls_' + e] = 'has-error col-sm-3';
-                notValidClasses['geometryValGrpCls_' + e] = 'val-err-tooltip';
-            }
-        });
+        const bounds = this.props.space ? this.state.spaces[this.props.space] : false;
+        console.log('Space is', this.props.space);
+        console.log('Bounds are', bounds);
 
         return (
-            <div className="step selectSpaceAndGeometry">
-                <div className="row">
-                    <form id="Form" className="form-horizontal">
-                        <div className="form-group">
-                            <label className="col-md-12 control-label">
-                                <h1>Step 2: Choose space and geometry</h1>
-                                <h3>You are creating an application of type <code>{this.state.app}</code>.<br />More information on <code>Space</code>, <code>Geometry</code> and other basic concepts are available in the <a href="https://ove.readthedocs.io/en/stable/docs/BASIC_CONCEPTS.html" target="_blank" rel="noopener noreferrer">documentation</a>.</h3>
-                            </label>
-                            <div className="col-md-12">
-                                <div className="form-group col-md-8 content form-block-holder">
-                                    <label className="control-label col-md-3">
-                                        Space
-                                    </label>
-                                    <div className={notValidClasses.spaceCls}>
-                                        <select ref="space" autoComplete="off" className="form-control" required defaultValue={this.state.space} onBlur={this.validationCheck}>
-                                            <option value="">Please select</option>
-                                            {this._getSelectionItems()}
-                                        </select>
-                                        <div className={notValidClasses.spaceValGrpCls}>{this.state.spaceValMsg}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-12">
-                                <div className="form-group col-md-8 content form-block-holder">
-                                    <label className="control-label col-md-2">
-                                        Geometry
-                                    </label>
-                                    <label className="control-label col-sm-1">
-                                        x:
-                                    </label>
-                                    <div className={notValidClasses.geometryCls_x}>
-                                        <input
-                                            ref="geometry_x"
-                                            autoComplete="off"
-                                            type="number"
-                                            placeholder="0"
-                                            min="0"
-                                            max={this.state.bounds ? this.state.bounds.w : Constants.DEFAULT_WIDTH}
-                                            className="form-control"
-                                            required
-                                            defaultValue={this.state.geometry.x}
-                                            onBlur={this.validationCheck} />
-                                        <div className={notValidClasses.geometryValGrpCls_x}>{this.state.geometryValMsg ? this.state.geometryValMsg.x : ''}</div>
-                                    </div>
-                                    <label className="control-label col-md-1">
-                                        y:
-                                    </label>
-                                    <div className={notValidClasses.geometryCls_y}>
-                                        <input
-                                            ref="geometry_y"
-                                            autoComplete="off"
-                                            type="number"
-                                            placeholder="0"
-                                            min="0"
-                                            max={this.state.bounds ? this.state.bounds.h : Constants.DEFAULT_HEIGHT}
-                                            className="form-control"
-                                            required
-                                            defaultValue={this.state.geometry.y}
-                                            onBlur={this.validationCheck} />
-                                        <div className={notValidClasses.geometryValGrpCls_y}>{this.state.geometryValMsg ? this.state.geometryValMsg.y : ''}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-12">
-                                <div className="form-group col-md-8 content form-block-holder">
-                                    <label className="control-label col-md-2"/>
-                                    <label className="control-label col-md-1">
-                                        w:
-                                    </label>
-                                    <div className={notValidClasses.geometryCls_w}>
-                                        <input
-                                            ref="geometry_w"
-                                            autoComplete="off"
-                                            type="number"
-                                            placeholder={this.state.bounds ? this.state.bounds.w : Constants.DEFAULT_WIDTH}
-                                            min="1"
-                                            max={this.state.bounds ? this.state.bounds.w : Constants.DEFAULT_WIDTH}
-                                            className="form-control"
-                                            required
-                                            defaultValue={this.state.geometry.w}
-                                            onBlur={this.validationCheck} />
-                                        <div className={notValidClasses.geometryValGrpCls_w}>{this.state.geometryValMsg ? this.state.geometryValMsg.w : ''}</div>
-                                    </div>
-                                    <label className="control-label col-md-1">
-                                        h:
-                                    </label>
-                                    <div className={notValidClasses.geometryCls_h}>
-                                        <input
-                                            ref="geometry_h"
-                                            autoComplete="off"
-                                            type="number"
-                                            placeholder={this.state.bounds ? this.state.bounds.h : Constants.DEFAULT_HEIGHT}
-                                            min="1"
-                                            max={this.state.bounds ? this.state.bounds.h : Constants.DEFAULT_HEIGHT}
-                                            className="form-control"
-                                            required
-                                            defaultValue={this.state.geometry.h}
-                                            onBlur={this.validationCheck} />
-                                        <div className={notValidClasses.geometryValGrpCls_h}>{this.state.geometryValMsg ? this.state.geometryValMsg.h : ''}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            <>
+
+                <Divider horizontal>
+                    <Header as='h2'>
+                    Space and Geometry
+                    </Header>
+                </Divider>
+
+                <p>More information on <code>Space</code>, <code>Geometry</code> and other basic concepts are available
+                    in the <a href="https://ove.readthedocs.io/en/stable/docs/BASIC_CONCEPTS.html" target="_blank"
+                    rel="noopener noreferrer">documentation</a>.</p>
+
+                <p>Note that launching an application in a space will <b>not</b> automatically switch any displays to
+                    show that space.</p>
+
+                <Form>
+
+                    <Form.Group>
+                        <Form.Field inline width={6}>
+                            <label>Space</label>
+                            <Form.Select options={spaceOptions}
+                                error={this.props.errors.space && { content: this.props.errors.space, pointing: 'below' }}
+                                onChange={(_, d) => this.props.updateSpace(d.value)}/>
+                        </Form.Field>
+                        <Form.Field>
+                            <label>Maximise</label>
+                            <Button icon="expand" onClick={this._fillSpace}/>
+                        </Form.Field>
+                    </Form.Group>
+
+                    <Form.Group>
+                        <Form.Input label='x'
+                            error={this.props.errors.x && { content: this.props.errors.x, pointing: 'above' }}
+                            autoComplete="off"
+                            type="number"
+                            placeholder="0"
+                            min="0"
+                            max={bounds ? bounds.w : Constants.DEFAULT_WIDTH}
+                            value={this.props.geometry.x}
+                            onChange={ev => this.props.updateGeometry({ ...this.props.geometry, x: ev.target.value })}
+                            width={6}/>
+
+                        <Form.Input label='y'
+                            error={this.props.errors.y && { content: this.props.errors.y, pointing: 'above' }}
+                            autoComplete="off"
+                            type="number"
+                            placeholder="0"
+                            min="0"
+                            max={bounds ? bounds.h : Constants.DEFAULT_HEIGHT}
+                            value={this.props.geometry.y}
+                            onChange={ev => this.props.updateGeometry({ ...this.props.geometry, y: ev.target.value })}
+                            width={6}/>
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Input label="width"
+                            error={this.props.errors.w && { content: this.props.errors.w, pointing: 'above' }}
+                            autoComplete="off"
+                            type="number"
+                            placeholder={bounds ? bounds.w : Constants.DEFAULT_WIDTH}
+                            min="1"
+                            max={bounds ? bounds.w : Constants.DEFAULT_WIDTH}
+                            value={this.props.geometry.w}
+                            onChange={ev => this.props.updateGeometry({ ...this.props.geometry, w: ev.target.value })}
+                            width={6}/>
+                        <Form.Input label="height"
+                            error={this.props.errors.h && { content: this.props.errors.h, pointing: 'above' }}
+                            autoComplete="off"
+                            type="number"
+                            placeholder={bounds ? bounds.h : Constants.DEFAULT_HEIGHT}
+                            min="1"
+                            max={bounds ? bounds.h : Constants.DEFAULT_HEIGHT}
+                            value={this.props.geometry.h}
+                            onChange={ev => this.props.updateGeometry({ ...this.props.geometry, h: ev.target.value })}
+                            width={6}/>
+                    </Form.Group>
+                </Form>
+            </>
         );
     }
 }
 
 SpaceAndGeometry.propTypes = {
-    getLogger: PropTypes.func.isRequired,
-    getStore: PropTypes.func.isRequired,
-    updateStore: PropTypes.func.isRequired,
-    jumpToStep: PropTypes.func // Added by stepzilla
+    updateSpace: PropTypes.func.isRequired,
+    updateGeometry: PropTypes.func.isRequired,
+    updateErrors: PropTypes.func.isRequired,
+
+    space: PropTypes.string,
+    geometry: PropTypes.shape({ x: PropTypes.string, y: PropTypes.string, w: PropTypes.string, h: PropTypes.string }),
+    errors: PropTypes.shape({ x: PropTypes.string, y: PropTypes.string, w: PropTypes.string, h: PropTypes.string, space: PropTypes.string })
 };

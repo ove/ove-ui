@@ -107,22 +107,22 @@ export default {
     /**************************************************************
                             Enums
     **************************************************************/
-    App: {
-        ALIGNMENT: 'alignment',
-        AUDIO: 'audio',
-        CHARTS: 'charts',
-        CONTROLLER: 'controller',
-        HTML: 'html',
-        IMAGES: 'images',
-        MAPS: 'maps',
-        NETWORKS: 'networks',
-        PDF: 'pdf',
-        QR: 'qrcode',
-        REPLICATOR: 'replicator',
-        SVG: 'svg',
-        VIDEOS: 'videos',
-        WEBRTC: 'webrtc',
-        WHITEBOARD: 'whiteboard'
+    APPS: {
+        ALIGNMENT: { name: 'alignment', label: 'Alignment' },
+        AUDIO: { name: 'audio', label: 'Audio' },
+        CHARTS: { name: 'charts', label: 'Charts' },
+        CONTROLLER: { name: 'controller', label: 'Controller' },
+        HTML: { name: 'html', label: 'HTML' },
+        IMAGES: { name: 'images', label: 'Images' },
+        MAPS: { name: 'maps', label: 'Maps' },
+        NETWORKS: { name: 'networks', label: 'Networks' },
+        PDF: { name: 'pdf', label: 'PDF' },
+        QR: { name: 'qrcode', label: 'QR Code' },
+        REPLICATOR: { name: 'replicator', label: 'Replicator' },
+        SVG: { name: 'svg', label: 'SVG' },
+        VIDEOS: { name: 'videos', label: 'Videos' },
+        WEBRTC: { name: 'webrtc', label: 'WebRTC' },
+        WHITEBOARD: { name: 'whiteboard', label: 'Whiteboard' }
     },
 
     Mode: {

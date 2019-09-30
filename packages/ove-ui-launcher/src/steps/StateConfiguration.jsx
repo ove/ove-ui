@@ -4,258 +4,146 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Constants from '../constants/launcher';
 
+import { Form, Button, Divider, Header } from 'semantic-ui-react';
+import axios from 'axios';
+
 export default class StateConfiguration extends Component {
     constructor (props) {
         super(props);
 
-        this.log = props.getLogger();
         this.state = {
-            app: props.getStore().app,
-            state: props.getStore().state,
-            space: props.getStore().space,
-            url: props.getStore().url,
-            mode: props.getStore().mode,
-            states: props.getStore().states
+            states: []
         };
 
-        if ([Constants.App.CONTROLLER, Constants.App.REPLICATOR].includes(this.state.app)) {
-            this.props.jumpToStep(1);
-            return;
-        }
-
-        this.validationCheck = this.validationCheck.bind(this);
-        this.isValidated = this.isValidated.bind(this);
-        this.log.debug('Displaying step:', StateConfiguration.name);
+        this.determineErrors = this.determineErrors.bind(this);
     }
 
-    componentDidMount () { }
+    determineErrors () {
+        if (Constants.APPS.WEBRTC.name === this.props.app && this.props.mode !== Constants.Mode.EXISTING) {
+            this.props.updateMode(Constants.Mode.EXISTING);
+        }
 
-    componentWillUnmount () { }
+        let errors = { existingState: null, newState: null };
 
-    isValidated () {
-        const userInput = this._grabUserInput(); // grab user entered vals
-        const validateNewInput = this._validateData(userInput); // run the new input against the validator
+        if (this.props.mode === Constants.Mode.EXISTING && !this.props.state) {
+            errors.existingState = 'You must select a state';
+        } else if (this.props.mode === Constants.Mode.NEW) {
+            const url = this.props.url;
 
-        // if full validation passes then save to store and pass as valid
-        if (Object.keys(validateNewInput).every((k) => { return validateNewInput[k] !== false; })) {
-            if (JSON.stringify(this.props.getStore().state) !== JSON.stringify(userInput.state) ||
-                this.props.getStore().mode !== userInput.mode ||
-                this.props.getStore().url !== userInput.url) { // only update store of something changed
-                this.props.updateStore({
-                    ...userInput
-                });
+            let urlObj;
+            try {
+                urlObj = new URL(this.props.url);
+            } catch (error) {
+                urlObj = false;
             }
-            const valid = true;
-            this.log.debug('Input is valid:', valid, 'step:', StateConfiguration.name);
-            return valid;
-        } else {
-            // if anything fails then update the UI validation state but NOT the UI Data State
-            this.setState(Object.assign(userInput, validateNewInput, this._validationMessages(userInput, validateNewInput)));
-            const valid = false;
-            this.log.debug('Input is valid:', valid, 'step:', StateConfiguration.name);
-            return valid;
+
+            if (!url) {
+                errors.newState = 'You must enter a URL';
+            } else if (!Constants.VALID_URL_REGEX.test(this.props.url) || !urlObj) {
+                errors.newState = 'Invalid URL';
+            } else if (urlObj.hostname.toString().includes('youtube') && !Constants.YOUTUBE_URL_REGEX.test(url)) {
+                errors.newState = 'Youtube URLs must have the format http://www.youtube.com/embed/<VIDEO_ID>';
+            }
+        }
+
+        if (errors.newState !== this.props.errors.newState || errors.existingState !== this.props.errors.existingState) {
+            this.props.updateErrors(errors);
         }
     }
 
-    validationCheck () {
-        const userInput = this._grabUserInput(); // grab user entered vals
-        const validateNewInput = this._validateData(userInput); // run the new input against the validator
-
-        this.setState(Object.assign(userInput, validateNewInput, this._validationMessages(userInput, validateNewInput)));
-        this.log.debug('Ran validation check at step:', StateConfiguration.name);
+    componentDidMount () {
+        this.listExistingStates(this.props.app);
+        this.determineErrors();
     }
 
-    _validateData (data) {
-        return {
-            stateVal: (data.mode === Constants.Mode.NEW || data.state !== ''),
-            urlVal: (data.mode !== Constants.Mode.NEW ||
-                (Constants.VALID_URL_REGEX.test(data.url) && this._validateVideoURL(data)))
-        };
+    componentDidUpdate (prevProps, prevState, snapshot) {
+        if (this.props.app !== prevProps.app) {
+            this.listExistingStates(this.props.app);
+        }
+        this.determineErrors();
     }
 
-    _validateVideoURL (data) {
-        if (this.state.app !== Constants.App.VIDEOS || data.mode !== Constants.Mode.NEW) {
-            return true; // no need to apply a check
-        }
-
-        let url;
-        try {
-            url = new URL(data.url);
-        } catch (error) {
-            return false; // invalid url provided
-        }
-
-        if (url.hostname.toString().includes('youtube')) {
-            return Constants.YOUTUBE_URL_REGEX.test(data.url); // check URL against youtube requirements
-        }
-
-        return true; // this is a valid non-youtube URL
-    }
-
-    _validationMessages (data, val) {
-        return {
-            stateValMsg: val.stateVal ? '' : 'A state must be selected',
-            urlValMsg: this._validateVideoURL(data) ? (
-                val.urlVal ? '' : 'The asset URL is not valid') : 'Youtube URLs ' +
-                'must have the format http://www.youtube.com/embed/<VIDEO_ID>'
-        };
-    }
-
-    _grabUserInput () {
-        return {
-            mode: this.refs.mode ? this.refs.mode.value : undefined,
-            state: this.refs.state ? this.refs.state.value : undefined,
-            url: this.refs.url ? this.refs.url.value : undefined
-        };
-    }
-
-    _getSelectionItems () {
-        let items = [];
-        if (this.state.states) {
-            this.state.states.forEach(e => {
-                items.push(<option key={e} value={e}>{e}</option>);
-            });
-        }
-        return items;
-    }
-
-    _getInstructions () {
-        switch (this.state.app) {
-            case Constants.App.ALIGNMENT:
-                return (<h3>The <code>Alignment App</code> does not require a state configuration.
-                    Please press <code>Next</code> to proceed.</h3>);
-            case Constants.App.WHITEBOARD:
-                return (<h3>The <code>Whiteboard App</code> does not require a state configuration.
-                    Please press <code>Next</code> to proceed.</h3>);
-            case Constants.App.WEBRTC:
-                return (<h3>You are creating an application of type <code>{this.state.app}</code> in space <code>{this.state.space}</code>.<br />
-                    Please select one of the following pre-loaded states.</h3>);
-            default:
-                return (<h3>You are creating an application of type <code>{this.state.app}</code> in space <code>{this.state.space}</code>.<br />
-                    Please select an existing state or create a new state by providing an asset URL.</h3>);
-        }
-    }
-
-    _getMode () {
-        if ([Constants.App.WEBRTC].includes(this.state.app)) {
-            return (
-                <input type="hidden" ref="mode" value={Constants.Mode.EXISTING} />
-            );
-        } else if (![Constants.App.ALIGNMENT, Constants.App.WHITEBOARD].includes(this.state.app)) {
-            return (
-                <div className="col-md-12">
-                    <div className="form-group col-md-8 content form-block-holder">
-                        <label className="control-label col-md-3">
-                            Mode
-                        </label>
-                        <div className="no-error col-md-5">
-                            <select ref="mode" autoComplete="off" className="form-control" required defaultValue={this.state.mode} onBlur={this.validationCheck}>
-                                <option value={Constants.Mode.EXISTING}>Use existing state</option>
-                                <option value={Constants.Mode.NEW}>New state configuration</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-    }
-
-    _getStateSelection () {
-        // explicit class assigning based on validation
-        let notValidClasses = {};
-
-        if (typeof this.state.stateVal === 'undefined' || this.state.stateVal) {
-            notValidClasses.stateCls = 'no-error col-md-5';
-        } else {
-            notValidClasses.stateCls = 'has-error col-md-5';
-            notValidClasses.stateValGrpCls = 'val-err-tooltip';
-        }
-        if (![Constants.App.ALIGNMENT, Constants.App.WHITEBOARD].includes(this.state.app)) {
-            return (
-                <div className="col-md-12">
-                    <div className="form-group col-md-8 content form-block-holder">
-                        <label className="control-label col-md-3">
-                            Existing state
-                        </label>
-                        <div className={notValidClasses.stateCls}>
-                            <select ref="state"
-                                autoComplete="off"
-                                className="form-control"
-                                required
-                                defaultValue={this.state.state}
-                                onBlur={this.validationCheck}
-                                disabled={this.state.mode === Constants.Mode.NEW}>
-                                <option value="">Please select</option>
-                                {this._getSelectionItems()}
-                            </select>
-                            <div className={notValidClasses.stateValGrpCls}>{this.state.stateValMsg}</div>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-    }
-
-    _getConfigurationEntry () {
-        // explicit class assigning based on validation
-        let notValidClasses = {};
-
-        if (typeof this.state.urlVal === 'undefined' || this.state.urlVal) {
-            notValidClasses.urlCls = 'no-error col-md-8';
-        } else {
-            notValidClasses.urlCls = 'has-error col-md-8';
-            notValidClasses.urlValGrpCls = 'val-err-tooltip';
-        }
-        if (![Constants.App.ALIGNMENT, Constants.App.WHITEBOARD, Constants.App.WEBRTC].includes(this.state.app)) {
-            return (
-                <div className="col-md-12">
-                    <div className="form-group col-md-8 content form-block-holder">
-                        <label className="control-label col-md-3">
-                            Asset URL
-                        </label>
-                        <div className={notValidClasses.urlCls}>
-                            <input
-                                ref="url"
-                                autoComplete="off"
-                                type="url"
-                                placeholder="Asset URL"
-                                className="form-control"
-                                required
-                                defaultValue={this.state.url}
-                                onBlur={this.validationCheck}
-                                disabled={this.state.mode === Constants.Mode.EXISTING} />
-                            <div className={notValidClasses.urlValGrpCls}>{this.state.urlValMsg}</div>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
+    listExistingStates (app) {
+        if (!app) { return; }
+        axios.get('//' + Constants.REACT_APP_OVE_APP(app) + '/states')
+            .then(res => res.data)
+            .then(states => {
+                this.setState({ states });
+            }).catch(error => console.log(error));
     }
 
     render () {
+        let existingStates = this.state.states.map(e => ({ key: e, value: e, text: e }));
+
+        if ([Constants.APPS.ALIGNMENT.name, Constants.APPS.WHITEBOARD.name, Constants.APPS.REPLICATOR.name, Constants.APPS.CONTROLLER.name].includes(this.props.app)) {
+            return '';
+        }
+
         return (
-            <div className="step selectStateConfiguration">
-                <div className="row">
-                    <form id="Form" className="form-horizontal">
-                        <div className="form-group">
-                            <label className="col-md-12 control-label">
-                                <h1>Step 3: Configure application state</h1>
-                                {this._getInstructions()}
-                            </label>
-                            {this._getMode()}
-                            {this._getStateSelection()}
-                            {this._getConfigurationEntry()}
-                        </div>
-                    </form>
-                </div>
-            </div>
+            <>
+                <Divider horizontal>
+                    <Header as='h2'>
+                    Application State
+                    </Header>
+                </Divider>
+
+                <Form>
+                    { Constants.APPS.WEBRTC.name === this.props.app
+
+                        ? <input type="hidden" ref="mode" value={Constants.Mode.EXISTING} />
+
+                        : <Form.Field>
+                            <Button.Group>
+                                <Button positive={this.props.mode === Constants.Mode.EXISTING} onClick={() => this.props.updateMode(Constants.Mode.EXISTING)}>Use existing state</Button>
+                                <Button.Or />
+                                <Button positive={this.props.mode === Constants.Mode.NEW} onClick={() => this.props.updateMode(Constants.Mode.NEW)}>New state configuration</Button>
+                            </Button.Group>
+                        </Form.Field>
+                    }
+
+                    { ![Constants.APPS.ALIGNMENT.name, Constants.APPS.WHITEBOARD.name].includes(this.props.app) && (this.props.mode === Constants.Mode.EXISTING) &&
+
+                    <Form.Field inline width={6}>
+                        <label>Existing state</label>
+                        <Form.Select options={existingStates}
+                            value={this.props.state}
+                            onChange={(_, d) => this.props.updateState(d.value)}
+                            error={this.props.errors.existingState && { content: this.props.errors.existingState, pointing: 'above' }}
+                            required/>
+                    </Form.Field>
+                    }
+
+                    {(![Constants.APPS.ALIGNMENT.name, Constants.APPS.WHITEBOARD.name, Constants.APPS.WEBRTC.name].includes(this.props.app)) && (this.props.mode === Constants.Mode.NEW) &&
+
+                        <Form.Group>
+                            <Form.Input
+                                autoComplete="off"
+                                type="url"
+                                placeholder="Asset URL"
+                                required
+                                defaultValue={this.props.url}
+                                onChange={ev => this.props.updateURL(ev.target.value)}
+                                error={this.props.errors.newState && { content: this.props.errors.newState, pointing: 'above' }}/>
+                        </Form.Group>
+                    }
+
+                </Form>
+            </>
         );
     }
 }
 
 StateConfiguration.propTypes = {
-    getLogger: PropTypes.func.isRequired,
-    getStore: PropTypes.func.isRequired,
-    updateStore: PropTypes.func.isRequired,
-    jumpToStep: PropTypes.func // Added by stepzilla
+    updateState: PropTypes.func.isRequired,
+    updateMode: PropTypes.func.isRequired,
+    updateURL: PropTypes.func.isRequired,
+    updateErrors: PropTypes.func.isRequired,
+
+    app: PropTypes.string.isRequired,
+    mode: PropTypes.oneOf([Constants.Mode.EXISTING, Constants.Mode.NEW]),
+    state: PropTypes.string,
+    url: PropTypes.string,
+
+    errors: PropTypes.shape({ newState: PropTypes.string, existingState: PropTypes.string })
+
 };
