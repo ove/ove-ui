@@ -39,13 +39,13 @@ export default class Launcher extends Component {
             config: ''
         };
 
-        const url = (new URL(document.location)).searchParams.get("url");
-        if (url){
+        const url = (new URL(document.location)).searchParams.get('url');
+        if (url) {
             this.state.url = url;
         }
 
-        const app = (new URL(document.location)).searchParams.get("app");
-        if (app){
+        const app = (new URL(document.location)).searchParams.get('app');
+        if (app) {
             this.state.app = app;
         }
     }
