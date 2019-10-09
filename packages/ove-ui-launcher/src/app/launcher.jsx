@@ -38,6 +38,16 @@ export default class Launcher extends Component {
             reviewErrors: { configError: null },
             config: ''
         };
+
+        const url = (new URL(document.location)).searchParams.get("url");
+        if (url){
+            this.state.url = url;
+        }
+
+        const app = (new URL(document.location)).searchParams.get("app");
+        if (app){
+            this.state.app = app;
+        }
     }
 
     // Callbacks called by each step

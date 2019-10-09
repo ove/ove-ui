@@ -24,6 +24,7 @@ const SelectApp = ({ selectedApp, updateApp }) => {
                 <Form.Field inline width={6}>
                     <label>Application</label>
                     <Form.Select
+                        value={selectedApp}
                         error={!selectedApp && { content: 'You must select an application', pointing: 'below' }}
                         options={appOptions} onChange={(_, d) => updateApp(d)}/>
                 </Form.Field>
