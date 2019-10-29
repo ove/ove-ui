@@ -39,6 +39,8 @@ export default class Launcher extends Component {
             config: ''
         };
 
+        this.state = {...this.state, ...(JSON.parse(window.localStorage.getItem("launcherState")))};
+
         const url = (new URL(document.location)).searchParams.get('url');
         if (url) {
             this.state.url = url;
@@ -73,6 +75,8 @@ export default class Launcher extends Component {
     }
 
     render () {
+        window.localStorage.setItem("launcherState", JSON.stringify(this.state));
+
         return (
             <>
             <h1>OVE Application Launcher</h1>

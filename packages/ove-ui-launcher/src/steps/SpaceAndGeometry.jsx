@@ -27,19 +27,21 @@ export default class SpaceAndGeometry extends Component {
             .then(res => res.data)
             .then(spaces => {
                 let spacesToProcess = Object.keys(spaces).length;
-                let result = [];
+                let result = {};
 
                 Object.keys(spaces).forEach(space => {
                     axios.get('//' + Constants.REACT_APP_OVE_HOST + '/spaces/' + space + '/geometry').then(res => {
                         result[space] = res.data;
                         spacesToProcess--;
 
-                        if (spacesToProcess === 0) { this.setState({ spaces: result }); }
+                        if (spacesToProcess === 0) {
+                            this.setState({ spaces: result });
+                            this.determineErrors();
+                        }
                     }).catch(error => console.log(error));
                 });
             }).catch(error => console.log(error));
 
-        this.determineErrors();
     }
 
     componentDidUpdate () {
@@ -47,6 +49,8 @@ export default class SpaceAndGeometry extends Component {
     }
 
     determineErrors () {
+        if (this.state.spaces.length === 0){  return; }
+
         const spaceSelected = (this.props.space !== '');
 
         const currentSpace = this.props.space;
@@ -140,7 +144,9 @@ export default class SpaceAndGeometry extends Component {
                             <label>Space</label>
                             <Form.Select options={spaceOptions}
                                 error={this.props.errors.space && { content: this.props.errors.space, pointing: 'below' }}
-                                onChange={(_, d) => this.props.updateSpace(d.value)}/>
+                                onChange={(_, d) => this.props.updateSpace(d.value)}
+                                defaultValue={this.props.space}
+                            />
                         </Form.Field>
                         <Form.Field>
                             <label>Maximise</label>
