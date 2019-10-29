@@ -39,7 +39,7 @@ export default class Launcher extends Component {
             config: ''
         };
 
-        this.state = {...this.state, ...(JSON.parse(window.localStorage.getItem("launcherState")))};
+        this.state = { ...this.state, ...(JSON.parse(window.localStorage.getItem('launcherState'))) };
 
         const url = (new URL(document.location)).searchParams.get('url');
         if (url) {
@@ -75,7 +75,7 @@ export default class Launcher extends Component {
     }
 
     render () {
-        window.localStorage.setItem("launcherState", JSON.stringify(this.state));
+        window.localStorage.setItem('launcherState', JSON.stringify(this.state));
 
         return (
             <>

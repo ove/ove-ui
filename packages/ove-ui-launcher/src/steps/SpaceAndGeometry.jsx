@@ -41,7 +41,6 @@ export default class SpaceAndGeometry extends Component {
                     }).catch(error => console.log(error));
                 });
             }).catch(error => console.log(error));
-
     }
 
     componentDidUpdate () {
@@ -49,7 +48,7 @@ export default class SpaceAndGeometry extends Component {
     }
 
     determineErrors () {
-        if (this.state.spaces.length === 0){  return; }
+        if (this.state.spaces.length === 0) { return; }
 
         const spaceSelected = (this.props.space !== '');
 
