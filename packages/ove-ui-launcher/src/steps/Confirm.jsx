@@ -99,8 +99,6 @@ const Confirm = (props) => {
         theme: Constants.CodeMirror.THEME
     };
 
-    console.log(_getCurlPayload(payload));
-
     const osChoices = [{ key: 'unix', value: Constants.OS.UNIX, text: 'Linux/Mac' }, {
         key: 'windows',
         value: Constants.OS.WINDOWS,

@@ -118,8 +118,6 @@ export default class SpaceAndGeometry extends Component {
         let spaceOptions = this.state.spaces ? Object.keys(this.state.spaces).map(e => ({ key: e, value: e, text: e })) : [];
 
         const bounds = this.props.space ? this.state.spaces[this.props.space] : false;
-        console.log('Space is', this.props.space);
-        console.log('Bounds are', bounds);
 
         return (
             <>
