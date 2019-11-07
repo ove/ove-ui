@@ -56,7 +56,7 @@ export default class Review extends Component {
                 // if URL has not changed, keep the provided config (to retain edits made in CodeMirror)
                 // this.props.updateConfig(props.config);
                 // otherwise, regenerate the config
-                newConfig = props.url ? JSON.stringify({ url: props.url }) : props.config;
+                newConfig = JSON.stringify({ url: props.url });
             }
         }
 
