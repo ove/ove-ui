@@ -13,6 +13,18 @@ import 'codemirror/theme/dracula.css';
 import { Form, Button, Divider, Header } from 'semantic-ui-react';
 
 const Confirm = (props) => {
+    if (props.app) {
+        axios.get('//' + Constants.REACT_APP_OVE_APP(props.app) + '/name').then(_ => {
+            if (props.appAvailable !== true) {
+                props.updateAppAvailability(true);
+            }
+        }).catch(_ => {
+            if (props.appAvailable !== false) {
+                props.updateAppAvailability(false);
+            }
+        });
+    }
+
     const constructPayload = (props) => {
         let payload = {
             space: props.space,
@@ -134,8 +146,11 @@ const Confirm = (props) => {
                     <CodeMirror value={_getCurlPayload(payload)} options={cmOptions}/>
                 </Form.Group>
 
-                <Button fluid positive onClick={() => _launch(payload)} disabled={!props.ready}>Launch!</Button>
+                <Button fluid positive onClick={() => _launch(payload)} disabled={!props.ready || !props.appAvailable}>Launch!</Button>
             </Form>
+
+            { (props.appAvailable !== false) || <p><b>App {props.app} is not available.</b></p> }
+
         </>
     );
 };
@@ -156,7 +171,10 @@ Confirm.propTypes = {
     space: PropTypes.string,
     geometry: PropTypes.shape({ x: PropTypes.string, y: PropTypes.string, w: PropTypes.string, h: PropTypes.string }),
     os: PropTypes.oneOf([Constants.OS.UNIX, Constants.OS.WINDOWS]),
-    ready: PropTypes.bool
+    ready: PropTypes.bool,
+
+    appAvailable: PropTypes.bool,
+    updateAppAvailability: PropTypes.func.isRequired
 };
 
 export default Confirm;

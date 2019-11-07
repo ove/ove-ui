@@ -41,7 +41,7 @@ export default class Launcher extends Component {
             config: ''
         };
 
-        this.state = { ...this.state, ...(JSON.parse(window.localStorage.getItem('launcherState'))) };
+        this.state = { ...this.state, ...(JSON.parse(window.localStorage.getItem('launcherState'))), appAvailable: undefined };
 
         const url = (new URL(document.location)).searchParams.get('url');
         if (url) {
@@ -111,7 +111,10 @@ export default class Launcher extends Component {
 
                 <Confirm log={this.log} updateControllerURL={controllerURL => this.setState({ controllerURL })}
                     updateOS={os => this.setState({ os })}
-                    app={this.state.app} space={this.state.space} geometry={this.state.geometry} mode={this.state.mode} config={this.state.config} state={this.state.state} deleteSections={this.state.deleteSections} showController={this.state.showController} os={this.state.os} ready={this.ready()}/>
+                    app={this.state.app} space={this.state.space} geometry={this.state.geometry} mode={this.state.mode}
+                    config={this.state.config} state={this.state.state} deleteSections={this.state.deleteSections}
+                    showController={this.state.showController} os={this.state.os} ready={this.ready()}
+                    appAvailable={this.state.appAvailable} updateAppAvailability={appAvailable => this.setState({ appAvailable })} />
 
                 <Complete app={this.state.app} space={this.state.space} controllerURL={this.state.controllerURL} />
             </div>
