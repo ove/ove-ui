@@ -60,6 +60,11 @@ export default class StateConfiguration extends Component {
         if (this.props.app !== prevProps.app) {
             this.listExistingStates(this.props.app);
         }
+
+        if (this.props.mode === Constants.Mode.EXISTING && this.state.states && this.state.states.length === 1 && this.props.state !== this.state.states[0]) {
+            this.props.updateState(this.state.states[0]);
+        }
+
         this.determineErrors();
     }
 
