@@ -72,6 +72,7 @@ const Confirm = (props) => {
                         props.updateControllerURL(undefined);
                     }
                     resolve(true);
+                    window.scrollTo(0, document.body.scrollHeight);
                 }).catch(props.log.error);
             };
             if (props.deleteSections) {

@@ -3,15 +3,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Constants from '../constants/launcher';
-import { Icon } from 'semantic-ui-react';
+import { Divider, Header, Icon } from 'semantic-ui-react';
 
 const Complete = ({ controllerURL, app, space }) => {
     if (!controllerURL) { return ''; }
 
     return <div>
-        <h2>Application instance created</h2>
-
-        <p>Congratulations! You have created a new section of the <code>{app}</code> OVE Application in
+        <Divider horizontal>
+            <Header as='h2'>
+                Application instance created
+            </Header>
+        </Divider>
+        <p>Congratulations! You have created a new section of the <code>{app}</code> app in
                 space <code>{space}</code>.</p>
 
         <ul>
