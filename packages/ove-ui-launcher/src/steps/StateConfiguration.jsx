@@ -108,7 +108,6 @@ export default class StateConfiguration extends Component {
                         value={this.props.state}
                         onChange={(_, d) => this.props.updateState(d.value)}
                         error={this.props.errors.existingState && { content: this.props.errors.existingState, pointing: 'above' }}
-                        required
                         width={6}
                     />
                     }
@@ -120,7 +119,6 @@ export default class StateConfiguration extends Component {
                                 autoComplete="off"
                                 type="url"
                                 placeholder="Asset URL"
-                                required
                                 defaultValue={this.props.url}
                                 onChange={ev => this.props.updateURL(ev.target.value)}
                                 error={this.props.errors.newState && { content: this.props.errors.newState, pointing: 'above' }}/>
