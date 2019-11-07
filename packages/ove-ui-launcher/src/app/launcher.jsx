@@ -87,7 +87,7 @@ export default class Launcher extends Component {
 
             <div className='form'>
                 <SelectApp updateApp={ev => this.setState({ app: ev.value, state: null, controllerURL: undefined })}
-                    selectedApp={this.state.app} />
+                    selectedApp={this.state.app} appAvailable={this.state.appAvailable} />
 
                 <SpaceAndGeometry log={this.log} updateSpace={space => this.setState({ space, controllerURL: undefined })}
                     updateGeometry={geometry => this.setState({ geometry, controllerURL: undefined })}

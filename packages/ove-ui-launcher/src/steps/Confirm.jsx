@@ -148,9 +148,6 @@ const Confirm = (props) => {
 
                 <Button fluid positive onClick={() => _launch(payload)} disabled={!props.ready || !props.appAvailable}>Launch!</Button>
             </Form>
-
-            { (props.appAvailable !== false) || <p><b>App {props.app} is not available.</b></p> }
-
         </>
     );
 };

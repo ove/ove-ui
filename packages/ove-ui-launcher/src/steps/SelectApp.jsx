@@ -6,11 +6,18 @@ import Constants from '../constants/launcher';
 
 import { Divider, Form, Header } from 'semantic-ui-react';
 
-const SelectApp = ({ selectedApp, updateApp }) => {
+const SelectApp = ({ selectedApp, updateApp, appAvailable }) => {
     const appOptions = Object.keys(Constants.APPS).map(appName => {
         const app = Constants.APPS[appName];
         return { key: app.name, value: app.name, text: app.label };
     });
+
+    let error;
+    if (!selectedApp){
+        error = {content: 'You must select an application', pointing: 'below' };
+    } else if (!appAvailable) {
+        error = {content: 'This application is not available', pointing: 'below' };
+    }
 
     return (
         <>
@@ -24,7 +31,7 @@ const SelectApp = ({ selectedApp, updateApp }) => {
                 <Form.Select
                     label="Application"
                     value={selectedApp}
-                    error={!selectedApp && { content: 'You must select an application', pointing: 'below' }}
+                    error={error}
                     options={appOptions} onChange={(_, d) => updateApp(d)}
                     width={6}
                 />
@@ -38,6 +45,7 @@ const SelectApp = ({ selectedApp, updateApp }) => {
 
 SelectApp.propTypes = {
     selectedApp: PropTypes.string,
+    appAvailable: PropTypes.bool,
     updateApp: PropTypes.func.isRequired
 };
 
