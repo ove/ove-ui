@@ -72,12 +72,12 @@ const Confirm = (props) => {
                         props.updateControllerURL(undefined);
                     }
                     resolve(true);
-                }).catch(this.props.log.error);
+                }).catch(props.log.error);
             };
             if (props.deleteSections) {
                 axios.delete('//' + Constants.REACT_APP_OVE_HOST + '/sections?space=' + props.space).then(_ => {
                     setTimeout(launchApp, Constants.SECTION_DELETE_WAIT_TIME);
-                }).catch(this.props.log.error);
+                }).catch(props.log.error);
             } else {
                 launchApp();
             }
