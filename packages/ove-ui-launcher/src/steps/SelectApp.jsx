@@ -21,13 +21,13 @@ const SelectApp = ({ selectedApp, updateApp }) => {
             </Divider>
 
             <Form>
-                <Form.Field inline width={6}>
-                    <label>Application</label>
-                    <Form.Select
-                        value={selectedApp}
-                        error={!selectedApp && { content: 'You must select an application', pointing: 'below' }}
-                        options={appOptions} onChange={(_, d) => updateApp(d)}/>
-                </Form.Field>
+                <Form.Select
+                    label="Application"
+                    value={selectedApp}
+                    error={!selectedApp && { content: 'You must select an application', pointing: 'below' }}
+                    options={appOptions} onChange={(_, d) => updateApp(d)}
+                    width={6}
+                />
             </Form>
             <p> For details of each application, see the <a
                 href="https://ove.readthedocs.io/en/stable/ove-apps/README.html" target="_blank"

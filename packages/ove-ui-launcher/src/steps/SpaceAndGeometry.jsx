@@ -38,9 +38,9 @@ export default class SpaceAndGeometry extends Component {
                             this.setState({ spaces: result });
                             this.determineErrors();
                         }
-                    }).catch(error => console.log(error));
+                    }).catch(this.props.log.error);
                 });
-            }).catch(error => console.log(error));
+            }).catch(this.props.log.error);
     }
 
     componentDidUpdate () {
@@ -50,7 +50,7 @@ export default class SpaceAndGeometry extends Component {
     determineErrors () {
         if (this.state.spaces.length === 0) { return; }
 
-        const spaceSelected = (this.props.space !== '');
+        const spaceSelected = (this.props.space !== undefined);
 
         const currentSpace = this.props.space;
 
@@ -137,14 +137,13 @@ export default class SpaceAndGeometry extends Component {
                 <Form>
 
                     <Form.Group>
-                        <Form.Field inline width={6}>
-                            <label>Space</label>
-                            <Form.Select options={spaceOptions}
-                                error={this.props.errors.space && { content: this.props.errors.space, pointing: 'below' }}
-                                onChange={(_, d) => this.props.updateSpace(d.value)}
-                                defaultValue={this.props.space}
-                            />
-                        </Form.Field>
+                        <Form.Select options={spaceOptions}
+                            label="Space"
+                            error={this.props.errors.space && { content: this.props.errors.space, pointing: 'above' }}
+                            onChange={(_, d) => this.props.updateSpace(d.value)}
+                            defaultValue={this.props.space}
+                            width={6}
+                        />
                         <Form.Field>
                             <label>Maximise</label>
                             <Button icon="expand" onClick={this._fillSpace}/>
@@ -203,6 +202,7 @@ export default class SpaceAndGeometry extends Component {
 }
 
 SpaceAndGeometry.propTypes = {
+    log: PropTypes.object.isRequired,
     updateSpace: PropTypes.func.isRequired,
     updateGeometry: PropTypes.func.isRequired,
     updateErrors: PropTypes.func.isRequired,

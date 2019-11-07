@@ -69,7 +69,7 @@ export default class StateConfiguration extends Component {
             .then(res => res.data)
             .then(states => {
                 this.setState({ states });
-            }).catch(error => console.log(error));
+            }).catch(this.props.log.error);
     }
 
     render () {
@@ -103,14 +103,14 @@ export default class StateConfiguration extends Component {
 
                     { ![Constants.APPS.ALIGNMENT.name, Constants.APPS.WHITEBOARD.name].includes(this.props.app) && (this.props.mode === Constants.Mode.EXISTING) &&
 
-                    <Form.Field inline width={6}>
-                        <label>Existing state</label>
-                        <Form.Select options={existingStates}
-                            value={this.props.state}
-                            onChange={(_, d) => this.props.updateState(d.value)}
-                            error={this.props.errors.existingState && { content: this.props.errors.existingState, pointing: 'above' }}
-                            required/>
-                    </Form.Field>
+                    <Form.Select options={existingStates}
+                        label="Existing state"
+                        value={this.props.state}
+                        onChange={(_, d) => this.props.updateState(d.value)}
+                        error={this.props.errors.existingState && { content: this.props.errors.existingState, pointing: 'above' }}
+                        required
+                        width={6}
+                    />
                     }
 
                     {(![Constants.APPS.ALIGNMENT.name, Constants.APPS.WHITEBOARD.name, Constants.APPS.WEBRTC.name].includes(this.props.app)) && (this.props.mode === Constants.Mode.NEW) &&
@@ -134,6 +134,7 @@ export default class StateConfiguration extends Component {
 }
 
 StateConfiguration.propTypes = {
+    log: PropTypes.object.isRequired,
     updateState: PropTypes.func.isRequired,
     updateMode: PropTypes.func.isRequired,
     updateURL: PropTypes.func.isRequired,

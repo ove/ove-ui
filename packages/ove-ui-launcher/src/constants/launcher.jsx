@@ -33,17 +33,9 @@ const getOVEHost = function () {
 };
 
 export default {
-    UPDATE: 'UPDATE',
-    STEP: 'step',
-    PENDING: 'pending',
-    LAUNCH: 'Launch',
-    BLACKLIST: ['log', 'spaces', 'states'],
     COMPONENT_NAME: 'launcher',
     LOG_LEVEL: +(process.env.LOG_LEVEL || 5), // Level (from 0 - 6): 5 == TRACE
-    SECTION_CONTROLLER: '.section-controller',
 
-    SPACE_NAMES_LOADED_TEST_TIME: 1000, // Unit: milliseconds
-    SPACE_NAMES_LOADED_INITIAL_WAIT_TIME: 2000, // Unit: milliseconds
     SECTION_DELETE_WAIT_TIME: 1000, // Unit: milliseconds
 
     REACT_APP_OVE_HOST: getOVEHost(),
@@ -53,9 +45,6 @@ export default {
     REACT_APP_OVE_APP: function (appName) {
         return getOVEHost() + '/app/' + appName.toLowerCase();
     },
-
-    NEXT_BUTTON_CLASS: 'btn btn-prev btn-primary btn-md pull-right',
-    BACK_BUTTON_CLASS: 'btn btn-next btn-primary btn-md pull-left',
 
     DEFAULT_HEIGHT: 2424, // Unit: pixels
     DEFAULT_WIDTH: 4320, // Unit: pixels

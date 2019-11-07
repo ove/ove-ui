@@ -11,8 +11,10 @@ import './index.css';
 
 load('//' + Constants.REACT_APP_OVE_HOST + '/ove.js', _ => {
     if (window.OVE) {
-        console.log('Rendering React DOM');
-        ReactDOM.render(<Launcher />, document.getElementById('root'));
+        const log = window.OVE.Utils.Logger(Constants.COMPONENT_NAME, Constants.LOG_LEVEL);
+
+        log.debug('Rendering React DOM');
+        ReactDOM.render(<Launcher log={log} />, document.getElementById('root'));
     } else {
         console.error('[FATAL] Unable to connect to OVE Core');
         ReactDOM.render(

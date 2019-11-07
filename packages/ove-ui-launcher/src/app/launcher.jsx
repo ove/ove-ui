@@ -1,6 +1,7 @@
 /* jshint ignore:start */
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import SelectApp from '../steps/SelectApp';
 import SpaceAndGeometry from '../steps/SpaceAndGeometry';
 import StateConfiguration from '../steps/StateConfiguration';
@@ -16,6 +17,7 @@ export default class Launcher extends Component {
     constructor (props) {
         super(props);
 
+        this.log = props.log;
         this.updateOptions = this.updateOptions.bind(this);
         this.ready = this.ready.bind(this);
 
@@ -87,13 +89,13 @@ export default class Launcher extends Component {
                 <SelectApp updateApp={ev => this.setState({ app: ev.value, state: null, controllerURL: undefined })}
                     selectedApp={this.state.app} />
 
-                <SpaceAndGeometry updateSpace={space => this.setState({ space, controllerURL: undefined })}
+                <SpaceAndGeometry log={this.log} updateSpace={space => this.setState({ space, controllerURL: undefined })}
                     updateGeometry={geometry => this.setState({ geometry, controllerURL: undefined })}
                     updateErrors={geometryErrors => this.setState({ geometryErrors })}
 
                     space={this.state.space} geometry={this.state.geometry} errors={this.state.geometryErrors}/>
 
-                <StateConfiguration updateState={(d) => this.setState({ state: d, controllerURL: undefined })}
+                <StateConfiguration log={this.log} updateState={(d) => this.setState({ state: d, controllerURL: undefined })}
                     updateMode={d => this.setState({ mode: d, controllerURL: undefined })}
                     updateURL={d => this.setState({ url: d, controllerURL: undefined })}
                     updateErrors={d => this.setState({ stateErrors: d })}
@@ -109,7 +111,7 @@ export default class Launcher extends Component {
                     app={this.state.app} space={this.state.space} deleteSections={this.state.deleteSections} showController={this.state.showController} mode={this.state.mode} state={this.state.state} url={this.state.url} config={this.state.config}
                     errors={this.state.optionsErrors} />
 
-                <Confirm updateControllerURL={controllerURL => this.setState({ controllerURL })}
+                <Confirm log={this.log} updateControllerURL={controllerURL => this.setState({ controllerURL })}
                     updateOS={os => this.setState({ os })}
                     app={this.state.app} space={this.state.space} geometry={this.state.geometry} mode={this.state.mode} config={this.state.config} state={this.state.state} deleteSections={this.state.deleteSections} showController={this.state.showController} os={this.state.os} ready={this.ready()}/>
 
@@ -119,3 +121,7 @@ export default class Launcher extends Component {
         );
     }
 }
+
+Launcher.propTypes = {
+    log: PropTypes.object.isRequired
+};

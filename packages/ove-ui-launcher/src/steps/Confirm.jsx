@@ -60,12 +60,12 @@ const Confirm = (props) => {
                         props.updateControllerURL(undefined);
                     }
                     resolve(true);
-                }).catch(error => console.log(error));
+                }).catch(this.props.log.error);
             };
             if (props.deleteSections) {
                 axios.delete('//' + Constants.REACT_APP_OVE_HOST + '/sections?space=' + props.space).then(_ => {
                     setTimeout(launchApp, Constants.SECTION_DELETE_WAIT_TIME);
-                }).catch(error => console.log(error));
+                }).catch(this.props.log.error);
             } else {
                 launchApp();
             }
@@ -141,6 +141,7 @@ const Confirm = (props) => {
 };
 
 Confirm.propTypes = {
+    log: PropTypes.object.isRequired,
     updateControllerURL: PropTypes.func.isRequired,
     updateOS: PropTypes.func.isRequired,
 
