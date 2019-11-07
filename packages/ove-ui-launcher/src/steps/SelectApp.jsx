@@ -13,10 +13,10 @@ const SelectApp = ({ selectedApp, updateApp, appAvailable }) => {
     });
 
     let error;
-    if (!selectedApp){
-        error = {content: 'You must select an application', pointing: 'below' };
+    if (!selectedApp) {
+        error = { content: 'You must select an application', pointing: 'below' };
     } else if (!appAvailable) {
-        error = {content: 'This application is not available', pointing: 'below' };
+        error = { content: 'This application is not available', pointing: 'below' };
     }
 
     return (
