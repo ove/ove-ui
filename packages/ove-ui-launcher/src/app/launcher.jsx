@@ -2,82 +2,127 @@
 // JSHint cannot deal with React.
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import StepZilla from 'react-stepzilla';
-import 'react-stepzilla/src/css/main.css';
-import Constants from '../constants/launcher';
 import SelectApp from '../steps/SelectApp';
 import SpaceAndGeometry from '../steps/SpaceAndGeometry';
 import StateConfiguration from '../steps/StateConfiguration';
 import Review from '../steps/Review';
 import Confirm from '../steps/Confirm';
 import Complete from '../steps/Complete';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/css/bootstrap-theme.min.css';
+
 import './launcher.css';
+import 'semantic-ui-css/semantic.min.css';
+import Constants from '../constants/launcher';
 
 export default class Launcher extends Component {
     constructor (props) {
         super(props);
-        this.store = JSON.parse(JSON.stringify(props));
-        delete this.store.log;
+
         this.log = props.log;
-        this.log.debug('Successfully loaded React App');
-    }
+        this.updateOptions = this.updateOptions.bind(this);
+        this.ready = this.ready.bind(this);
 
-    componentDidMount () { }
+        this.state = {
+            app: '',
+            ready: false,
 
-    componentWillUnmount () { }
+            os: Constants.OS.UNIX,
+            showController: true,
+            deleteSections: false,
 
-    getStore () {
-        this.log.debug('Retrieving store', this.store);
-        return this.store;
-    }
+            geometry: { x: '', y: '', w: '', h: '' },
+            geometryErrors: { x: null, y: null, w: null, h: null },
 
-    updateStore (update) {
-        this.log.debug('Updating store with:', update);
-        this.store = {
-            ...this.store,
-            ...update
+            stateErrors: { existingState: null, newState: null },
+            mode: Constants.Mode.NEW,
+
+            optionsErrors: { configError: null },
+
+            reviewErrors: { configError: null },
+            config: ''
         };
-        this.props.dispatch({
-            type: Constants.UPDATE,
-            ...this.store,
-            ...update
-        });
+
+        this.state = { ...this.state, ...(JSON.parse(window.localStorage.getItem('launcherState'))), appAvailable: undefined };
+
+        const url = (new URL(document.location)).searchParams.get('url');
+        if (url) {
+            this.state.url = url;
+        }
+
+        const app = (new URL(document.location)).searchParams.get('app');
+        if (app) {
+            this.state.app = app;
+        }
+    }
+
+    // Callbacks called by each step
+    updateOptions (state) {
+        const errors = state.errors || {}; // ?
+        const ready = Object.values(errors).every(d => !d);
+        this.setState({ config: state.config,
+            deleteSections: state.deleteSections,
+            showController: state.showController,
+            optionsReady: ready,
+            controllerURL: undefined });
+    }
+
+    ready () {
+        const stateReady = ((this.state.mode === Constants.Mode.EXISTING) && !this.state.stateErrors.existingState) || ((this.state.mode === Constants.Mode.NEW) && !this.state.stateErrors.newState);
+        const geometryReady = Object.values(this.state.geometryErrors).every(d => !d);
+        const optionsReady = Object.values(this.state.optionsErrors).every(d => !d);
+
+        const appsWithoutStates = [Constants.APPS.ALIGNMENT.name, Constants.APPS.WHITEBOARD.name, Constants.APPS.REPLICATOR.name, Constants.APPS.CONTROLLER.name];
+        const noStateRequired = appsWithoutStates.includes(this.state.app);
+
+        return !!this.state.app && geometryReady && optionsReady && (stateReady || noStateRequired);
     }
 
     render () {
-        const steps =
-            [
-                { name: 'Select Application', component: <SelectApp getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
-                { name: 'Define Geometry', component: <SpaceAndGeometry getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
-                { name: 'Configure State', component: <StateConfiguration getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
-                { name: 'Review Configuration', component: <Review getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
-                { name: 'Confirm Operation', component: <Confirm getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> },
-                { name: 'Complete', component: <Complete getLogger={() => (this.log)} getStore={() => (this.getStore())} updateStore={(u) => { this.updateStore(u); }} /> }
-            ];
-        steps.forEach(e => {
-            this.log.debug('Loading step:', e.name);
-        });
+        window.localStorage.setItem('launcherState', JSON.stringify(this.state));
+
         return (
+            <>
+            <h1>OVE Application Launcher</h1>
+                <p>Configured to launch applications into the OVE instance at <a href={Constants.REACT_APP_OVE_HOST} target="_blank"
+                    rel="noopener noreferrer"><code>{Constants.REACT_APP_OVE_HOST}</code></a>.</p>
+
             <div className='form'>
-                <div className='step-progress'>
-                    <StepZilla
-                        steps={steps}
-                        preventEnterSubmission={true}
-                        nextTextOnFinalActionStep={Constants.LAUNCH}
-                        startAtStep={window.sessionStorage.getItem(Constants.STEP) ? parseFloat(window.sessionStorage.getItem(Constants.STEP)) : 0}
-                        onStepChange={(step) => window.sessionStorage.setItem(Constants.STEP, step)}
-                        nextButtonCls={Constants.NEXT_BUTTON_CLASS}
-                        backButtonCls={Constants.BACK_BUTTON_CLASS}
-                    />
-                </div>
+                <SelectApp updateApp={ev => this.setState({ app: ev.value, state: null, controllerURL: undefined })}
+                    selectedApp={this.state.app} appAvailable={this.state.appAvailable} />
+
+                <SpaceAndGeometry log={this.log} updateSpace={space => this.setState({ space, controllerURL: undefined })}
+                    updateGeometry={geometry => this.setState({ geometry, controllerURL: undefined })}
+                    updateErrors={geometryErrors => this.setState({ geometryErrors })}
+
+                    space={this.state.space} geometry={this.state.geometry} errors={this.state.geometryErrors}/>
+
+                <StateConfiguration log={this.log} updateState={(d) => this.setState({ state: d, controllerURL: undefined })}
+                    updateMode={d => this.setState({ mode: d, controllerURL: undefined })}
+                    updateURL={d => this.setState({ url: d, controllerURL: undefined })}
+                    updateErrors={d => this.setState({ stateErrors: d })}
+                    app={this.state.app} mode={this.state.mode} state={this.state.state} url={this.state.url} errors={this.state.stateErrors} />
+
+                <Review updateOptions={this.updateOptions}
+                    updateDeleteSections={deleteSections => this.setState({ deleteSections })}
+                    updateShowController={showController => this.setState({ showController })}
+                    updateErrors={optionsErrors => this.setState({ optionsErrors })}
+                    updateConfig={config => this.setState({ config })}
+                    app={this.state.app} space={this.state.space} deleteSections={this.state.deleteSections} showController={this.state.showController} mode={this.state.mode} state={this.state.state} url={this.state.url} config={this.state.config}
+                    errors={this.state.optionsErrors} />
+
+                <Confirm log={this.log} updateControllerURL={controllerURL => this.setState({ controllerURL })}
+                    updateOS={os => this.setState({ os })}
+                    app={this.state.app} space={this.state.space} geometry={this.state.geometry} mode={this.state.mode}
+                    config={this.state.config} state={this.state.state} deleteSections={this.state.deleteSections}
+                    showController={this.state.showController} os={this.state.os} ready={this.ready()}
+                    appAvailable={this.state.appAvailable} updateAppAvailability={appAvailable => this.setState({ appAvailable })} />
+
+                <Complete app={this.state.app} space={this.state.space} controllerURL={this.state.controllerURL} />
             </div>
+            </>
         );
     }
 }
 
 Launcher.propTypes = {
-    dispatch: PropTypes.func.isRequired,
     log: PropTypes.object.isRequired
 };

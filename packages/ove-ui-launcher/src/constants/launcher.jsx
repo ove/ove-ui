@@ -33,17 +33,9 @@ const getOVEHost = function () {
 };
 
 export default {
-    UPDATE: 'UPDATE',
-    STEP: 'step',
-    PENDING: 'pending',
-    LAUNCH: 'Launch',
-    BLACKLIST: ['log', 'spaces', 'states'],
     COMPONENT_NAME: 'launcher',
     LOG_LEVEL: +(process.env.LOG_LEVEL || 5), // Level (from 0 - 6): 5 == TRACE
-    SECTION_CONTROLLER: '.section-controller',
 
-    SPACE_NAMES_LOADED_TEST_TIME: 1000, // Unit: milliseconds
-    SPACE_NAMES_LOADED_INITIAL_WAIT_TIME: 2000, // Unit: milliseconds
     SECTION_DELETE_WAIT_TIME: 1000, // Unit: milliseconds
 
     REACT_APP_OVE_HOST: getOVEHost(),
@@ -53,9 +45,6 @@ export default {
     REACT_APP_OVE_APP: function (appName) {
         return getOVEHost() + '/app/' + appName.toLowerCase();
     },
-
-    NEXT_BUTTON_CLASS: 'btn btn-prev btn-primary btn-md pull-right',
-    BACK_BUTTON_CLASS: 'btn btn-next btn-primary btn-md pull-left',
 
     DEFAULT_HEIGHT: 2424, // Unit: pixels
     DEFAULT_WIDTH: 4320, // Unit: pixels
@@ -107,22 +96,22 @@ export default {
     /**************************************************************
                             Enums
     **************************************************************/
-    App: {
-        ALIGNMENT: 'alignment',
-        AUDIO: 'audio',
-        CHARTS: 'charts',
-        CONTROLLER: 'controller',
-        HTML: 'html',
-        IMAGES: 'images',
-        MAPS: 'maps',
-        NETWORKS: 'networks',
-        PDF: 'pdf',
-        QR: 'qrcode',
-        REPLICATOR: 'replicator',
-        SVG: 'svg',
-        VIDEOS: 'videos',
-        WEBRTC: 'webrtc',
-        WHITEBOARD: 'whiteboard'
+    APPS: {
+        ALIGNMENT: { name: 'alignment', label: 'Alignment' },
+        AUDIO: { name: 'audio', label: 'Audio' },
+        CHARTS: { name: 'charts', label: 'Charts' },
+        CONTROLLER: { name: 'controller', label: 'Controller' },
+        HTML: { name: 'html', label: 'HTML' },
+        IMAGES: { name: 'images', label: 'Images' },
+        MAPS: { name: 'maps', label: 'Maps' },
+        NETWORKS: { name: 'networks', label: 'Networks' },
+        PDF: { name: 'pdf', label: 'PDF' },
+        QR: { name: 'qrcode', label: 'QR Code' },
+        REPLICATOR: { name: 'replicator', label: 'Replicator' },
+        SVG: { name: 'svg', label: 'SVG' },
+        VIDEOS: { name: 'videos', label: 'Videos' },
+        WEBRTC: { name: 'webrtc', label: 'WebRTC' },
+        WHITEBOARD: { name: 'whiteboard', label: 'Whiteboard' }
     },
 
     Mode: {
