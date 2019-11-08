@@ -112,8 +112,8 @@ const Confirm = (props) => {
         theme: Constants.CodeMirror.THEME
     };
 
-    const osChoices = [{ key: 'unix', value: Constants.OS.UNIX, text: 'Linux/Mac' }, {
-        key: 'windows',
+    const osChoices = [{ key: Constants.OS.UNIX, value: Constants.OS.UNIX, text: 'Linux/Mac' }, {
+        key: Constants.OS.WINDOWS,
         value: Constants.OS.WINDOWS,
         text: 'Windows'
     }];

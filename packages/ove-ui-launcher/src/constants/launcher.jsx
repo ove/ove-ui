@@ -39,12 +39,12 @@ export default {
     SECTION_DELETE_WAIT_TIME: 1000, // Unit: milliseconds
 
     REACT_APP_OVE_HOST: getOVEHost(),
-
     REACT_APP_OVE_UI_PREVIEW: getOVEHost() + '/ui/preview',
-
     REACT_APP_OVE_APP: function (appName) {
         return getOVEHost() + '/app/' + appName.toLowerCase();
     },
+
+    LOCAL_STORAGE_KEY: 'launcherState',
 
     DEFAULT_HEIGHT: 2424, // Unit: pixels
     DEFAULT_WIDTH: 4320, // Unit: pixels
@@ -122,6 +122,11 @@ export default {
     OS: {
         UNIX: 'unix',
         WINDOWS: 'windows'
+    },
+
+    Pointing: {
+        ABOVE: 'above',
+        BELOW: 'below'
     },
 
     CodeMirror: {

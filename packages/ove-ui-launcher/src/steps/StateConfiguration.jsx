@@ -110,7 +110,7 @@ export default class StateConfiguration extends Component {
                         label="Existing state"
                         value={this.props.state}
                         onChange={(_, d) => this.props.updateState(d.value)}
-                        error={this.props.errors.existingState && { content: this.props.errors.existingState, pointing: 'above' }}
+                        error={this.props.errors.existingState && { content: this.props.errors.existingState, pointing: Constants.Pointing.ABOVE }}
                         width={6}
                     />
                     }
@@ -124,7 +124,7 @@ export default class StateConfiguration extends Component {
                                 placeholder="Asset URL"
                                 defaultValue={this.props.url}
                                 onChange={ev => this.props.updateURL(ev.target.value)}
-                                error={this.props.errors.newState && { content: this.props.errors.newState, pointing: 'above' }}/>
+                                error={this.props.errors.newState && { content: this.props.errors.newState, pointing: Constants.Pointing.ABOVE }}/>
                         </Form.Group>
                     }
 

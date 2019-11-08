@@ -7,16 +7,15 @@ import Constants from '../constants/launcher';
 import { Divider, Form, Header } from 'semantic-ui-react';
 
 const SelectApp = ({ selectedApp, updateApp, appAvailable }) => {
-    const appOptions = Object.keys(Constants.APPS).map(appName => {
-        const app = Constants.APPS[appName];
+    const appOptions = Object.values(Constants.APPS).map(app => {
         return { key: app.name, value: app.name, text: app.label };
     });
 
     let error;
     if (!selectedApp) {
-        error = { content: 'You must select an application', pointing: 'below' };
-    } else if (!appAvailable) {
-        error = { content: 'This application is not available', pointing: 'below' };
+        error = { content: 'You must select an application', pointing: Constants.Pointing.BELOW };
+    } else if (appAvailable === false) {
+        error = { content: 'This application is not available', pointing: Constants.Pointing.BELOW };
     }
 
     return (

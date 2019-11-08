@@ -139,7 +139,7 @@ export default class SpaceAndGeometry extends Component {
                     <Form.Group>
                         <Form.Select options={spaceOptions}
                             label="Space"
-                            error={this.props.errors.space && { content: this.props.errors.space, pointing: 'above' }}
+                            error={this.props.errors.space && { content: this.props.errors.space, pointing: Constants.Pointing.ABOVE }}
                             onChange={(_, d) => this.props.updateSpace(d.value)}
                             defaultValue={this.props.space}
                             width={6}
@@ -152,7 +152,7 @@ export default class SpaceAndGeometry extends Component {
 
                     <Form.Group>
                         <Form.Input label='x'
-                            error={this.props.errors.x && { content: this.props.errors.x, pointing: 'above' }}
+                            error={this.props.errors.x && { content: this.props.errors.x, pointing: Constants.Pointing.ABOVE }}
                             autoComplete="off"
                             type="number"
                             placeholder="0"
@@ -163,7 +163,7 @@ export default class SpaceAndGeometry extends Component {
                             width={6}/>
 
                         <Form.Input label='y'
-                            error={this.props.errors.y && { content: this.props.errors.y, pointing: 'above' }}
+                            error={this.props.errors.y && { content: this.props.errors.y, pointing: Constants.Pointing.ABOVE }}
                             autoComplete="off"
                             type="number"
                             placeholder="0"
@@ -175,7 +175,7 @@ export default class SpaceAndGeometry extends Component {
                     </Form.Group>
                     <Form.Group>
                         <Form.Input label="width"
-                            error={this.props.errors.w && { content: this.props.errors.w, pointing: 'above' }}
+                            error={this.props.errors.w && { content: this.props.errors.w, pointing: Constants.Pointing.ABOVE }}
                             autoComplete="off"
                             type="number"
                             placeholder={bounds ? bounds.w : Constants.DEFAULT_WIDTH}
@@ -185,7 +185,7 @@ export default class SpaceAndGeometry extends Component {
                             onChange={ev => this.props.updateGeometry({ ...this.props.geometry, w: ev.target.value })}
                             width={6}/>
                         <Form.Input label="height"
-                            error={this.props.errors.h && { content: this.props.errors.h, pointing: 'above' }}
+                            error={this.props.errors.h && { content: this.props.errors.h, pointing: Constants.Pointing.ABOVE }}
                             autoComplete="off"
                             type="number"
                             placeholder={bounds ? bounds.h : Constants.DEFAULT_HEIGHT}

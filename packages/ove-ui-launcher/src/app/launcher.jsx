@@ -41,17 +41,31 @@ export default class Launcher extends Component {
             config: ''
         };
 
-        this.state = { ...this.state, ...(JSON.parse(window.localStorage.getItem('launcherState'))), appAvailable: undefined };
+        this.state = { ...this.state, ...(JSON.parse(window.localStorage.getItem(Constants.LOCAL_STORAGE_KEY))), appAvailable: undefined };
 
         const url = (new URL(document.location)).searchParams.get('url');
         if (url) {
+            this.log.debug('Setting URL:', url);
             this.state.mode = Constants.Mode.NEW;
             this.state.url = url;
         }
 
-        const app = (new URL(document.location)).searchParams.get('app');
+        let app = (new URL(document.location)).searchParams.get('app');
         if (app) {
-            this.state.app = app;
+            let foundApp = false;
+            app = app.toLowerCase();
+            Object.values(Constants.APPS).forEach(a => {
+                foundApp = foundApp || a.name === app;
+            });
+            if (foundApp) {
+                this.log.debug('Setting App:', app);
+                this.state.app = app;
+            } else {
+                // The user can still select the correct app, so this is a mere warning.
+                this.log.warn('Got invalid App name:', app);
+                this.state.app = '';
+                this.state.state = undefined;
+            }
         }
     }
 
@@ -78,7 +92,7 @@ export default class Launcher extends Component {
     }
 
     render () {
-        window.localStorage.setItem('launcherState', JSON.stringify(this.state));
+        window.localStorage.setItem(Constants.LOCAL_STORAGE_KEY, JSON.stringify(this.state));
 
         return (
             <>
