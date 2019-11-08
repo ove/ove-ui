@@ -45,6 +45,7 @@ export default class Launcher extends Component {
 
         const url = (new URL(document.location)).searchParams.get('url');
         if (url) {
+            this.state.mode = Constants.Mode.NEW;
             this.state.url = url;
         }
 
