@@ -37,7 +37,9 @@ export default class StateConfiguration extends Component {
                 urlObj = false;
             }
 
-            if (!url) {
+            if (!url && this.props.app === Constants.APPS.MAPS.name){
+                errors.newState = null;
+            } else if (!url) {
                 errors.newState = 'You must enter a URL';
             } else if (!Constants.VALID_URL_REGEX.test(this.props.url) || !urlObj) {
                 errors.newState = 'Invalid URL';
