@@ -28,7 +28,10 @@ const Confirm = (props) => {
     const constructPayload = (props) => {
         let payload = {
             space: props.space,
-            ...props.geometry,
+            x: parseInt(props.geometry.x),
+            y: parseInt(props.geometry.y),
+            w: parseInt(props.geometry.w),
+            h: parseInt(props.geometry.h),
             app: {
                 url: 'http://' + Constants.REACT_APP_OVE_APP(props.app),
                 states: {}
