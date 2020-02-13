@@ -20,7 +20,7 @@
     "eslint-plugin-node": "8.0.1",
     "eslint-plugin-promise": "4.2.1",
     "eslint-plugin-standard": "4.0.1",
-    "eslint-plugin-jest": "22.21.0",
+    "eslint-plugin-jest": "23.7.0",
     "eslint-plugin-react": "7.18.3",
     "remark": "10.0.1",
     "remark-preset-lint-recommended": "3.0.3"
