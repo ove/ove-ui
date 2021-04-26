@@ -18,7 +18,7 @@
     "little-loader": "0.2.0",
     "react": "16.8.6",
     "react-dom": "16.8.6",
-    "react-redux": "7.0.3",
+    "react-redux": "7.2.4",
     "react-scripts": "3.0.0",
     "redux": "4.0.5",
     "redux-persist": "5.10.0"
