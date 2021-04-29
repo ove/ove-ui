@@ -96,43 +96,43 @@ export default class Launcher extends Component {
 
         return (
             <>
-            <h1>OVE Application Launcher</h1>
+                <h1>OVE Application Launcher</h1>
                 <p>Configured to launch applications into the OVE instance at <a href={Constants.REACT_APP_OVE_HOST} target="_blank"
                     rel="noopener noreferrer"><code>{Constants.REACT_APP_OVE_HOST}</code></a>.</p>
 
-            <div className='form'>
-                <SelectApp updateApp={ev => this.setState({ app: ev.value, state: null, controllerURL: undefined })}
-                    selectedApp={this.state.app} appAvailable={this.state.appAvailable} />
+                <div className='form'>
+                    <SelectApp updateApp={ev => this.setState({ app: ev.value, state: null, controllerURL: undefined })}
+                        selectedApp={this.state.app} appAvailable={this.state.appAvailable} />
 
-                <SpaceAndGeometry log={this.log} updateSpace={space => this.setState({ space, controllerURL: undefined })}
-                    updateGeometry={geometry => this.setState({ geometry, controllerURL: undefined })}
-                    updateErrors={geometryErrors => this.setState({ geometryErrors })}
+                    <SpaceAndGeometry log={this.log} updateSpace={space => this.setState({ space, controllerURL: undefined })}
+                        updateGeometry={geometry => this.setState({ geometry, controllerURL: undefined })}
+                        updateErrors={geometryErrors => this.setState({ geometryErrors })}
 
-                    space={this.state.space} geometry={this.state.geometry} errors={this.state.geometryErrors}/>
+                        space={this.state.space} geometry={this.state.geometry} errors={this.state.geometryErrors}/>
 
-                <StateConfiguration log={this.log} updateState={(d) => this.setState({ state: d, controllerURL: undefined })}
-                    updateMode={d => this.setState({ mode: d, controllerURL: undefined })}
-                    updateURL={d => this.setState({ url: d, controllerURL: undefined })}
-                    updateErrors={d => this.setState({ stateErrors: d })}
-                    app={this.state.app} mode={this.state.mode} state={this.state.state} url={this.state.url} errors={this.state.stateErrors} />
+                    <StateConfiguration log={this.log} updateState={(d) => this.setState({ state: d, controllerURL: undefined })}
+                        updateMode={d => this.setState({ mode: d, controllerURL: undefined })}
+                        updateURL={d => this.setState({ url: d, controllerURL: undefined })}
+                        updateErrors={d => this.setState({ stateErrors: d })}
+                        app={this.state.app} mode={this.state.mode} state={this.state.state} url={this.state.url} errors={this.state.stateErrors} />
 
-                <Review updateOptions={this.updateOptions}
-                    updateDeleteSections={deleteSections => this.setState({ deleteSections })}
-                    updateShowController={showController => this.setState({ showController })}
-                    updateErrors={optionsErrors => this.setState({ optionsErrors })}
-                    updateConfig={config => this.setState({ config })}
-                    app={this.state.app} space={this.state.space} deleteSections={this.state.deleteSections} showController={this.state.showController} mode={this.state.mode} state={this.state.state} url={this.state.url} config={this.state.config}
-                    errors={this.state.optionsErrors} />
+                    <Review updateOptions={this.updateOptions}
+                        updateDeleteSections={deleteSections => this.setState({ deleteSections })}
+                        updateShowController={showController => this.setState({ showController })}
+                        updateErrors={optionsErrors => this.setState({ optionsErrors })}
+                        updateConfig={config => this.setState({ config })}
+                        app={this.state.app} space={this.state.space} deleteSections={this.state.deleteSections} showController={this.state.showController} mode={this.state.mode} state={this.state.state} url={this.state.url} config={this.state.config}
+                        errors={this.state.optionsErrors} />
 
-                <Confirm log={this.log} updateControllerURL={controllerURL => this.setState({ controllerURL })}
-                    updateOS={os => this.setState({ os })}
-                    app={this.state.app} space={this.state.space} geometry={this.state.geometry} mode={this.state.mode}
-                    config={this.state.config} state={this.state.state} deleteSections={this.state.deleteSections}
-                    showController={this.state.showController} os={this.state.os} ready={this.ready()}
-                    appAvailable={this.state.appAvailable} updateAppAvailability={appAvailable => this.setState({ appAvailable })} />
+                    <Confirm log={this.log} updateControllerURL={controllerURL => this.setState({ controllerURL })}
+                        updateOS={os => this.setState({ os })}
+                        app={this.state.app} space={this.state.space} geometry={this.state.geometry} mode={this.state.mode}
+                        config={this.state.config} state={this.state.state} deleteSections={this.state.deleteSections}
+                        showController={this.state.showController} os={this.state.os} ready={this.ready()}
+                        appAvailable={this.state.appAvailable} updateAppAvailability={appAvailable => this.setState({ appAvailable })} />
 
-                <Complete app={this.state.app} space={this.state.space} controllerURL={this.state.controllerURL} />
-            </div>
+                    <Complete app={this.state.app} space={this.state.space} controllerURL={this.state.controllerURL} />
+                </div>
             </>
         );
     }

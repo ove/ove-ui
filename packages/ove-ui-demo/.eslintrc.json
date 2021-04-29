@@ -29,5 +29,10 @@
         }],
         "semi": ["error", "always"],
         "react/no-string-refs": [0, {"noTemplateLiterals": false}]
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
     }
 }
