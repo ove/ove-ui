@@ -19,8 +19,8 @@
     "little-loader": "0.2.0",
     "react": "16.14.0",
     "react-dom": "16.14.0",
-    "react-router-dom": "5.0.0",
-    "react-scripts": "3.4.4"
+    "react-scripts": "3.4.4",
+    "react-router-dom": "5.2.0"
   },
   "scripts": {
     "start": "PORT=8284 node -r dotenv/config server.js dotenv_config_path=.env",
