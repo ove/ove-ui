@@ -28,8 +28,9 @@
   "scripts": {
     "start": "PORT=8281 node -r dotenv/config server.js dotenv_config_path=.env",
     "start:dev": "OVE_HOST='localhost:8080' PORT=8281 node -r dotenv/config ../../node_modules/.bin/react-scripts start dotenv_config_path=.env",
+    "start:windows": ".\\\"node_modules/.bin/react-scripts\" start",
     "build": "react-scripts build",
-    "test": "react-scripts test --no-watch",
+    "test": "react-scripts test --watchAll=false",
     "lint": "eslint src/. --ext .jsx"
   },
   "eslintConfig": {
