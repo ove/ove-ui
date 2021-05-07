@@ -12,7 +12,7 @@
     "codemirror": "5.61.0",
     "axios": "0.21.1",
     "cors": "2.8.5",
-    "dotenv": "8.2.0",
+    "dotenv": "8.6.0",
     "express": "4.17.1",
     "jquery": "3.5.0",
     "js-beautify": "1.10.3",
