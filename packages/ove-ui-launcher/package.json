@@ -15,7 +15,7 @@
     "dotenv": "8.2.0",
     "express": "4.17.1",
     "jquery": "3.5.0",
-    "js-beautify": "1.10.3",
+    "js-beautify": "1.13.13",
     "little-loader": "0.2.0",
     "react-codemirror2": "7.2.1",
     "react": "16.14.0",
