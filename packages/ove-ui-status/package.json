@@ -8,24 +8,25 @@
   "author": "Senaka Fernando <senaka.fernando15@imperial.ac.uk>",
   "license": "MIT",
   "dependencies": {
-    "@fortawesome/fontawesome-free": "5.8.1",
-    "axios": "0.19.2",
-    "bootstrap": "4.3.1",
+    "@fortawesome/fontawesome-free": "5.15.3",
+    "bootstrap": "4.6.0",
+    "axios": "0.21.1",
     "cors": "2.8.5",
     "dotenv": "8.2.0",
     "express": "4.17.1",
-    "github-markdown-css": "3.0.1",
-    "jquery": "3.4.1",
+    "github-markdown-css": "4.0.0",
+    "jquery": "3.5.0",
     "little-loader": "0.2.0",
-    "react": "16.8.6",
-    "react-dom": "16.8.6",
-    "react-scripts": "3.0.0"
+    "react": "16.14.0",
+    "react-dom": "16.14.0",
+    "react-scripts": "3.4.4"
   },
   "scripts": {
     "start": "PORT=8283 node -r dotenv/config server.js dotenv_config_path=.env",
     "start:dev": "OVE_HOST='localhost:8080' PORT=8283 node -r dotenv/config ../../node_modules/.bin/react-scripts start dotenv_config_path=.env",
+    "start:windows": ".\\\"node_modules/.bin/react-scripts\" start dotenv_config_path=.env",
     "build": "react-scripts build",
-    "test": "react-scripts test --no-watch",
+    "test": "react-scripts test --watchAll=false",
     "lint": "eslint src/. --ext .jsx"
   },
   "eslintConfig": {

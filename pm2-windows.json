@@ -5,9 +5,12 @@
         "cwd": "./packages/ove-ui-launcher",
         "kill_timeout": 3000,
         "restart_delay": 3000,
-        "script": "-r dotenv/config server.js dotenv_config_path=.env",
+        "script": "server.js",
         "env": {
-            "PORT": "8281"
+          "PUBLIC_URL": "//__OVEHOST__/ui/demo",
+          "OVE_HOST": "localhost:8080",
+          "PORT": 8281,
+          "REACT_APP_OVE_HOST": "$OVE_HOST"
         }
     },
     {
@@ -15,9 +18,12 @@
         "cwd": "./packages/ove-ui-preview",
         "kill_timeout": 3000,
         "restart_delay": 3000,
-        "script": "-r dotenv/config server.js dotenv_config_path=.env",
+        "script": "server.js",
         "env": {
-            "PORT": "8282"
+          "PUBLIC_URL": "//__OVEHOST__/ui/demo",
+          "OVE_HOST": "localhost:8080",
+          "PORT": 8282,
+          "REACT_APP_OVE_HOST": "$OVE_HOST"
         }
     },
     {
@@ -25,9 +31,12 @@
         "cwd": "./packages/ove-ui-status",
         "kill_timeout": 3000,
         "restart_delay": 3000,
-        "script": "-r dotenv/config server.js dotenv_config_path=.env",
+        "script": "server.js",
         "env": {
-            "PORT": "8283"
+          "PUBLIC_URL": "//__OVEHOST__/ui/demo",
+          "OVE_HOST": "localhost:8080",
+          "PORT": 8283,
+          "REACT_APP_OVE_HOST": "$OVE_HOST"
         }
     },
     {
@@ -35,9 +44,12 @@
         "cwd": "./packages/ove-ui-demo",
         "kill_timeout": 3000,
         "restart_delay": 3000,
-        "script": "-r dotenv/config server.js dotenv_config_path=.env",
+        "script": "server.js",
         "env": {
-            "PORT": "8284"
+          "PUBLIC_URL": "//__OVEHOST__/ui/demo",
+          "OVE_HOST": "localhost:8080",
+          "PORT": 8284,
+          "REACT_APP_OVE_HOST": "$OVE_HOST"
         }
     }
   ]

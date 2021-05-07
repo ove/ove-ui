@@ -8,26 +8,27 @@
   "author": "Senaka Fernando <senaka.fernando15@imperial.ac.uk>",
   "license": "MIT",
   "dependencies": {
-    "axios": "0.19.2",
-    "bootstrap": "3.4.1",
+    "bootstrap": "4.6.0",
+    "axios": "0.21.1",
     "cors": "2.8.5",
-    "d3": "5.15.0",
+    "d3": "5.16.0",
     "dotenv": "8.2.0",
     "express": "4.17.1",
-    "jquery": "3.4.1",
+    "jquery": "3.5.0",
     "little-loader": "0.2.0",
-    "react": "16.8.6",
-    "react-dom": "16.8.6",
-    "react-redux": "7.0.3",
-    "react-scripts": "3.0.0",
+    "react": "16.14.0",
+    "react-dom": "16.14.0",
+    "react-redux": "7.2.4",
+    "react-scripts": "3.4.4",
     "redux": "4.0.5",
-    "redux-persist": "5.10.0"
+    "redux-persist": "6.0.0"
   },
   "scripts": {
     "start": "PORT=8282 node -r dotenv/config server.js dotenv_config_path=.env",
     "start:dev": "OVE_HOST='localhost:8080' PORT=8282 node -r dotenv/config ../../node_modules/.bin/react-scripts start dotenv_config_path=.env",
+    "start:windows": ".\\\"node_modules/.bin/react-scripts\" start",
     "build": "react-scripts build",
-    "test": "react-scripts test --no-watch",
+    "test": "react-scripts test --watchAll=false",
     "lint": "eslint src/. --ext .jsx && eslint src/. --ext .js"
   },
   "eslintConfig": {

@@ -26,6 +26,11 @@
         }],
         "quotes": [1, "single"],
         "semi": ["error", "always"],
-        "react/no-string-refs": ["false"]
+        "react/no-string-refs": [0, {"noTemplateLiterals": false}]
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
     }
 }
