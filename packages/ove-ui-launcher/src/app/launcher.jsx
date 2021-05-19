@@ -114,7 +114,7 @@ export default class Launcher extends Component {
                         updateMode={d => this.setState({ mode: d, controllerURL: undefined })}
                         updateURL={d => this.setState({ url: d, controllerURL: undefined })}
                         updateErrors={d => this.setState({ stateErrors: d })}
-                        app={this.state.app} mode={this.state.mode} state={this.state.state} url={this.state.url} errors={this.state.stateErrors} />
+                        app={this.state.app} mode={this.state.mode} state={this.state.state} url={this.state.url} geometry={this.state.geometry} errors={this.state.stateErrors} />
 
                     <Review updateOptions={this.updateOptions}
                         updateDeleteSections={deleteSections => this.setState({ deleteSections })}
