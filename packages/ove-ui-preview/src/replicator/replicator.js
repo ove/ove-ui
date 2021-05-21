@@ -233,8 +233,8 @@ export default class Replicator {
                 };
                 log.debug('Translation is limited to a maximum of:', maxTranslate);
                 // We are only interested in translations and not in scaling.
-                d3.select(Constants.CONTROL_CANVAS).call(d3.zoom().scaleExtent([1, 1.000001]).on('zoom', function () {
-                    const event = d3.event.transform;
+                d3.select(Constants.CONTROL_CANVAS).call(d3.zoom().scaleExtent([1, 1.000001]).on('zoom', function (e) {
+                    const event = e.transform;
                     log.trace('Got D3 event with, k:', event.k, 'x:', event.x, 'y:', event.y);
                     const x = Math.max(-maxTranslate.x, Math.min(event.x, 0));
                     const y = Math.max(-maxTranslate.y, Math.min(event.y, 0));
