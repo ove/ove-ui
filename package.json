@@ -14,7 +14,7 @@
     "start:dev": "lerna exec -- npm run start:dev"
   },
   "devDependencies": {
-    "@babel/core": "7.13.16",
+    "@babel/core": "7.14.3",
     "eslint-config-standard": "12.0.0",
     "eslint-plugin-jest": "23.20.0",
     "eslint-plugin-node": "11.1.0",
