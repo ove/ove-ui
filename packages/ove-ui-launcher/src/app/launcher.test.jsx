@@ -4,9 +4,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Launcher from './launcher';
 
-document.createRange = () => {
-    const range = new Range();
+const range = document.createRange();
 
+document.createRange = () => {
     range.getBoundingClientRect = jest.fn();
 
     range.getClientRects = jest.fn(() => ({
