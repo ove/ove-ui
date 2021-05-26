@@ -4,6 +4,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Launcher from './launcher';
 
+const range = document.createRange();
+
+document.createRange = () => {
+    range.getBoundingClientRect = jest.fn();
+
+    range.getClientRects = jest.fn(() => ({
+        item: () => null,
+        length: 0
+    }));
+
+    return range;
+};
+
 // Mocking required for codemirror (see https://discuss.codemirror.net/t/working-in-jsdom-or-node-js-natively/138/6)
 global.document.body.createTextRange = function () {
     return {

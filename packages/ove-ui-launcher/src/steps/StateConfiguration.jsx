@@ -25,8 +25,12 @@ export default class StateConfiguration extends Component {
 
         let errors = { existingState: null, newState: null };
 
-        if (this.props.mode === Constants.Mode.EXISTING && !this.props.state) {
-            errors.existingState = 'You must select a state';
+        if (this.props.mode === Constants.Mode.EXISTING) {
+            if (!this.props.state) {
+                errors.existingState = 'You must select a state';
+            } else if ((this.props.state === 'SigmaSample' || this.props.state === 'LesMiserables') && (this.props.geometry.h > 1616 || this.props.geometry.w > 2880)) {
+                errors.existingState = 'Must display in resolution <= 2880x1616, currently displaying in - ' + this.props.geometry.w.toString() + 'x' + this.props.geometry.h.toString();
+            }
         } else if (this.props.mode === Constants.Mode.NEW) {
             const url = this.props.url;
 
@@ -145,6 +149,7 @@ StateConfiguration.propTypes = {
     mode: PropTypes.oneOf([Constants.Mode.EXISTING, Constants.Mode.NEW]),
     state: PropTypes.string,
     url: PropTypes.string,
+    geometry: PropTypes.shape({ x: PropTypes.string, y: PropTypes.string, w: PropTypes.string, h: PropTypes.string }),
 
     errors: PropTypes.shape({ newState: PropTypes.string, existingState: PropTypes.string })
 

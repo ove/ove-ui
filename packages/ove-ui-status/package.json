@@ -9,17 +9,17 @@
   "license": "MIT",
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.15.3",
-    "bootstrap": "4.6.0",
+    "bootstrap": "5.0.1",
     "axios": "0.21.1",
     "cors": "2.8.5",
-    "dotenv": "8.2.0",
+    "dotenv": "9.0.2",
     "express": "4.17.1",
     "github-markdown-css": "4.0.0",
-    "jquery": "3.5.0",
+    "jquery": "3.6.0",
     "little-loader": "0.2.0",
-    "react": "16.14.0",
-    "react-dom": "16.14.0",
-    "react-scripts": "3.4.4"
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-scripts": "4.0.3"
   },
   "scripts": {
     "start": "PORT=8283 node -r dotenv/config server.js dotenv_config_path=.env",
