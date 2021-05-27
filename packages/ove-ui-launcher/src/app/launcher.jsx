@@ -30,9 +30,12 @@ export default class Launcher extends Component {
             deleteSections: false,
 
             geometry: { x: '', y: '', w: '', h: '' },
-            geometryErrors: { x: null, y: null, w: null, h: null },
+            geometryErrors: { x: null, y: null, w: null, h: null, space: null, sectionNo: null, noSections: null },
+            geoCache: { x: '', y: '', w: '', h: '' },
 
             showSize: 'No',
+            sectionNo: '1',
+            noSections: '1',
 
             stateErrors: { existingState: null, newState: null },
             mode: Constants.Mode.NEW,
@@ -110,8 +113,13 @@ export default class Launcher extends Component {
                         updateGeometry={geometry => this.setState({ geometry, controllerURL: undefined })}
                         updateErrors={geometryErrors => this.setState({ geometryErrors })}
                         updateShowSize={showSize => this.setState({ showSize })}
+                        updateGeoCache={geoCache => this.setState({ geoCache })}
+                        updateSectionNo={sectionNo => this.setState({ sectionNo })}
+                        updateNoSections={noSections => this.setState({ noSections })}
 
-                        space={this.state.space} geometry={this.state.geometry} errors={this.state.geometryErrors} showSize={this.state.showSize}/>
+                        space={this.state.space} geometry={this.state.geometry} errors={this.state.geometryErrors} showSize={this.state.showSize} geoCache={this.state.geoCache}
+                        sectionNo={this.state.sectionNo} noSections={this.state.noSections}
+                    />
 
                     <StateConfiguration log={this.log} updateState={(d) => this.setState({ state: d, controllerURL: undefined })}
                         updateMode={d => this.setState({ mode: d, controllerURL: undefined })}

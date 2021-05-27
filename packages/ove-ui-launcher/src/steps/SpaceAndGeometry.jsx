@@ -14,10 +14,7 @@ export default class SpaceAndGeometry extends Component {
         this.state = {
             spaces: [],
             bounds: { w: null, h: null },
-            errors: { x: null, y: null, w: null, h: null },
-            sectionNo: 1,
-            noSections: 1,
-            geoCache: this.props.geometry
+            errors: { x: null, y: null, w: null, h: null }
         };
 
         this.determineErrors = this.determineErrors.bind(this);
@@ -60,7 +57,7 @@ export default class SpaceAndGeometry extends Component {
         const spaceHeight = currentSpace ? `${this.state.spaces[currentSpace].h}` : '';
         const spaceWidth = currentSpace ? `${this.state.spaces[currentSpace].w}` : '';
 
-        let errors = { space: null, x: null, y: null, w: null, h: null };
+        let errors = { space: null, x: null, y: null, w: null, h: null, noSections: null, sectionNo: null };
 
         if (!currentSpace) {
             errors.space = 'You must select a space';
@@ -98,7 +95,27 @@ export default class SpaceAndGeometry extends Component {
             errors.h = `height must be less than space height (${spaceHeight})`;
         }
 
-        if (errors.x !== this.props.errors.x || errors.y !== this.props.errors.y || errors.w !== this.props.errors.w || errors.h !== this.props.errors.h || errors.space !== this.props.errors.space) {
+        if (!Number.isInteger(parseFloat(this.props.sectionNo))) {
+            errors.sectionNo = 'sectionNo is not provided';
+        } else if (this.props.sectionNo <= 0) {
+            errors.sectionNo = 'sectionNo must be greater than 0';
+        } else if (this.props.sectionNo > this.props.noSections && Number.isInteger(parseFloat(this.props.noSections))) {
+            errors.sectionNo = 'sectionNo must be less than noSections';
+        }
+
+        if (!Number.isInteger(parseFloat(this.props.noSections))) {
+            console.log('No. Sections: ', this.props.noSections);
+            console.log('Type of: ', typeof this.props.noSections);
+            errors.noSections = 'noSections is not provided';
+        } else if (this.props.noSections <= 0) {
+            errors.noSections = 'noSections must be greater than 0';
+        } else if (spaceSelected && this.props.noSections > (!currentSpace ? 0 : this.state.spaces[currentSpace].h)) {
+            errors.noSections = 'noSections cannot be greater than the height';
+        } else if (spaceSelected && this.props.noSections > (!currentSpace ? 0 : this.state.spaces[currentSpace].w)) {
+            errors.noSections = 'noSections cannot be greater than the width';
+        }
+
+        if (errors.x !== this.props.errors.x || errors.y !== this.props.errors.y || errors.w !== this.props.errors.w || errors.h !== this.props.errors.h || errors.space !== this.props.errors.space || errors.sectionNo !== this.props.errors.sectionNo || errors.noSections !== this.props.errors.noSections) {
             this.props.updateErrors(errors);
         }
     }
@@ -118,40 +135,46 @@ export default class SpaceAndGeometry extends Component {
     }
 
     async _updateSectionNo (sectionNo) {
-        await this.setState({ sectionNo });
+        await this.props.updateSectionNo(sectionNo);
         this._updateSize();
     }
 
     _updateShowSize (showSize) {
         this.props.updateShowSize(showSize ? 'Yes' : 'No');
         if (showSize) {
-            const geoCache = this.props.geometry;
-            this.setState({ geoCache });
+            this.props.updateGeoCache(this.props.geometry);
             this._updateSize();
         } else {
-            this.props.updateGeometry(this.state.geoCache);
+            this.props.updateGeometry(this.props.geoCache);
         }
     }
 
     async _updateNoSections (noSections) {
-        await this.setState({ noSections });
+        await this.props.updateNoSections(noSections);
         this._updateSize();
     }
 
     _updateSize () {
         if (!this.props.space) { return; }
-        if (!this.state.sectionNo.toString().match(/^[1-9]\d*$/)) { return; }
-        if (!this.state.noSections.toString().match(/^[1-9]\d*$/)) { return; }
+        if (!this.props.sectionNo.toString().match(/^[1-9]\d*$/)) { return; }
+        if (!this.props.noSections.toString().match(/^[1-9]\d*$/)) { return; }
 
-        const width = this.state.spaces[this.props.space].w / this.state.noSections;
-        const height = this.state.spaces[this.props.space].h / this.state.noSections;
+        const width = this.state.spaces[this.props.space].w / Number(this.props.noSections);
+        const height = this.state.spaces[this.props.space].h / Number(this.props.noSections);
 
         this.props.updateGeometry({
-            x: (width * (this.state.sectionNo - 1)).toString(),
-            y: (height * (this.state.sectionNo - 1)).toString(),
+            x: (width * (Number(this.props.sectionNo) - 1)).toString(),
+            y: (height * (Number(this.props.sectionNo) - 1)).toString(),
             w: width.toString(),
             h: height.toString()
         });
+    }
+
+    async _updateSpace (d) {
+        await this.props.updateSpace(d);
+        if (this.props.showSize === 'Yes') {
+            this._updateSize();
+        }
     }
 
     render () {
@@ -180,7 +203,7 @@ export default class SpaceAndGeometry extends Component {
                         <Form.Select options={spaceOptions}
                             label="Space"
                             error={this.props.errors.space && { content: this.props.errors.space, pointing: Constants.Pointing.ABOVE }}
-                            onChange={(_, d) => this.props.updateSpace(d.value) }
+                            onChange={(_, d) => this._updateSpace(d.value) }
                             defaultValue={this.props.space}
                             width={6}
                         />
@@ -199,23 +222,25 @@ export default class SpaceAndGeometry extends Component {
 
                     { this.props.showSize === 'Yes' ? <Form.Group>
                         <Form.Input
+                            error={this.props.errors.sectionNo && { content: this.props.errors.sectionNo, pointing: Constants.Pointing.ABOVE }}
                             autoComplete={'off'}
-                            type={'num'}
+                            type={'number'}
                             label={'Section No.'}
                             onChange={(_, d) => this._updateSectionNo(d.value)}
-                            placeholder={'Section No.'}
-                            value={this.state.sectionNo}
+                            placeholder={'0'}
+                            value={this.props.sectionNo}
                             min={1}
                             width={6}
                         />
                         <Form.Input
+                            error={this.props.errors.noSections && { content: this.props.errors.noSections, pointing: Constants.Pointing.ABOVE }}
                             autoComplete={'off'}
-                            type={'num'}
+                            type={'number'}
                             label={'No. of Sections'}
                             onChange={(_, d) => this._updateNoSections(d.value)}
-                            placeholder={'No. of Sections'}
+                            placeholder={'0'}
                             min={1}
-                            value={this.state.noSections}
+                            value={this.props.noSections}
                             width={6}
                         />
                     </Form.Group> : null }
@@ -277,9 +302,15 @@ SpaceAndGeometry.propTypes = {
     updateGeometry: PropTypes.func.isRequired,
     updateErrors: PropTypes.func.isRequired,
     updateShowSize: PropTypes.func.isRequired,
+    updateGeoCache: PropTypes.func.isRequired,
+    updateSectionNo: PropTypes.func.isRequired,
+    updateNoSections: PropTypes.func.isRequired,
 
     space: PropTypes.string,
     geometry: PropTypes.shape({ x: PropTypes.string, y: PropTypes.string, w: PropTypes.string, h: PropTypes.string }),
-    errors: PropTypes.shape({ x: PropTypes.string, y: PropTypes.string, w: PropTypes.string, h: PropTypes.string, space: PropTypes.string }),
-    showSize: PropTypes.string
+    errors: PropTypes.shape({ x: PropTypes.string, y: PropTypes.string, w: PropTypes.string, h: PropTypes.string, space: PropTypes.string, noSections: PropTypes.string, sectionNo: PropTypes.string }),
+    showSize: PropTypes.string,
+    geoCache: PropTypes.shape({ x: PropTypes.string, y: PropTypes.string, w: PropTypes.string, h: PropTypes.string }),
+    sectionNo: PropTypes.string,
+    noSections: PropTypes.string
 };
