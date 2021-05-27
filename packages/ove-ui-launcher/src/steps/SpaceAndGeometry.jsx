@@ -15,8 +15,9 @@ export default class SpaceAndGeometry extends Component {
             spaces: [],
             bounds: { w: null, h: null },
             errors: { x: null, y: null, w: null, h: null },
-            selectedSize: this.props.presetSelected,
-            sizeOptions: [this.props.presetSelected, 'Half', 'Full'].map(e => ({ key: e, value: e, text: e }))
+            sectionNo: 1,
+            noSections: 1,
+            geoCache: this.props.geometry
         };
 
         this.determineErrors = this.determineErrors.bind(this);
@@ -105,63 +106,57 @@ export default class SpaceAndGeometry extends Component {
     _fillSpace (ev) {
         ev.preventDefault();
 
-        this._updateSize('Full');
-    }
-
-    _updateSize (d, newCustom = false, newSpace = false) {
         if (!this.props.space) { return; }
-
-        if (d === this.props.presetSelected && !newSpace) { return; }
-
-        if (this.props.presetSelected === 'Custom') {
-            this.props.updateGeoCache(this.props.geometry);
-        }
-        const selectedSize = d;
-        this.setState({ selectedSize });
-
-        if (d === 'Custom') {
-            this.props.updatePresetSelected(d);
-            if (!newCustom) {
-                this.props.updateGeometry(this.props.geoCache);
-            } else {
-                this.props.updateGeometry(this.props.geometry);
-            }
-        } else if (d.match(/[1-9]\d*\/[1-9]\d*/g)) {
-            const frac = d.split('/');
-            this._updateSizeHelper(d, frac[0], frac[1]);
-        } else if (d === 'Full') {
-            this._updateSizeHelper(d, 1, 1);
-        }
-    }
-
-    _updateSizeHelper (d, numerator, denominator) {
-        this.props.updatePresetSelected(d);
-
-        const singleW = this.state.spaces[this.props.space].w / denominator;
-        const singleH = this.state.spaces[this.props.space].h / denominator;
+        this._updateShowSize(false);
 
         this.props.updateGeometry({
-            x: (singleW * (numerator - 1)).toString(),
-            y: (singleH * (numerator - 1)).toString(),
-            w: (singleW).toString(),
-            h: (singleH).toString()
+            x: '0',
+            y: '0',
+            w: this.state.spaces[this.props.space].w.toString(),
+            h: this.state.spaces[this.props.space].h.toString()
         });
     }
 
-    async _updateSpace (d) {
-        await this.props.updateSpace(d);
-        this._updateSize(this.props.presetSelected, false, true);
+    async _updateSectionNo (sectionNo) {
+        await this.setState({ sectionNo });
+        this._updateSize();
     }
 
-    _handleCreate (inputValue) {
-        const newValue = { key: inputValue, value: inputValue, text: inputValue };
-        this._updateSize(inputValue);
-        this.setState([...this.state.sizeOptions, newValue]);
-        return [this.state.sizeOptions];
+    _updateShowSize (showSize) {
+        this.props.updateShowSize(showSize ? 'Yes' : 'No');
+        if (showSize) {
+            const geoCache = this.props.geometry;
+            this.setState({ geoCache });
+            this._updateSize();
+        } else {
+            this.props.updateGeometry(this.state.geoCache);
+        }
+    }
+
+    async _updateNoSections (noSections) {
+        await this.setState({ noSections });
+        this._updateSize();
+    }
+
+    _updateSize () {
+        if (!this.props.space) { return; }
+        if (!this.state.sectionNo.toString().match(/^[1-9]\d*$/)) { return; }
+        if (!this.state.noSections.toString().match(/^[1-9]\d*$/)) { return; }
+
+        const width = this.state.spaces[this.props.space].w / this.state.noSections;
+        const height = this.state.spaces[this.props.space].h / this.state.noSections;
+
+        this.props.updateGeometry({
+            x: (width * (this.state.sectionNo - 1)).toString(),
+            y: (height * (this.state.sectionNo - 1)).toString(),
+            w: width.toString(),
+            h: height.toString()
+        });
     }
 
     render () {
         let spaceOptions = this.state.spaces ? Object.keys(this.state.spaces).map(e => ({ key: e, value: e, text: e })) : [];
+        const sizeOptions = ['Yes', 'No'].map(e => ({ key: e, value: e, text: e }));
 
         const bounds = this.props.space ? this.state.spaces[this.props.space] : false;
 
@@ -185,17 +180,15 @@ export default class SpaceAndGeometry extends Component {
                         <Form.Select options={spaceOptions}
                             label="Space"
                             error={this.props.errors.space && { content: this.props.errors.space, pointing: Constants.Pointing.ABOVE }}
-                            onChange={(_, d) => this._updateSpace(d.value) }
+                            onChange={(_, d) => this.props.updateSpace(d.value) }
                             defaultValue={this.props.space}
                             width={6}
                         />
-                        <Form.Input
-                            autoComplete="off"
-                            type="text"
-                            label="Size Presets"
-                            onChange={(_, d) => this._updateSize(d.value)}
-                            placeholder={'Full/Custom/Other'}
-                            value={this.state.selectedSize}
+                        <Form.Select
+                            label="Use Preset Size"
+                            onChange={(_, d) => this._updateShowSize(d.value === 'Yes')}
+                            options={sizeOptions}
+                            value={this.props.showSize}
                             width={6}
                         />
                         <Form.Field>
@@ -203,6 +196,29 @@ export default class SpaceAndGeometry extends Component {
                             <Button icon="expand" onClick={this._fillSpace}/>
                         </Form.Field>
                     </Form.Group>
+
+                    { this.props.showSize === 'Yes' ? <Form.Group>
+                        <Form.Input
+                            autoComplete={'off'}
+                            type={'num'}
+                            label={'Section No.'}
+                            onChange={(_, d) => this._updateSectionNo(d.value)}
+                            placeholder={'Section No.'}
+                            value={this.state.sectionNo}
+                            min={1}
+                            width={6}
+                        />
+                        <Form.Input
+                            autoComplete={'off'}
+                            type={'num'}
+                            label={'No. of Sections'}
+                            onChange={(_, d) => this._updateNoSections(d.value)}
+                            placeholder={'No. of Sections'}
+                            min={1}
+                            value={this.state.noSections}
+                            width={6}
+                        />
+                    </Form.Group> : null }
 
                     <Form.Group>
                         <Form.Input label='x'
@@ -237,7 +253,6 @@ export default class SpaceAndGeometry extends Component {
                             max={bounds ? bounds.w : Constants.DEFAULT_WIDTH}
                             value={this.props.geometry.w}
                             onChange={ev => this.props.updateGeometry({ ...this.props.geometry, w: ev.target.value })}
-                            onClick={_ => this._updateSize('Custom', true)}
                             width={6}/>
                         <Form.Input label="height"
                             error={this.props.errors.h && { content: this.props.errors.h, pointing: Constants.Pointing.ABOVE }}
@@ -248,7 +263,6 @@ export default class SpaceAndGeometry extends Component {
                             max={bounds ? bounds.h : Constants.DEFAULT_HEIGHT}
                             value={this.props.geometry.h}
                             onChange={ev => this.props.updateGeometry({ ...this.props.geometry, h: ev.target.value })}
-                            onClick={_ => this._updateSize('Custom', true)}
                             width={6}/>
                     </Form.Group>
                 </Form>
@@ -262,12 +276,10 @@ SpaceAndGeometry.propTypes = {
     updateSpace: PropTypes.func.isRequired,
     updateGeometry: PropTypes.func.isRequired,
     updateErrors: PropTypes.func.isRequired,
-    updateGeoCache: PropTypes.func.isRequired,
-    updatePresetSelected: PropTypes.func.isRequired,
+    updateShowSize: PropTypes.func.isRequired,
 
     space: PropTypes.string,
     geometry: PropTypes.shape({ x: PropTypes.string, y: PropTypes.string, w: PropTypes.string, h: PropTypes.string }),
     errors: PropTypes.shape({ x: PropTypes.string, y: PropTypes.string, w: PropTypes.string, h: PropTypes.string, space: PropTypes.string }),
-    geoCache: PropTypes.shape({ x: PropTypes.string, y: PropTypes.string, w: PropTypes.string, h: PropTypes.string }),
-    presetSelected: PropTypes.string
+    showSize: PropTypes.string
 };
