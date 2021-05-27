@@ -30,7 +30,10 @@ export default class Launcher extends Component {
             deleteSections: false,
 
             geometry: { x: '', y: '', w: '', h: '' },
+            geoCache: { x: '', y: '', w: '', h: '' },
             geometryErrors: { x: null, y: null, w: null, h: null },
+
+            presetSelected: 'Custom',
 
             stateErrors: { existingState: null, newState: null },
             mode: Constants.Mode.NEW,
@@ -107,8 +110,10 @@ export default class Launcher extends Component {
                     <SpaceAndGeometry log={this.log} updateSpace={space => this.setState({ space, controllerURL: undefined })}
                         updateGeometry={geometry => this.setState({ geometry, controllerURL: undefined })}
                         updateErrors={geometryErrors => this.setState({ geometryErrors })}
+                        updateGeoCache={geoCache => this.setState({ geoCache })}
+                        updatePresetSelected={presetSelected => this.setState({ presetSelected })}
 
-                        space={this.state.space} geometry={this.state.geometry} errors={this.state.geometryErrors}/>
+                        space={this.state.space} geometry={this.state.geometry} errors={this.state.geometryErrors} geoCache={this.state.geoCache} presetSelected={this.state.presetSelected}/>
 
                     <StateConfiguration log={this.log} updateState={(d) => this.setState({ state: d, controllerURL: undefined })}
                         updateMode={d => this.setState({ mode: d, controllerURL: undefined })}

@@ -14,7 +14,9 @@ export default class SpaceAndGeometry extends Component {
         this.state = {
             spaces: [],
             bounds: { w: null, h: null },
-            errors: { x: null, y: null, w: null, h: null }
+            errors: { x: null, y: null, w: null, h: null },
+            selectedSize: this.props.presetSelected,
+            sizeOptions: [this.props.presetSelected, 'Half', 'Full'].map(e => ({ key: e, value: e, text: e }))
         };
 
         this.determineErrors = this.determineErrors.bind(this);
@@ -103,14 +105,59 @@ export default class SpaceAndGeometry extends Component {
     _fillSpace (ev) {
         ev.preventDefault();
 
+        this._updateSize('Full');
+    }
+
+    _updateSize (d, newCustom = false, newSpace = false) {
         if (!this.props.space) { return; }
 
+        if (d === this.props.presetSelected && !newSpace) { return; }
+
+        if (this.props.presetSelected === 'Custom') {
+            this.props.updateGeoCache(this.props.geometry);
+        }
+        const selectedSize = d;
+        this.setState({ selectedSize });
+
+        if (d === 'Custom') {
+            this.props.updatePresetSelected(d);
+            if (!newCustom) {
+                this.props.updateGeometry(this.props.geoCache);
+            } else {
+                this.props.updateGeometry(this.props.geometry);
+            }
+        } else if (d.match(/[1-9]\d*\/[1-9]\d*/g)) {
+            const frac = d.split('/');
+            this._updateSizeHelper(d, frac[0], frac[1]);
+        } else if (d === 'Full') {
+            this._updateSizeHelper(d, 1, 1);
+        }
+    }
+
+    _updateSizeHelper (d, numerator, denominator) {
+        this.props.updatePresetSelected(d);
+
+        const singleW = this.state.spaces[this.props.space].w / denominator;
+        const singleH = this.state.spaces[this.props.space].h / denominator;
+
         this.props.updateGeometry({
-            x: '0',
-            y: '0',
-            w: this.state.spaces[this.props.space].w.toString(),
-            h: this.state.spaces[this.props.space].h.toString()
+            x: (singleW * (numerator - 1)).toString(),
+            y: (singleH * (numerator - 1)).toString(),
+            w: (singleW).toString(),
+            h: (singleH).toString()
         });
+    }
+
+    async _updateSpace (d) {
+        await this.props.updateSpace(d);
+        this._updateSize(this.props.presetSelected, false, true);
+    }
+
+    _handleCreate (inputValue) {
+        const newValue = { key: inputValue, value: inputValue, text: inputValue };
+        this._updateSize(inputValue);
+        this.setState([...this.state.sizeOptions, newValue]);
+        return [this.state.sizeOptions];
     }
 
     render () {
@@ -120,7 +167,6 @@ export default class SpaceAndGeometry extends Component {
 
         return (
             <>
-
                 <Divider horizontal>
                     <Header as='h2'>
                     Space and Geometry
@@ -135,13 +181,21 @@ export default class SpaceAndGeometry extends Component {
                     show that space.</p>
 
                 <Form>
-
                     <Form.Group>
                         <Form.Select options={spaceOptions}
                             label="Space"
                             error={this.props.errors.space && { content: this.props.errors.space, pointing: Constants.Pointing.ABOVE }}
-                            onChange={(_, d) => this.props.updateSpace(d.value)}
+                            onChange={(_, d) => this._updateSpace(d.value) }
                             defaultValue={this.props.space}
+                            width={6}
+                        />
+                        <Form.Input
+                            autoComplete="off"
+                            type="text"
+                            label="Size Presets"
+                            onChange={(_, d) => this._updateSize(d.value)}
+                            placeholder={'Full/Custom/Other'}
+                            value={this.state.selectedSize}
                             width={6}
                         />
                         <Form.Field>
@@ -183,6 +237,7 @@ export default class SpaceAndGeometry extends Component {
                             max={bounds ? bounds.w : Constants.DEFAULT_WIDTH}
                             value={this.props.geometry.w}
                             onChange={ev => this.props.updateGeometry({ ...this.props.geometry, w: ev.target.value })}
+                            onClick={_ => this._updateSize('Custom', true)}
                             width={6}/>
                         <Form.Input label="height"
                             error={this.props.errors.h && { content: this.props.errors.h, pointing: Constants.Pointing.ABOVE }}
@@ -193,6 +248,7 @@ export default class SpaceAndGeometry extends Component {
                             max={bounds ? bounds.h : Constants.DEFAULT_HEIGHT}
                             value={this.props.geometry.h}
                             onChange={ev => this.props.updateGeometry({ ...this.props.geometry, h: ev.target.value })}
+                            onClick={_ => this._updateSize('Custom', true)}
                             width={6}/>
                     </Form.Group>
                 </Form>
@@ -206,8 +262,12 @@ SpaceAndGeometry.propTypes = {
     updateSpace: PropTypes.func.isRequired,
     updateGeometry: PropTypes.func.isRequired,
     updateErrors: PropTypes.func.isRequired,
+    updateGeoCache: PropTypes.func.isRequired,
+    updatePresetSelected: PropTypes.func.isRequired,
 
     space: PropTypes.string,
     geometry: PropTypes.shape({ x: PropTypes.string, y: PropTypes.string, w: PropTypes.string, h: PropTypes.string }),
-    errors: PropTypes.shape({ x: PropTypes.string, y: PropTypes.string, w: PropTypes.string, h: PropTypes.string, space: PropTypes.string })
+    errors: PropTypes.shape({ x: PropTypes.string, y: PropTypes.string, w: PropTypes.string, h: PropTypes.string, space: PropTypes.string }),
+    geoCache: PropTypes.shape({ x: PropTypes.string, y: PropTypes.string, w: PropTypes.string, h: PropTypes.string }),
+    presetSelected: PropTypes.string
 };
