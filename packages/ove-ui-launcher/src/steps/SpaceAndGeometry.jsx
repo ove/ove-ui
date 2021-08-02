@@ -52,7 +52,11 @@ export default class SpaceAndGeometry extends Component {
 
         const spaceSelected = (this.props.space !== undefined);
 
-        const currentSpace = this.props.space;
+        let currentSpace = this.props.space;
+        if (!this.state.spaces[currentSpace]) {
+            currentSpace = Object.keys(this.state.spaces)[0];
+            this.props.updateSpace(currentSpace);
+        }
 
         const spaceHeight = currentSpace ? `${this.state.spaces[currentSpace].h}` : '';
         const spaceWidth = currentSpace ? `${this.state.spaces[currentSpace].w}` : '';
