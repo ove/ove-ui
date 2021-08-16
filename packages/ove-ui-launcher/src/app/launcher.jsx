@@ -30,12 +30,13 @@ export default class Launcher extends Component {
             deleteSections: false,
 
             geometry: { x: '', y: '', w: '', h: '' },
-            geometryErrors: { x: null, y: null, w: null, h: null, space: null, sectionNo: null, noSections: null },
+            geometryErrors: { x: null, y: null, w: null, h: null, space: null, sectionRows: null, sectionColumns: null },
             geoCache: { x: '', y: '', w: '', h: '' },
 
             showSize: 'No',
-            sectionNo: '1',
-            noSections: '1',
+            sectionRows: '1',
+            sectionColumns: '1',
+            selectedSection: -1,
 
             stateErrors: { existingState: null, newState: null },
             mode: Constants.Mode.NEW,
@@ -114,11 +115,12 @@ export default class Launcher extends Component {
                         updateErrors={geometryErrors => this.setState({ geometryErrors })}
                         updateShowSize={showSize => this.setState({ showSize })}
                         updateGeoCache={geoCache => this.setState({ geoCache })}
-                        updateSectionNo={sectionNo => this.setState({ sectionNo })}
-                        updateNoSections={noSections => this.setState({ noSections })}
+                        updateSectionRows={sectionRows => this.setState({ sectionRows })}
+                        updateSectionColumns={sectionColumns => this.setState({ sectionColumns })}
+                        updateSelectedSection={(selectedSection) => this.setState({ selectedSection }) }
 
                         space={this.state.space} geometry={this.state.geometry} errors={this.state.geometryErrors} showSize={this.state.showSize} geoCache={this.state.geoCache}
-                        sectionNo={this.state.sectionNo} noSections={this.state.noSections}
+                        sectionRows={this.state.sectionRows} sectionColumns={this.state.sectionColumns} selectedSection={this.state.selectedSection}
                     />
 
                     <StateConfiguration log={this.log} updateState={(d) => this.setState({ state: d, controllerURL: undefined })}

@@ -5,16 +5,22 @@ import PropTypes from 'prop-types';
 import Constants from '../constants/launcher';
 import axios from 'axios';
 
-import { Form, Button, Divider, Header } from 'semantic-ui-react';
+import { Form, Button, Divider, Header, Grid } from 'semantic-ui-react';
 
 export default class SpaceAndGeometry extends Component {
     constructor (props) {
         super(props);
+        const cState = [...Array(this.props.sectionRows * this.props.sectionColumns)]
+            .map((_) => ({ color: '#d6d6d6', isClicked: false }));
+        if (this.props.selectedSection !== -1) {
+            cState[this.props.selectedSection] = { color: '#aaaba6', isClicked: true };
+        }
 
         this.state = {
             spaces: [],
             bounds: { w: null, h: null },
-            errors: { x: null, y: null, w: null, h: null }
+            errors: { x: null, y: null, w: null, h: null },
+            cellState: cState
         };
 
         this.determineErrors = this.determineErrors.bind(this);
@@ -61,7 +67,7 @@ export default class SpaceAndGeometry extends Component {
         const spaceHeight = currentSpace ? `${this.state.spaces[currentSpace].h}` : '';
         const spaceWidth = currentSpace ? `${this.state.spaces[currentSpace].w}` : '';
 
-        let errors = { space: null, x: null, y: null, w: null, h: null, noSections: null, sectionNo: null };
+        let errors = { space: null, x: null, y: null, w: null, h: null, sectionColumns: null, sectionRows: null };
 
         if (!currentSpace) {
             errors.space = 'You must select a space';
@@ -99,27 +105,27 @@ export default class SpaceAndGeometry extends Component {
             errors.h = `height must be less than space height (${spaceHeight})`;
         }
 
-        if (!Number.isInteger(parseFloat(this.props.sectionNo))) {
-            errors.sectionNo = 'sectionNo is not provided';
-        } else if (this.props.sectionNo <= 0) {
-            errors.sectionNo = 'sectionNo must be greater than 0';
-        } else if (this.props.sectionNo > this.props.noSections && Number.isInteger(parseFloat(this.props.noSections))) {
-            errors.sectionNo = 'sectionNo must be less than noSections';
+        if (!Number.isInteger(parseFloat(this.props.sectionRows))) {
+            errors.sectionRows = 'sectionRows is not provided';
+        } else if (this.props.sectionRows <= 0) {
+            errors.sectionRows = 'sectionRows must be greater than 0';
         }
 
-        if (!Number.isInteger(parseFloat(this.props.noSections))) {
-            console.log('No. Sections: ', this.props.noSections);
-            console.log('Type of: ', typeof this.props.noSections);
-            errors.noSections = 'noSections is not provided';
-        } else if (this.props.noSections <= 0) {
-            errors.noSections = 'noSections must be greater than 0';
-        } else if (spaceSelected && this.props.noSections > (!currentSpace ? 0 : this.state.spaces[currentSpace].h)) {
-            errors.noSections = 'noSections cannot be greater than the height';
-        } else if (spaceSelected && this.props.noSections > (!currentSpace ? 0 : this.state.spaces[currentSpace].w)) {
-            errors.noSections = 'noSections cannot be greater than the width';
+        if (!Number.isInteger(parseFloat(this.props.sectionColumns))) {
+            console.log('No. Sections: ', this.props.sectionColumns);
+            console.log('Type of: ', typeof this.props.sectionColumns);
+            errors.sectionColumns = 'sectionColumns is not provided';
+        } else if (this.props.sectionColumns <= 0) {
+            errors.sectionColumns = 'sectionColumns must be greater than 0';
+        } else if (spaceSelected && this.props.sectionColumns > (!currentSpace ? 0 : this.state.spaces[currentSpace].h)) {
+            errors.sectionColumns = 'sectionColumns cannot be greater than the height';
+        } else if (spaceSelected && this.props.sectionColumns > (!currentSpace ? 0 : this.state.spaces[currentSpace].w)) {
+            errors.sectionColumns = 'sectionColumns cannot be greater than the width';
         }
 
-        if (errors.x !== this.props.errors.x || errors.y !== this.props.errors.y || errors.w !== this.props.errors.w || errors.h !== this.props.errors.h || errors.space !== this.props.errors.space || errors.sectionNo !== this.props.errors.sectionNo || errors.noSections !== this.props.errors.noSections) {
+        if (errors.x !== this.props.errors.x || errors.y !== this.props.errors.y || errors.w !== this.props.errors.w ||
+            errors.h !== this.props.errors.h || errors.space !== this.props.errors.space || errors.sectionRows !== this.props.errors.sectionRows ||
+            errors.sectionColumns !== this.props.errors.sectionColumns) {
             this.props.updateErrors(errors);
         }
     }
@@ -138,8 +144,17 @@ export default class SpaceAndGeometry extends Component {
         });
     }
 
-    async _updateSectionNo (sectionNo) {
-        await this.props.updateSectionNo(sectionNo);
+    async _updateCellState () {
+        await this.props.updateSelectedSection(-1);
+        await this.setState({
+            cellState: [...Array(this.props.sectionRows * this.props.sectionColumns)]
+                .map((_) => ({ color: '#d6d6d6', isClicked: false }))
+        });
+    }
+
+    async _updateSectionRows (sectionRows) {
+        await this.props.updateSectionRows(sectionRows);
+        await this._updateCellState();
         this._updateSize();
     }
 
@@ -153,22 +168,24 @@ export default class SpaceAndGeometry extends Component {
         }
     }
 
-    async _updateNoSections (noSections) {
-        await this.props.updateNoSections(noSections);
+    async _updateSectionColumns (sectionColumns) {
+        await this.props.updateSectionColumns(sectionColumns);
+        await this._updateCellState();
         this._updateSize();
     }
 
     _updateSize () {
-        if (!this.props.space) { return; }
-        if (!this.props.sectionNo.toString().match(/^[1-9]\d*$/)) { return; }
-        if (!this.props.noSections.toString().match(/^[1-9]\d*$/)) { return; }
+        if (!this.props.space) return;
+        if (this.props.selectedSection === -1) return;
 
-        const width = this.state.spaces[this.props.space].w / Number(this.props.noSections);
-        const height = this.state.spaces[this.props.space].h / Number(this.props.noSections);
+        const width = Math.floor(this.state.spaces[this.props.space].w / Number(this.props.sectionColumns));
+        const height = Math.floor(this.state.spaces[this.props.space].h / Number(this.props.sectionRows));
+        const i = this.props.selectedSection % Number(this.props.sectionColumns);
+        const j = Math.floor(this.props.selectedSection / Number(this.props.sectionColumns));
 
         this.props.updateGeometry({
-            x: (width * (Number(this.props.sectionNo) - 1)).toString(),
-            y: (height * (Number(this.props.sectionNo) - 1)).toString(),
+            x: (width * i).toString(),
+            y: (height * j).toString(),
             w: width.toString(),
             h: height.toString()
         });
@@ -177,8 +194,34 @@ export default class SpaceAndGeometry extends Component {
     async _updateSpace (d) {
         await this.props.updateSpace(d);
         if (this.props.showSize === 'Yes') {
-            this._updateSize();
+            if (this.props.selectedSection !== -1) {
+                this._updateSize();
+            }
         }
+    }
+
+    _getCell (i, j) {
+        return (i * this.props.sectionColumns) + j;
+    }
+
+    async cellClick (_, i, j) {
+        let temp = this.state.cellState;
+        const index = this._getCell(i, j);
+        const current = temp[index];
+        const value = this.props.selectedSection !== index ? index : -1;
+
+        await this.props.updateSelectedSection(value);
+
+        temp = temp.map((_) => ({ color: '#d6d6d6', isClicked: false }));
+        current.color = current.isClicked ? '#d6d6d6' : '#aaaba6';
+        temp[index] = current;
+
+        await this.setState({ cellState: temp });
+        this._updateSize();
+    }
+
+    _getColor (i, j) {
+        return this.state.cellState[this._getCell(i, j)] ? this.state.cellState[this._getCell(i, j)].color : '#d6d6d6';
     }
 
     render () {
@@ -226,28 +269,42 @@ export default class SpaceAndGeometry extends Component {
 
                     { this.props.showSize === 'Yes' ? <Form.Group>
                         <Form.Input
-                            error={this.props.errors.sectionNo && { content: this.props.errors.sectionNo, pointing: Constants.Pointing.ABOVE }}
+                            error={this.props.errors.sectionRows && { content: this.props.errors.sectionRows, pointing: Constants.Pointing.ABOVE }}
                             autoComplete={'off'}
                             type={'number'}
-                            label={'Section No.'}
-                            onChange={(_, d) => this._updateSectionNo(d.value)}
+                            label={'Rows'}
+                            onChange={(_, d) => this._updateSectionRows(d.value)}
                             placeholder={'0'}
-                            value={this.props.sectionNo}
+                            value={this.props.sectionRows}
                             min={1}
                             width={6}
                         />
                         <Form.Input
-                            error={this.props.errors.noSections && { content: this.props.errors.noSections, pointing: Constants.Pointing.ABOVE }}
+                            error={this.props.errors.sectionColumns && { content: this.props.errors.sectionColumns, pointing: Constants.Pointing.ABOVE }}
                             autoComplete={'off'}
                             type={'number'}
-                            label={'No. of Sections'}
-                            onChange={(_, d) => this._updateNoSections(d.value)}
+                            label={'Columns'}
+                            onChange={(_, d) => this._updateSectionColumns(d.value)}
                             placeholder={'0'}
                             min={1}
-                            value={this.props.noSections}
+                            value={this.props.sectionColumns}
                             width={6}
                         />
                     </Form.Group> : null }
+                    { this.props.showSize === 'Yes' ? <Grid style={{ margin: '0px' }}>
+                        {[...Array(Number(this.props.sectionRows))].map((_, i) =>
+                            <Grid.Row key={i} style={ { padding: '0px' } }>
+                                {[...Array(Number(this.props.sectionColumns))].map((_, j) => (
+                                    <Grid.Column
+                                        key={j}
+                                        style={{ backgroundColor: this._getColor(i, j) }}
+                                        id={'column'}
+                                        onClick={(e) => this.cellClick(e, i, j)}
+                                    />
+                                ))}
+                            </Grid.Row>
+                        )}
+                    </Grid> : null }
 
                     <Form.Group>
                         <Form.Input label='x'
@@ -307,14 +364,16 @@ SpaceAndGeometry.propTypes = {
     updateErrors: PropTypes.func.isRequired,
     updateShowSize: PropTypes.func.isRequired,
     updateGeoCache: PropTypes.func.isRequired,
-    updateSectionNo: PropTypes.func.isRequired,
-    updateNoSections: PropTypes.func.isRequired,
+    updateSectionRows: PropTypes.func.isRequired,
+    updateSectionColumns: PropTypes.func.isRequired,
+    updateSelectedSection: PropTypes.func.isRequired,
 
     space: PropTypes.string,
     geometry: PropTypes.shape({ x: PropTypes.string, y: PropTypes.string, w: PropTypes.string, h: PropTypes.string }),
-    errors: PropTypes.shape({ x: PropTypes.string, y: PropTypes.string, w: PropTypes.string, h: PropTypes.string, space: PropTypes.string, noSections: PropTypes.string, sectionNo: PropTypes.string }),
+    errors: PropTypes.shape({ x: PropTypes.string, y: PropTypes.string, w: PropTypes.string, h: PropTypes.string, space: PropTypes.string, sectionColumns: PropTypes.string, sectionRows: PropTypes.string }),
     showSize: PropTypes.string,
     geoCache: PropTypes.shape({ x: PropTypes.string, y: PropTypes.string, w: PropTypes.string, h: PropTypes.string }),
-    sectionNo: PropTypes.string,
-    noSections: PropTypes.string
+    sectionRows: PropTypes.string,
+    sectionColumns: PropTypes.string,
+    selectedSection: PropTypes.number
 };
