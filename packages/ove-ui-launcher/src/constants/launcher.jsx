@@ -5,7 +5,7 @@ window.$ = $;
 const getOVEHost = function () {
     const publicURL = (function () {
         try {
-            let manifestURL = $('link[rel=\'manifest\'')[0].href;
+            let manifestURL = $('link[rel=\'manifest\']')[0].href;
             let host = manifestURL.substring(0, manifestURL.indexOf('/manifest.json'));
             if (host) {
                 if (host.indexOf('//') >= 0) {

@@ -51,6 +51,19 @@
           "PORT": 8284,
           "REACT_APP_OVE_HOST": "$OVE_HOST"
         }
+    },
+    {
+      "name": "@ove/ove-ui-logs",
+      "cwd": "./packages/ove-ui-logs",
+      "kill_timeout": 3000,
+      "restart_delay": 3000,
+      "script": "server.js",
+      "env": {
+        "PUBLIC_URL": "//__OVEHOST__/ui/logs",
+        "OVE_HOST": "localhost:8080",
+        "PORT": 8285,
+        "REACT_APP_OVE_HOST": "$OVE_HOST"
+      }
     }
   ]
 }

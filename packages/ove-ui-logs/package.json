@@ -1,0 +1,45 @@
+{
+  "name": "@ove/ove-ui-logs",
+  "description": "Monitor logging output from all OVE components",
+  "main": "server.js",
+  "private": true,
+  "keywords": [],
+  "author": "Brython Caley-Davies <bc2918@imperial.ac.uk>",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "5.0.1",
+    "codemirror": "5.61.1",
+    "axios": "0.21.1",
+    "cors": "2.8.5",
+    "dotenv": "9.0.2",
+    "express": "4.17.1",
+    "jquery": "3.6.0",
+    "js-beautify": "1.13.13",
+    "little-loader": "0.2.0",
+    "react-codemirror2": "7.2.1",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-redux": "7.2.4",
+    "react-scripts": "4.0.3",
+    "semantic-ui-css": "2.4.1",
+    "semantic-ui-react": "2.0.3",
+    "tail": "2.2.3"
+  },
+  "scripts": {
+    "start": "PORT=8285 node -r dotenv/config server.js dotenv_config_path=.env",
+    "start:dev": "OVE_HOST='localhost:8080' PORT=8284 node -r dotenv/config ../../node_modules/.bin/react-scripts start dotenv_config_path=.env",
+    "start:windows": ".\\\"node_modules/.bin/react-scripts\" start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --watchAll=false",
+    "lint": "eslint src/. --ext .jsx"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

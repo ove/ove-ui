@@ -9,7 +9,7 @@ RUN npm run install:prod
 
 RUN npm uninstall -global lerna
 
-EXPOSE 8281-8284
+EXPOSE 8281-8285
 
 CMD [ "pm2-runtime", "pm2.json" ]
 

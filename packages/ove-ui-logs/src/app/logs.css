@@ -1,0 +1,28 @@
+html {
+    min-width: 200px;
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+/* change codemirror height */
+.CodeMirror {
+    border: 1px solid #eee;
+    height: auto;
+}
+
+.ui.horizontal.divider {
+    margin-top: 30px;
+}
+
+/* Required to replicate functionality of Bootstrap */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}

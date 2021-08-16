@@ -43,6 +43,17 @@
         "env": {
             "PORT": "8284"
         }
+    },
+    {
+      "name": "@ove/ove-ui-logs",
+      "cwd": "./packages/ove-ui-logs",
+      "kill_timeout": 3000,
+      "restart_delay": 3000,
+      "script": "npm",
+      "args": "run start",
+      "env": {
+        "PORT": "8285"
+      }
     }
   ]
 }
