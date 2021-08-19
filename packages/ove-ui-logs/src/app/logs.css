@@ -1,7 +1,7 @@
 html {
     min-width: 200px;
-    max-width: 980px;
-    margin: 0 auto;
+    min-height: 200px;
+    margin: 5px;
 }
 
 /* change codemirror height */
@@ -25,4 +25,25 @@ html {
     color: #a94442;
     background-color: #f2dede;
     border-color: #ebccd1;
+}
+
+ul li {
+    position: relative;
+    padding-bottom: 10px;
+}
+
+ul {
+    list-style: none;
+}
+
+ul li:before {
+    content: '';
+    position: absolute;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    width: 5px;
+    height: 5px;
+    top: calc(8px);
+    left: -15px;
+    transform: translateY(-50%) rotate(-45deg);
 }

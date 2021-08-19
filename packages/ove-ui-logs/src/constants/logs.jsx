@@ -39,10 +39,6 @@ export default {
     SECTION_DELETE_WAIT_TIME: 1000, // Unit: milliseconds
 
     REACT_APP_OVE_HOST: getOVEHost(),
-    REACT_APP_OVE_UI_PREVIEW: getOVEHost() + '/ui/preview',
-    REACT_APP_OVE_APP: function (appName) {
-        return getOVEHost() + '/app/' + appName.toLowerCase();
-    },
 
     LOCAL_STORAGE_KEY: 'logsState',
 
