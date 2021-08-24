@@ -7,7 +7,7 @@
         "restart_delay": 3000,
         "script": "server.js",
         "env": {
-          "PUBLIC_URL": "//__OVEHOST__/ui/demo",
+          "PUBLIC_URL": "//__OVEHOST__/ui/launcher",
           "OVE_HOST": "localhost:8080",
           "PORT": 8281,
           "REACT_APP_OVE_HOST": "$OVE_HOST"
@@ -20,7 +20,7 @@
         "restart_delay": 3000,
         "script": "server.js",
         "env": {
-          "PUBLIC_URL": "//__OVEHOST__/ui/demo",
+          "PUBLIC_URL": "//__OVEHOST__/ui/preview",
           "OVE_HOST": "localhost:8080",
           "PORT": 8282,
           "REACT_APP_OVE_HOST": "$OVE_HOST"
@@ -33,7 +33,7 @@
         "restart_delay": 3000,
         "script": "server.js",
         "env": {
-          "PUBLIC_URL": "//__OVEHOST__/ui/demo",
+          "PUBLIC_URL": "//__OVEHOST__/ui/status",
           "OVE_HOST": "localhost:8080",
           "PORT": 8283,
           "REACT_APP_OVE_HOST": "$OVE_HOST"
@@ -62,7 +62,8 @@
         "PUBLIC_URL": "//__OVEHOST__/ui/logs",
         "OVE_HOST": "localhost:8080",
         "PORT": 8285,
-        "REACT_APP_OVE_HOST": "$OVE_HOST"
+        "REACT_APP_OVE_HOST": "$OVE_HOST",
+        "CONFIG_PATH": "./config.json"
       }
     }
   ]

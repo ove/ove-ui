@@ -1,7 +1,7 @@
 {
   "name": "@ove/ove-ui-logs",
   "description": "Monitor logging output from all OVE components",
-  "main": "server.js",
+  "main": "server.ts",
   "private": true,
   "keywords": [],
   "author": "Brython Caley-Davies <bc2918@imperial.ac.uk>",
@@ -29,7 +29,7 @@
     "ws": "8.2.0"
   },
   "scripts": {
-    "start": "PORT=8285 node -r dotenv/config server.js dotenv_config_path=.env",
+    "start": "PORT=8285 node -r dotenv/config server.ts dotenv_config_path=.env",
     "start:dev": "OVE_HOST='localhost:8080' PORT=8284 node -r dotenv/config ../../node_modules/.bin/react-scripts start dotenv_config_path=.env",
     "start:windows": ".\\\"node_modules/.bin/react-scripts\" start",
     "build": "react-scripts build",

@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-const config = require('./config.json');
+const config = require(process.env.CONFIG_PATH);
 const app = express();
 const Tail = require('tail').Tail;
 
@@ -46,13 +46,13 @@ const setupTails = () => {
         console.log(x);
         return new Tail(x, options);
     });
-    const errors = config.error_logs.map(x => new Tail(x, options));
+    const errors: [typeof Tail] = config.error_logs.map(x => new Tail(x, options));
     outputs.forEach(connectFile);
     errors.forEach(connectFile);
 };
 
 app.post('/log', (req, res) => {
-    const message = req.body.message;
+    const message: [string] = req.body.message;
 
     message.splice(1, 1);
     message[0] = message[0].substring(message[0].indexOf('['));
