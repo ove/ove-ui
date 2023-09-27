@@ -1,6 +1,6 @@
 {
   "name": "@ove/ove-ui-preview",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Preview spaces of the OVE framework",
   "main": "server.js",
   "private": true,
