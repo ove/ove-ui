@@ -8,7 +8,7 @@
   "author": "Senaka Fernando <senaka.fernando15@imperial.ac.uk>",
   "license": "MIT",
   "dependencies": {
-    "bootstrap": "5.0.1",
+    "bootstrap": "5.3.3",
     "axios": "0.21.1",
     "cors": "2.8.5",
     "detect-browser": "5.2.0",
