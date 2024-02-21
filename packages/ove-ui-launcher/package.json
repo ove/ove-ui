@@ -10,7 +10,7 @@
   "dependencies": {
     "bootstrap": "5.0.1",
     "codemirror": "5.61.1",
-    "axios": "0.21.1",
+    "axios": "0.28.0",
     "cors": "2.8.5",
     "dotenv": "9.0.2",
     "express": "4.17.1",
