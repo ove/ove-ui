@@ -9,7 +9,7 @@
   "license": "MIT",
   "dependencies": {
     "bootstrap": "5.0.1",
-    "codemirror": "5.61.1",
+    "codemirror": "5.65.18",
     "axios": "0.21.1",
     "cors": "2.8.5",
     "dotenv": "9.0.2",
