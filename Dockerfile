@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM node:22-alpine
 
 RUN apk add --update g++ make py3-pip git && rm -rf /var/cache/apk/*
 USER root
